@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gcm.demo.app;
+package com.cloudbees.gasp.gcm;
 
-import static com.google.android.gcm.demo.app.CommonUtilities.SENDER_ID;
-import static com.google.android.gcm.demo.app.CommonUtilities.displayMessage;
+import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
+import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -29,6 +29,7 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
+import com.cloudbees.gasp.gcm.R;
 
 /**
  * IntentService responsible for handling GCM messages.

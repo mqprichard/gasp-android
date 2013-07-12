@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gcm.demo.app;
+package com.cloudbees.gasp.gcm;
 
-import static com.google.android.gcm.demo.app.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.google.android.gcm.demo.app.CommonUtilities.EXTRA_MESSAGE;
-import static com.google.android.gcm.demo.app.CommonUtilities.SENDER_ID;
-import static com.google.android.gcm.demo.app.CommonUtilities.SERVER_URL;
+import static com.cloudbees.gasp.gcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.cloudbees.gasp.gcm.CommonUtilities.EXTRA_MESSAGE;
+import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
+import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.cloudbees.gasp.gcm.R;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
