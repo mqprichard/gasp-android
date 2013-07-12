@@ -39,5 +39,9 @@
         android:id="@+id/options_exit"
         android:title="@string/options_exit">
     </item>
+    <item android:id="@+id/gasp_settings"
+          android:title="@string/gasp_settings"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
 
 </menu>

@@ -15,37 +15,71 @@
  */
 package com.cloudbees.gasp.gcm;
 
-import static com.cloudbees.gasp.gcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.cloudbees.gasp.gcm.CommonUtilities.EXTRA_MESSAGE;
-import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
-import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
-
-import com.google.android.gcm.GCMRegistrar;
-import com.cloudbees.gasp.gcm.R;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.cloudbees.gasp.model.Review;
+import com.google.android.gcm.GCMRegistrar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.ListIterator;
+
+import static com.cloudbees.gasp.gcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.cloudbees.gasp.gcm.CommonUtilities.EXTRA_MESSAGE;
+import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
+import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
+
 /**
  * Main UI for the demo app.
  */
 public class DemoActivity extends Activity {
+    private static String TAG = DemoActivity.class.getName();
 
-    TextView mDisplay;
-    AsyncTask<Void, Void, Void> mRegisterTask;
+    private TextView mDisplay;
+    private Uri mgaspReviewsUri;
+    private List<Review> mList;
+
+    private AsyncTask<Void, Void, Void> mRegisterTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Load shared preferences from res/xml/preferences.xml (first time only)
+        // Subsequent activations will use the saved shared preferences from the device
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.i(TAG, "Using Gasp Server URI: " + gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
+        mgaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
+
+        new LongRunningGetIO().execute();
+
         checkNotNull(SERVER_URL, "SERVER_URL");
         checkNotNull(SENDER_ID, "SENDER_ID");
         // Make sure the device has the proper dependencies.
@@ -161,4 +195,52 @@ public class DemoActivity extends Activity {
         }
     };
 
+    private class LongRunningGetIO extends AsyncTask<Void, Void, String> {
+        protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
+            InputStream in = entity.getContent();
+            StringBuffer out = new StringBuffer();
+            int n = 1;
+            while (n>0) {
+                byte[] b = new byte[4096];
+                n =  in.read(b);
+                if (n>0) out.append(new String(b, 0, n));
+            }
+            return out.toString();
+        }
+        @Override
+        protected String doInBackground(Void... params) {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            HttpGet httpGet = new HttpGet(mgaspReviewsUri.toString());
+            String text = null;
+            try {
+                HttpResponse response = httpClient.execute(httpGet, localContext);
+                HttpEntity entity = response.getEntity();
+                text = getASCIIContentFromEntity(entity);
+            } catch (Exception e) {
+                return e.getLocalizedMessage();
+            }
+            return text;
+        }
+
+        @Override
+        protected void onPostExecute(String results) {
+            if (results!=null) {
+
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Review>>() {}.getType();
+                mList = gson.fromJson(results, type);
+
+                Log.i(TAG, results);
+                ListIterator<Review> iterator = mList.listIterator();
+                int reviews = 0;
+                while (iterator.hasNext()) {
+                    Review review = iterator.next();
+                    reviews = review.getId();
+                    Log.i(TAG, "Gasp Review: " + reviews);
+                }
+                mDisplay.append("Loaded " + reviews + " reviews from " + mgaspReviewsUri);
+            }
+        }
+    }
 }
