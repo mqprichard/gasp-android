@@ -36,16 +36,15 @@ import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ListIterator;
@@ -78,7 +77,7 @@ public class DemoActivity extends Activity {
         Log.i(TAG, "Using Gasp Server URI: " + gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
         mgaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
 
-        new LongRunningGetIO().execute();
+        new ReviewsRESTQuery().execute();
 
         checkNotNull(SERVER_URL, "SERVER_URL");
         checkNotNull(SENDER_ID, "SENDER_ID");
@@ -195,32 +194,25 @@ public class DemoActivity extends Activity {
         }
     };
 
-    private class LongRunningGetIO extends AsyncTask<Void, Void, String> {
-        protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
-            InputStream in = entity.getContent();
-            StringBuffer out = new StringBuffer();
-            int n = 1;
-            while (n>0) {
-                byte[] b = new byte[4096];
-                n =  in.read(b);
-                if (n>0) out.append(new String(b, 0, n));
-            }
-            return out.toString();
-        }
+    private class ReviewsRESTQuery extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
+            ResponseHandler<String> handler = new BasicResponseHandler();
             HttpGet httpGet = new HttpGet(mgaspReviewsUri.toString());
-            String text = null;
+            String responseBody = null;
+
             try {
                 HttpResponse response = httpClient.execute(httpGet, localContext);
-                HttpEntity entity = response.getEntity();
-                text = getASCIIContentFromEntity(entity);
-            } catch (Exception e) {
-                return e.getLocalizedMessage();
+                responseBody = handler.handleResponse(response);
+
+                Log.d(TAG, responseBody);
             }
-            return text;
+            catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage());
+            }
+            return responseBody;
         }
 
         @Override
@@ -231,13 +223,11 @@ public class DemoActivity extends Activity {
                 Type type = new TypeToken<List<Review>>() {}.getType();
                 mList = gson.fromJson(results, type);
 
-                Log.i(TAG, results);
                 ListIterator<Review> iterator = mList.listIterator();
                 int reviews = 0;
                 while (iterator.hasNext()) {
                     Review review = iterator.next();
                     reviews = review.getId();
-                    Log.i(TAG, "Gasp Review: " + reviews);
                 }
                 mDisplay.append("Loaded " + reviews + " reviews from " + mgaspReviewsUri);
             }
