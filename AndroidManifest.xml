@@ -54,7 +54,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name="com.cloudbees.gasp.gcm.DemoActivity"
+            android:name=".ReviewSyncActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -62,6 +62,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- Gasp! preferences activity -->
+        <activity
+                android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
+                android:label="@string/gasp_preferences" >
         </activity>
 
         <!--

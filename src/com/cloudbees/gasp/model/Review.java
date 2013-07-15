@@ -20,15 +20,18 @@ public class Review {
     String user;
     String url;
 
-    final int urlLen = "/reviews/".length();
-    final int userLen = "/users/".length();
-    final int restLen = "/restaurants/".length();
+    final String pathReviews = "/reviews/";
+    final int lenReviews = "/reviews/".length();
+    final String pathUsers = "/users/";
+    final int lenUsers = "/users/".length();
+    final String pathRestaurants = "/restaurants/";
+    final int lenRestaurants = "/restaurants/".length();
 
     public int getId() {
         return id;
     }
 
-    private void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -36,16 +39,18 @@ public class Review {
         return restaurant_id;
     }
 
-    private void setRestaurant_id(int restaurant_id) {
+    public void setRestaurant_id(int restaurant_id) {
         this.restaurant_id = restaurant_id;
+        this.setRestaurant(pathRestaurants + restaurant_id);
     }
 
     public int getUser_id() {
         return user_id;
     }
 
-    private void setUser_id(int user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
+        this.setUser(pathUsers + user_id);
     }
 
     public int getStar() {
@@ -70,7 +75,7 @@ public class Review {
 
     public void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
-        setRestaurant_id(Integer.valueOf(this.getRestaurant().substring(restLen)));
+        setRestaurant_id(Integer.valueOf(this.getRestaurant().substring(lenRestaurants)));
     }
 
     public String getUser() {
@@ -79,7 +84,7 @@ public class Review {
 
     public void setUser(String user) {
         this.user = user;
-        setUser_id(Integer.valueOf(this.getUser().substring(userLen)));
+        setUser_id(Integer.valueOf(this.getUser().substring(lenUsers)));
     }
 
     public String getUrl() {
@@ -88,6 +93,6 @@ public class Review {
 
     public void setUrl(String url) {
         this.url = url;
-        setId(Integer.valueOf(this.getUrl().substring(urlLen)));
+        setId(Integer.valueOf(this.getUrl().substring(lenReviews)));
     }
 }

@@ -31,7 +31,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.cloudbees.gasp.activity.SetPreferencesActivity;
 import com.cloudbees.gasp.model.Review;
+import com.cloudbees.gasp.model.ReviewsDataSource;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,11 +59,11 @@ import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
 /**
  * Main UI for the demo app.
  */
-public class DemoActivity extends Activity {
-    private static String TAG = DemoActivity.class.getName();
+public class ReviewSyncActivity extends Activity {
+    private static String TAG = ReviewSyncActivity.class.getName();
 
     private TextView mDisplay;
-    private Uri mgaspReviewsUri;
+    private Uri mGaspReviewsUri;
     private List<Review> mList;
 
     private AsyncTask<Void, Void, Void> mRegisterTask;
@@ -75,7 +77,7 @@ public class DemoActivity extends Activity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.i(TAG, "Using Gasp Server URI: " + gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
-        mgaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
+        mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
 
         new ReviewsRESTQuery().execute();
 
@@ -110,12 +112,7 @@ public class DemoActivity extends Activity {
                     protected Void doInBackground(Void... params) {
                         boolean registered =
                                 ServerUtilities.register(context, regId);
-                        // At this point all attempts to register with the app
-                        // server failed, so we need to unregister the device
-                        // from GCM - the app will try to register again when
-                        // it is restarted. Note that GCM will send an
-                        // unregistered callback upon completion, but
-                        // GCMIntentService.onUnregistered() will ignore it.
+
                         if (!registered) {
                             GCMRegistrar.unregister(context);
                         }
@@ -160,9 +157,17 @@ public class DemoActivity extends Activity {
             case R.id.options_clear:
                 mDisplay.setText(null);
                 return true;
+
             case R.id.options_exit:
                 finish();
                 return true;
+
+            case R.id.gasp_settings:
+                Intent intent = new Intent();
+                intent.setClass(ReviewSyncActivity.this, SetPreferencesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -200,7 +205,7 @@ public class DemoActivity extends Activity {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             ResponseHandler<String> handler = new BasicResponseHandler();
-            HttpGet httpGet = new HttpGet(mgaspReviewsUri.toString());
+            HttpGet httpGet = new HttpGet(mGaspReviewsUri.toString());
             String responseBody = null;
 
             try {
@@ -210,7 +215,7 @@ public class DemoActivity extends Activity {
                 Log.d(TAG, responseBody);
             }
             catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage());
+                Log.e(TAG, e.getStackTrace().toString());
             }
             return responseBody;
         }
@@ -218,18 +223,27 @@ public class DemoActivity extends Activity {
         @Override
         protected void onPostExecute(String results) {
             if (results!=null) {
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<Review>>() {}.getType();
+                    mList = gson.fromJson(results, type);
 
-                Gson gson = new Gson();
-                Type type = new TypeToken<List<Review>>() {}.getType();
-                mList = gson.fromJson(results, type);
+                    ReviewsDataSource reviewsDB = new ReviewsDataSource(getApplicationContext());
+                    reviewsDB.open();
+                    ListIterator<Review> iterator = mList.listIterator();
+                    int reviews = 0;
+                    while (iterator.hasNext()) {
+                        Review review = iterator.next();
+                        reviewsDB.insertReview(review);
+                        reviews = review.getId();
+                    }
+                    reviewsDB.close();
 
-                ListIterator<Review> iterator = mList.listIterator();
-                int reviews = 0;
-                while (iterator.hasNext()) {
-                    Review review = iterator.next();
-                    reviews = review.getId();
+                    mDisplay.append("Loaded " + reviews + " reviews from " + mGaspReviewsUri +'\n');
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.getStackTrace().toString());
                 }
-                mDisplay.append("Loaded " + reviews + " reviews from " + mgaspReviewsUri);
             }
         }
     }

@@ -37,5 +37,6 @@
     <string name="gasp_reviews_uri">http://gasp.mqprichard.cloudbees.net/reviews</string>
     <string name="gasp_network_error">Failed to load Gasp! reviews: Please check your internet settings</string>
     <string name="gasp_settings">Gasp! Settings</string>
+    <string name="gasp_preferences">Gasp! Preferences</string>
 
 </resources>
