@@ -1,7 +1,5 @@
 package com.cloudbees.gasp.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Model class for Gasp! Reviews. The class is designed to be populated via a JSON call
  * to the Gasp! REST server: the id, restaurant_id an user_id are parsed from the return
@@ -9,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Mark Prichard
  */
-@XmlRootElement
 public class Review {
     int id;
     int restaurant_id;
