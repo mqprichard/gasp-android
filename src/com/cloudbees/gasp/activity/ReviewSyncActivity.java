@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cloudbees.gasp.gcm;
+package com.cloudbees.gasp.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -31,7 +31,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.cloudbees.gasp.activity.SetPreferencesActivity;
+import com.cloudbees.gasp.gcm.R;
+import com.cloudbees.gasp.gcm.ServerUtilities;
 import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.model.ReviewsDataSource;
 import com.google.android.gcm.GCMRegistrar;
@@ -51,10 +52,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.cloudbees.gasp.gcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.cloudbees.gasp.gcm.CommonUtilities.EXTRA_MESSAGE;
-import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
-import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
+import static com.cloudbees.gasp.gcm.CommonUtilities.getDisplayMessageAction;
+import static com.cloudbees.gasp.gcm.CommonUtilities.getExtraMessage;
+import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
+import static com.cloudbees.gasp.gcm.CommonUtilities.getServerUrl;
 
 /**
  * Main UI for the demo app.
@@ -81,8 +82,8 @@ public class ReviewSyncActivity extends Activity {
 
         new ReviewsRESTQuery().execute();
 
-        checkNotNull(SERVER_URL, "SERVER_URL");
-        checkNotNull(SENDER_ID, "SENDER_ID");
+        checkNotNull(getServerUrl(), "SERVER_URL");
+        checkNotNull(getSenderId(), "SENDER_ID");
         // Make sure the device has the proper dependencies.
         GCMRegistrar.checkDevice(this);
         // Make sure the manifest was properly set - comment out this line
@@ -91,11 +92,11 @@ public class ReviewSyncActivity extends Activity {
         setContentView(R.layout.main);
         mDisplay = (TextView) findViewById(R.id.display);
         registerReceiver(mHandleMessageReceiver,
-                new IntentFilter(DISPLAY_MESSAGE_ACTION));
+                new IntentFilter(getDisplayMessageAction()));
         final String regId = GCMRegistrar.getRegistrationId(this);
         if (regId.equals("")) {
             // Automatically registers application on startup.
-            GCMRegistrar.register(this, SENDER_ID);
+            GCMRegistrar.register(this, getSenderId());
         } else {
             // Device is already registered on GCM, check server.
             if (GCMRegistrar.isRegisteredOnServer(this)) {
@@ -194,7 +195,7 @@ public class ReviewSyncActivity extends Activity {
             new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
+            String newMessage = intent.getExtras().getString(getExtraMessage());
             mDisplay.append(newMessage + "\n");
         }
     };

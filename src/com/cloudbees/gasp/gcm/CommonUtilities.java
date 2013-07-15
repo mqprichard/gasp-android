@@ -29,13 +29,22 @@ public final class CommonUtilities {
      */
     static final String SERVER_URL = "http://gasp-gcm-server.mqprichard.cloudbees.net/gcm";
 
+    public static String getServerUrl() {
+        return SERVER_URL;
+    }
+
     /**
      * Google API project id registered to use GCM.
      */
     static final String SENDER_ID = "960428562804";
 
+    public static String getSenderId() {
+        return SENDER_ID;
+    }
+
     /**
      * Tag used on log messages.
+
      */
     static final String TAG = "GCMDemo";
 
@@ -45,10 +54,19 @@ public final class CommonUtilities {
     static final String DISPLAY_MESSAGE_ACTION =
             "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
 
+    public static String getDisplayMessageAction() {
+        return DISPLAY_MESSAGE_ACTION;
+    }
+
     /**
      * Intent's extra that contains the message to be displayed.
      */
     static final String EXTRA_MESSAGE = "message";
+
+
+    public static String getExtraMessage() {
+        return EXTRA_MESSAGE;
+    }
 
     /**
      * Notifies UI to display a message.

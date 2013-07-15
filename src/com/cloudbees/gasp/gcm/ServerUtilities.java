@@ -15,15 +15,10 @@
  */
 package com.cloudbees.gasp.gcm;
 
-import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
-import static com.cloudbees.gasp.gcm.CommonUtilities.TAG;
-import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
-
-import com.google.android.gcm.GCMRegistrar;
-import com.cloudbees.gasp.gcm.R;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.google.android.gcm.GCMRegistrar;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,6 +30,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+
+import static com.cloudbees.gasp.gcm.CommonUtilities.SERVER_URL;
+import static com.cloudbees.gasp.gcm.CommonUtilities.TAG;
+import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
 
 /**
  * Helper class used to communicate with the demo server.
@@ -50,7 +49,7 @@ public final class ServerUtilities {
      *
      * @return whether the registration succeeded or not.
      */
-    static boolean register(final Context context, final String regId) {
+    public static boolean register(final Context context, final String regId) {
         Log.i(TAG, "registering device (regId = " + regId + ")");
         String serverUrl = SERVER_URL + "/register";
         Map<String, String> params = new HashMap<String, String>();
@@ -99,7 +98,7 @@ public final class ServerUtilities {
     /**
      * Unregister this account/device pair within the server.
      */
-    static void unregister(final Context context, final String regId) {
+    public static void unregister(final Context context, final String regId) {
         Log.i(TAG, "unregistering device (regId = " + regId + ")");
         String serverUrl = SERVER_URL + "/unregister";
         Map<String, String> params = new HashMap<String, String>();
