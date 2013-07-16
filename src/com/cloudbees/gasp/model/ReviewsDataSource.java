@@ -68,13 +68,28 @@ public class ReviewsDataSource {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Review Review = cursorToReview(cursor);
-            Reviews.add(Review);
+            Review review = cursorToReview(cursor);
+            Reviews.add(review);
             cursor.moveToNext();
         }
-        // Make sure to close the cursor
         cursor.close();
         return Reviews;
+    }
+
+    public List<String> getAllReviewsAsStrings() {
+        List<String> reviewStrings = new ArrayList<String>();
+
+        Cursor cursor = database.query(ReviewsSQLiteHelper.REVIEWS_TABLE,
+                allColumns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Review review = cursorToReview(cursor);
+            reviewStrings.add(review.toString());
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return reviewStrings;
     }
 
     private Review cursorToReview(Cursor cursor) {

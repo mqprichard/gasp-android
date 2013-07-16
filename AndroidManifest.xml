@@ -69,6 +69,7 @@
                 android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
                 android:label="@string/gasp_preferences" >
         </activity>
+        <activity android:name="com.cloudbees.gasp.activity.ReviewDatabaseListActivity"/>
 
         <!--
           BroadcastReceiver that will receive intents from GCM

@@ -127,7 +127,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 Log.d(TAG, responseBody);
             }
             catch (Exception e) {
-                Log.e(TAG, e.getStackTrace().toString());
+                e.printStackTrace();
             }
             return responseBody;
         }

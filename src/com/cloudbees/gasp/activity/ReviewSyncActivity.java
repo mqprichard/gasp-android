@@ -89,7 +89,7 @@ public class ReviewSyncActivity extends Activity {
         // Make sure the manifest was properly set - comment out this line
         // while developing the app, then uncomment it when it's ready.
         GCMRegistrar.checkManifest(this);
-        setContentView(R.layout.main);
+        setContentView(R.layout.gcm_demo);
         mDisplay = (TextView) findViewById(R.id.display);
         registerReceiver(mHandleMessageReceiver,
                 new IntentFilter(getDisplayMessageAction()));
@@ -169,6 +169,12 @@ public class ReviewSyncActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return true;
 
+            case R.id.gasp_reviews_data:
+                intent = new Intent();
+                intent.setClass(ReviewSyncActivity.this, ReviewDatabaseListActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -216,7 +222,7 @@ public class ReviewSyncActivity extends Activity {
                 Log.d(TAG, responseBody);
             }
             catch (Exception e) {
-                Log.e(TAG, e.getStackTrace().toString());
+                e.printStackTrace();
             }
             return responseBody;
         }
@@ -243,7 +249,7 @@ public class ReviewSyncActivity extends Activity {
                     mDisplay.append("Loaded " + reviews + " reviews from " + mGaspReviewsUri +'\n');
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.getStackTrace().toString());
+                    e.printStackTrace();
                 }
             }
         }
