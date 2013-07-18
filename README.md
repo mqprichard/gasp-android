@@ -41,5 +41,4 @@ The easiest way to is run the app directly from Android Studio; alternatively de
 
 Resetting the Demo Client
 -------------------------
-To re-run the demo from a clean state, 
-
+To re-run the demo from a clean state, you should uninstall the app to remove the GCM registration and delete the SQLite database.  
