@@ -22,4 +22,15 @@ The Options Menu allows you to:
    - Exit the application
    - Edit the Gasp! server endpoint URL
    - View the SQLite database (reviews shown in reverse order)
+   
+Building the Demo Client
+------------------------
+You can build the application directly from Android Studio or via gradle. The application needs both the Android support and GCM client libraries from the Android SDK, so build.gradle uses the [CloudBees maven-android-sdk repository](https://repository-maven-android-sdk.forge.cloudbees.com/release/) for these dependencies.  Thanks to [these folk](https://github.com/mosabua/maven-android-sdk-deployer) for enabling this!
+
+Build using `gradle clean build` or use the gradle wrapper.
+
+Running the Demo Client
+-----------------------
+The easiest way to is run the app directly from Android Studio; alternatively deploy using adb and use `am start -n "com.cloudbees.gasp.gcm/com.cloudbees.gasp.activity.ReviewSyncActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER`.
+
 
