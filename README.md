@@ -22,7 +22,13 @@ The Options Menu allows you to:
    - Exit the application
    - Edit the Gasp! server endpoint URL
    - View the SQLite database (reviews shown in reverse order)
-   
+
+Pre-reqs
+--------
+1. Run the [Gasp! Server](https://github.com/cloudbees/gasp-server) application on CloudBees
+2. Configure Google APIs for Google Cloud Messaging - see [instructions here](https://github.com/mqprichard/gasp-gcm-server/blob/master/README.md).  You will need to edit CommonUtilities to set SENDER_ID equal to your 12-digit Google API Project Number, to match the API Key configured for the gasp-gcm-server.
+3. Configure and run the FoxWeave Integration Service and the gasp-gcm server application - see [instructions here](https://github.com/mqprichard/gasp-gcm-server/blob/master/README.md).
+
 Building the Demo Client
 ------------------------
 You can build the application directly from Android Studio or via gradle. The application needs both the Android support and GCM client libraries from the Android SDK, so build.gradle uses the [CloudBees maven-android-sdk repository](https://repository-maven-android-sdk.forge.cloudbees.com/release/) for these dependencies.  Thanks to [these folk](https://github.com/mosabua/maven-android-sdk-deployer) for enabling this!
