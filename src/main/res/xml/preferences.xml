@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >  
+        <EditTextPreference
+            android:key="gasp_endpoint_uri"
+            android:title="Gasp! Server Endpoint" 
+            android:dialogTitle="Gasp! Server Endpoint"             
+            android:defaultValue="http://gasp.mqprichard.cloudbees.net/reviews" 
+        />
+</PreferenceScreen>
