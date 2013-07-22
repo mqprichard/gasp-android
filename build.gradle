@@ -14,10 +14,10 @@ task wrapper(type: Wrapper) {
 apply plugin: 'android'
 
 repositories {
-    maven {
-        url "https://repository-maven-android-sdk.forge.cloudbees.com/release/"
-    }
     mavenCentral()
+    maven {
+        url "https://repository-partnerdemo.forge.cloudbees.com/release/"
+    }
 }
 
 dependencies {
