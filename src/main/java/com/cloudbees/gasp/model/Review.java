@@ -37,6 +37,7 @@ public class Review {
 
     public void setId(int id) {
         this.id = id;
+        this.setUrl("/users/" + id);
     }
 
     public int getRestaurant_id() {
@@ -45,6 +46,7 @@ public class Review {
 
     public void setRestaurant_id(int restaurant_id){
         this.restaurant_id = restaurant_id;
+        this.setRestaurant("/restaurants/" + restaurant_id);
     }
 
     public int getUser_id() {
@@ -53,6 +55,7 @@ public class Review {
 
     public void setUser_id(int user_id){
         this.user_id = user_id;
+        this.setUser("/users/" + user_id);
     }
 
     public int getStar() {
@@ -75,7 +78,7 @@ public class Review {
         return restaurant;
     }
 
-    public void setRestaurant(String restaurant) {
+    private void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
     }
 
@@ -83,7 +86,7 @@ public class Review {
         return user;
     }
 
-    public void setUser(String user) {
+    private void setUser(String user) {
         this.user = user;
     }
 
@@ -91,7 +94,7 @@ public class Review {
         return url;
     }
 
-    public void setUrl(String url) {
+    private void setUrl(String url) {
         this.url = url;
     }
 
