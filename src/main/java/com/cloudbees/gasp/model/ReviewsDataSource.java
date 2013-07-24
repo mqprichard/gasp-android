@@ -18,15 +18,15 @@ public class ReviewsDataSource {
 
     // Database fields
     private SQLiteDatabase database;
-    private ReviewsSQLiteHelper dbHelper;
-    private String[] allColumns = { ReviewsSQLiteHelper.COLUMN_ID,
-                                    ReviewsSQLiteHelper.COLUMN_RESTAURANT_ID,
-                                    ReviewsSQLiteHelper.COLUMN_USER_ID,
-                                    ReviewsSQLiteHelper.COLUMN_COMMENT,
-                                    ReviewsSQLiteHelper.COLUMN_STAR };
+    private GaspSQLiteHelper dbHelper;
+    private String[] allColumns = { GaspSQLiteHelper.REVIEWS_COLUMN_ID,
+                                    GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID,
+                                    GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID,
+                                    GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT,
+                                    GaspSQLiteHelper.REVIEWS_COLUMN_STAR };
 
     public ReviewsDataSource(Context context) {
-        dbHelper = new ReviewsSQLiteHelper(context);
+        dbHelper = new GaspSQLiteHelper(context);
     }
 
     public void open() throws SQLException {
@@ -39,12 +39,12 @@ public class ReviewsDataSource {
 
     public void insertReview(Review review) {
         ContentValues values = new ContentValues();
-        values.put(ReviewsSQLiteHelper.COLUMN_ID, review.getId());
-        values.put(ReviewsSQLiteHelper.COLUMN_RESTAURANT_ID, review.getRestaurant_id());
-        values.put(ReviewsSQLiteHelper.COLUMN_USER_ID, review.getUser_id());
-        values.put(ReviewsSQLiteHelper.COLUMN_COMMENT, review.getComment());
-        values.put(ReviewsSQLiteHelper.COLUMN_STAR, review.getStar());
-        long insertId = database.insert(ReviewsSQLiteHelper.REVIEWS_TABLE, null,
+        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_ID, review.getId());
+        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID, review.getRestaurant_id());
+        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID, review.getUser_id());
+        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT, review.getComment());
+        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_STAR, review.getStar());
+        long insertId = database.insert(GaspSQLiteHelper.REVIEWS_TABLE, null,
                 values);
         if (insertId != -1) {
             Log.d(TAG, "Inserted review with id: " + insertId);
@@ -56,15 +56,37 @@ public class ReviewsDataSource {
     public void deleteReview(Review Review) {
         long id = Review.getId();
         Log.d(TAG, "Deleting review with id: " + id);
-        database.delete(ReviewsSQLiteHelper.REVIEWS_TABLE, ReviewsSQLiteHelper.COLUMN_ID
+        database.delete(GaspSQLiteHelper.REVIEWS_TABLE, GaspSQLiteHelper.REVIEWS_COLUMN_ID
                 + " = " + id, null);
+    }
+
+    public void insertRestaurant(Restaurant restaurant) {
+        ContentValues values = new ContentValues();
+        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_ID, restaurant.getId());
+        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME, restaurant.getName());
+        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE, restaurant.getWebsite());
+        long insertId = database.insert(GaspSQLiteHelper.RESTAURANTS_TABLE, null,
+                values);
+        if (insertId != -1) {
+            Log.d(TAG, "Inserted restaurant with id: " + insertId);
+        } else {
+            Log.e(TAG, "Error inserting restaurant with id: " + restaurant.getId());
+        }
+    }
+
+    public void deleteRestaurant(Restaurant restaurant) {
+        long id = restaurant.getId();
+        Log.d(TAG, "Deleting restaurant with id: " + id);
+        database.delete(GaspSQLiteHelper.RESTAURANTS_TABLE,
+                GaspSQLiteHelper.RESTAURANTS_COLUMN_ID
+                        + " = " + id, null);
     }
 
     public List<Review> getAllReviews() {
         List<Review> Reviews = new ArrayList<Review>();
 
-        Cursor cursor = database.query(ReviewsSQLiteHelper.REVIEWS_TABLE,
-                allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE,
+                        allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -79,8 +101,8 @@ public class ReviewsDataSource {
     public List<String> getAllReviewsAsStrings() {
         List<String> reviewStrings = new ArrayList<String>();
 
-        Cursor cursor = database.query(ReviewsSQLiteHelper.REVIEWS_TABLE,
-                allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE,
+                        allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
