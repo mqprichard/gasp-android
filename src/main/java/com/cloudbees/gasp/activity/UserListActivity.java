@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.gcm.R;
-import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewsDataSource;
+import com.cloudbees.gasp.model.User;
+import com.cloudbees.gasp.model.UserAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,36 +14,36 @@ import java.util.List;
 /**
  * Created by markprichard on 7/15/13.
  */
-public class ReviewDatabaseListActivity extends ListActivity {
-    private ReviewsDataSource reviewsDataSource;
+public class UserListActivity extends ListActivity {
+    private UserAdapter userAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gasp_review_database);
+        setContentView(R.layout.gasp_database_list);
 
-        reviewsDataSource = new ReviewsDataSource(this);
-        reviewsDataSource.open();
+        userAdapter = new UserAdapter(this);
+        userAdapter.open();
 
-        List<Review> reviews = reviewsDataSource.getAllReviews();
-        Collections.reverse(reviews);
+        List<User> users = userAdapter.getAllUsers();
+        Collections.reverse(users);
 
         // Use the SimpleCursorAdapter to show the
         // elements in a ListView
-        ArrayAdapter<Review> adapter = new ArrayAdapter<Review>(this,
-                android.R.layout.simple_list_item_1, reviews);
+        ArrayAdapter<User> adapter =
+                new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1, users);
         setListAdapter(adapter);
     }
 
     @Override
     protected void onResume() {
-        reviewsDataSource.open();
+        userAdapter.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        reviewsDataSource.close();
+        userAdapter.close();
         super.onPause();
     }
 }

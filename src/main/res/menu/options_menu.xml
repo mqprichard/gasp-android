@@ -49,5 +49,15 @@
         android:title="@string/gasp_reviews_data"
         android:showAsAction="never">
     </item>
+    <item
+        android:id="@+id/gasp_restaurants_data"
+        android:title="@string/gasp_restaurants_data"
+        android:showAsAction="never">
+    </item>
+    <item
+        android:id="@+id/gasp_users_data"
+        android:title="@string/gasp_users_data"
+        android:showAsAction="never">
+    </item>
 
 </menu>

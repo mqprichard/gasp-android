@@ -34,7 +34,7 @@ import android.widget.TextView;
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.gcm.ServerUtilities;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewsDataSource;
+import com.cloudbees.gasp.model.ReviewAdapter;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -171,7 +171,19 @@ public class ReviewSyncActivity extends Activity {
 
             case R.id.gasp_reviews_data:
                 intent = new Intent();
-                intent.setClass(ReviewSyncActivity.this, ReviewDatabaseListActivity.class);
+                intent.setClass(ReviewSyncActivity.this, ReviewListActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.gasp_restaurants_data:
+                intent = new Intent();
+                intent.setClass(ReviewSyncActivity.this, RestaurantListActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.gasp_users_data:
+                intent = new Intent();
+                intent.setClass(ReviewSyncActivity.this, UserListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
@@ -235,7 +247,7 @@ public class ReviewSyncActivity extends Activity {
                     Type type = new TypeToken<List<Review>>() {}.getType();
                     mList = gson.fromJson(results, type);
 
-                    ReviewsDataSource reviewsDB = new ReviewsDataSource(getApplicationContext());
+                    ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
                     reviewsDB.open();
                     ListIterator<Review> iterator = mList.listIterator();
                     int reviews = 0;

@@ -30,7 +30,7 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.ReviewSyncActivity;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewsDataSource;
+import com.cloudbees.gasp.model.ReviewAdapter;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
@@ -140,7 +140,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                     Type type = new TypeToken<Review>() {}.getType();
                     mReview = gson.fromJson(result, type);
 
-                    ReviewsDataSource reviewsDB = new ReviewsDataSource(getApplicationContext());
+                    ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
                     reviewsDB.open();
                     reviewsDB.insertReview(mReview);
                     reviewsDB.close();

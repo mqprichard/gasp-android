@@ -69,7 +69,11 @@
                 android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
                 android:label="@string/gasp_preferences" >
         </activity>
-        <activity android:name="com.cloudbees.gasp.activity.ReviewDatabaseListActivity"/>
+
+        <!-- Gasp! database activities -->
+        <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity"/>
+        <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity"/>
+        <activity android:name="com.cloudbees.gasp.activity.UserListActivity"/>
 
         <!--
           BroadcastReceiver that will receive intents from GCM
