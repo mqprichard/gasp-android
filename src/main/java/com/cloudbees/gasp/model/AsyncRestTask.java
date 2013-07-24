@@ -27,10 +27,10 @@ public class AsyncRestTask {
     }
 
     public void doRest() {
-        new ReviewsRESTQuery().execute();
+        new AsyncRestCall().execute();
     }
 
-    private class ReviewsRESTQuery extends AsyncTask<Void, Void, String> {
+    private class AsyncRestCall extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {
             HttpClient httpClient = new DefaultHttpClient();
