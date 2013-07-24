@@ -16,9 +16,9 @@ import java.util.List;
 public class ReviewAdapter {
     private static final String TAG = ReviewAdapter.class.getName();
 
-    // Database fields
     private SQLiteDatabase database;
     private GaspSQLiteHelper dbHelper;
+
     private String[] allColumns = { GaspSQLiteHelper.REVIEWS_COLUMN_ID,
                                     GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID,
                                     GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID,

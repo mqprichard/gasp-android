@@ -16,9 +16,9 @@ import java.util.List;
 public class UserAdapter {
     private static final String TAG = UserAdapter.class.getName();
 
-    // Database fields
     private SQLiteDatabase database;
     private GaspSQLiteHelper dbHelper;
+
     private String[] allColumns = { GaspSQLiteHelper.USERS_COLUMN_ID,
                                     GaspSQLiteHelper.USERS_COLUMN_NAME };
 

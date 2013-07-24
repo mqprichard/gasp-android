@@ -16,9 +16,9 @@ import java.util.List;
 public class RestaurantAdapter {
     private static final String TAG = RestaurantAdapter.class.getName();
 
-    // Database fields
     private SQLiteDatabase database;
     private GaspSQLiteHelper dbHelper;
+
     private String[] allColumns = { GaspSQLiteHelper.RESTAURANTS_COLUMN_ID,
                                     GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME,
                                     GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE};
