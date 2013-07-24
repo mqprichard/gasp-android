@@ -73,22 +73,6 @@ public class RestaurantAdapter {
         return restaurants;
     }
 
-    public List<String> getStringList() {
-        List<String> restaurantStrings = new ArrayList<String>();
-
-        Cursor cursor = database.query(GaspSQLiteHelper.RESTAURANTS_TABLE,
-                        allColumns, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Restaurant restaurant = cursorToRestaurant(cursor);
-            restaurantStrings.add(restaurant.toString());
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return restaurantStrings;
-    }
-
     private Restaurant cursorToRestaurant(Cursor cursor) {
         Restaurant restaurant = new Restaurant();
         restaurant.setId(cursor.getInt(0));

@@ -70,22 +70,6 @@ public class UserAdapter {
         return users;
     }
 
-    public List<String> getStringList() {
-        List<String> reviewStrings = new ArrayList<String>();
-
-        Cursor cursor = database.query(GaspSQLiteHelper.USERS_TABLE,
-                allColumns, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            User user = cursorToUser(cursor);
-            reviewStrings.add(user.toString());
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return reviewStrings;
-    }
-
     private User cursorToUser(Cursor cursor) {
         User user = new User();
         user.setId(cursor.getInt(0));

@@ -76,22 +76,6 @@ public class ReviewAdapter {
         return Reviews;
     }
 
-    public List<String> getStringList() {
-        List<String> reviewStrings = new ArrayList<String>();
-
-        Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE,
-                        allColumns, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Review review = cursorToReview(cursor);
-            reviewStrings.add(review.toString());
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return reviewStrings;
-    }
-
     private Review cursorToReview(Cursor cursor) {
         Review Review = new Review();
         Review.setId(cursor.getInt(0));

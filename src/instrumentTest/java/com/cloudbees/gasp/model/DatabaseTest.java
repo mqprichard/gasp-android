@@ -83,10 +83,6 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(reviewList.get(0).getComment(), testComment);
         assertEquals(reviewList.get(0).getStar(), testStar);
 
-        List<String> reviewStringList = reviewData.getStringList();
-        assertEquals(reviewStringList.size(), 1);
-        assertEquals(reviewStringList.get(0), review.toString());
-
         review.setId(testId + 1);
         reviewData.insertReview(review);
         reviewList = reviewData.getAll();
@@ -118,10 +114,6 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(restaurantList.get(0).getName(), testName);
         assertEquals(restaurantList.get(0).getWebsite(), testWebsite);
 
-        List<String> restaurantStringList = restaurantData.getStringList();
-        assertEquals(restaurantStringList.size(), 1);
-        assertEquals(restaurantStringList.get(0), restaurant.toString());
-
         restaurant.setId(testId + 1);
         restaurantData.insertRestaurant(restaurant);
         restaurantList = restaurantData.getAll();
@@ -151,10 +143,6 @@ public class DatabaseTest extends AndroidTestCase {
 
         assertEquals(userList.get(0).getId(), testId);
         assertEquals(userList.get(0).getName(), testName);
-
-        List<String> userStringList = userData.getStringList();
-        assertEquals(userStringList.size(), 1);
-        assertEquals(userStringList.get(0), user.toString());
 
         user.setId(testId + 1);
         userData.insertUser(user);
