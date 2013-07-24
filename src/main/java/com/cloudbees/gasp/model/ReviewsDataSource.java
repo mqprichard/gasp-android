@@ -98,7 +98,7 @@ public class ReviewsDataSource {
         Review.setRestaurant_id(cursor.getInt(1));
         Review.setUser_id(cursor.getInt(2));
         Review.setComment(cursor.getString(3));
-        Review.setStar(4);
+        Review.setStar(cursor.getInt(4));
         return Review;
     }
 }
