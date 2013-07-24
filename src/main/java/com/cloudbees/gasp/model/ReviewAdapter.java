@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by markprichard on 7/14/13.
  */
-public class ReviewsDataSource {
-    private static final String TAG = ReviewsDataSource.class.getName();
+public class ReviewAdapter {
+    private static final String TAG = ReviewAdapter.class.getName();
 
     // Database fields
     private SQLiteDatabase database;
@@ -25,7 +25,7 @@ public class ReviewsDataSource {
                                     GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT,
                                     GaspSQLiteHelper.REVIEWS_COLUMN_STAR };
 
-    public ReviewsDataSource(Context context) {
+    public ReviewAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
     }
 

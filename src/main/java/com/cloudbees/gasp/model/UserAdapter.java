@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by markprichard on 7/14/13.
  */
-public class UsersDataSource {
-    private static final String TAG = UsersDataSource.class.getName();
+public class UserAdapter {
+    private static final String TAG = UserAdapter.class.getName();
 
     // Database fields
     private SQLiteDatabase database;
@@ -22,7 +22,7 @@ public class UsersDataSource {
     private String[] allColumns = { GaspSQLiteHelper.USERS_COLUMN_ID,
                                     GaspSQLiteHelper.USERS_COLUMN_NAME };
 
-    public UsersDataSource(Context context) {
+    public UserAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
     }
 

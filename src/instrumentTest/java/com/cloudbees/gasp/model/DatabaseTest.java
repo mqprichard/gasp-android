@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by markprichard on 7/23/13.
  */
-public class DataSourceTest extends AndroidTestCase {
+public class DatabaseTest extends AndroidTestCase {
 
     private static final int testId = 1;
     private static final int testUserId = 1;
@@ -18,22 +18,50 @@ public class DataSourceTest extends AndroidTestCase {
     private static final String testWebsite = "http://www.restaurant.com/";
 
     protected void setUp() {
-        /*
-        reviewData = new ReviewsDataSource(getContext());
-
-        // Delete all rows prior to running tests
+        ReviewAdapter reviewData = new ReviewAdapter(getContext());
         reviewData.open();
-        reviewList = reviewData.getAllReviews();
-        for (Review review : reviewList) {
-            reviewData.deleteReview(review);
+        try {
+            List<Review> reviewList = reviewData.getAllReviews();
+            for (Review review : reviewList) {
+                reviewData.deleteReview(review);
+            }
         }
-        reviewData.close();
-        */
+        catch(Exception e){}
+        finally {
+            reviewData.close();
+        }
+
+        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getContext());
+        restaurantAdapter.open();
+        try {
+            List<Restaurant> restaurantList = restaurantAdapter.getAllRestaurants();
+            for (Restaurant restaurant : restaurantList) {
+                restaurantAdapter.deleteRestaurant(restaurant);
+            }
+        }
+        catch (Exception e) {}
+        finally {
+            restaurantAdapter.close();
+        }
+
+        UserAdapter userAdapter = new UserAdapter(getContext());
+        userAdapter.open();
+        try {
+            List<User> userList = userAdapter.getAllUsers();
+            for (User user : userList) {
+                userAdapter.deleteUser(user);
+            }
+        }
+        catch (Exception e) {}
+        finally {
+            userAdapter.close();
+        }
     }
+
     protected void tearDown() {}
 
-    public void testReviewsDataSource() {
-        ReviewsDataSource reviewData = new ReviewsDataSource(getContext());
+    public void testReviewAdapter() {
+        ReviewAdapter reviewData = new ReviewAdapter(getContext());
         List<Review> reviewList;
 
         Review review = new Review();
@@ -71,8 +99,8 @@ public class DataSourceTest extends AndroidTestCase {
         reviewData.close();
     }
 
-    public void testRestaurantsDataSource() {
-        RestaurantsDataSource restaurantData = new RestaurantsDataSource(getContext());
+    public void testRestaurantAdapter() {
+        RestaurantAdapter restaurantData = new RestaurantAdapter(getContext());
         List<Restaurant> restaurantList;
 
         Restaurant restaurant = new Restaurant();
@@ -107,8 +135,8 @@ public class DataSourceTest extends AndroidTestCase {
         restaurantData.close();
     }
 
-    public void testUsersDataSource() {
-        UsersDataSource userData = new UsersDataSource(getContext());
+    public void testUserAdapter() {
+        UserAdapter userData = new UserAdapter(getContext());
         List<User> userList;
 
         User user = new User();

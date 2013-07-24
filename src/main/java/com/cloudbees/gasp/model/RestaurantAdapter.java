@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by markprichard on 7/14/13.
  */
-public class RestaurantsDataSource {
-    private static final String TAG = RestaurantsDataSource.class.getName();
+public class RestaurantAdapter {
+    private static final String TAG = RestaurantAdapter.class.getName();
 
     // Database fields
     private SQLiteDatabase database;
@@ -23,7 +23,7 @@ public class RestaurantsDataSource {
                                     GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME,
                                     GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE};
 
-    public RestaurantsDataSource(Context context) {
+    public RestaurantAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
     }
 
