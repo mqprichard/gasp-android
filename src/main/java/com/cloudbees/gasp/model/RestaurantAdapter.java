@@ -57,7 +57,7 @@ public class RestaurantAdapter {
                         + " = " + id, null);
     }
 
-    public List<Restaurant> getAllRestaurants() {
+    public List<Restaurant> getAll() {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.RESTAURANTS_TABLE,
@@ -73,7 +73,7 @@ public class RestaurantAdapter {
         return restaurants;
     }
 
-    public List<String> getAllRestaurantsAsStrings() {
+    public List<String> getStringList() {
         List<String> restaurantStrings = new ArrayList<String>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.RESTAURANTS_TABLE,

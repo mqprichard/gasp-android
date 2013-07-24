@@ -25,7 +25,7 @@ public class UserListActivity extends ListActivity {
         userAdapter = new UserAdapter(this);
         userAdapter.open();
 
-        List<User> users = userAdapter.getAllUsers();
+        List<User> users = userAdapter.getAll();
         Collections.reverse(users);
 
         // Use the SimpleCursorAdapter to show the

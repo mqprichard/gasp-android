@@ -25,7 +25,7 @@ public class RestaurantListActivity extends ListActivity {
         restaurantAdapter = new RestaurantAdapter(this);
         restaurantAdapter.open();
 
-        List<Restaurant> restaurants = restaurantAdapter.getAllRestaurants();
+        List<Restaurant> restaurants = restaurantAdapter.getAll();
         Collections.reverse(restaurants);
 
         // Use the SimpleCursorAdapter to show the

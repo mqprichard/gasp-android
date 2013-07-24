@@ -54,7 +54,7 @@ public class UserAdapter {
                         + " = " + id, null);
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         List<User> users = new ArrayList<User>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.USERS_TABLE,
@@ -70,7 +70,7 @@ public class UserAdapter {
         return users;
     }
 
-    public List<String> getAllUsersAsStrings() {
+    public List<String> getStringList() {
         List<String> reviewStrings = new ArrayList<String>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.USERS_TABLE,

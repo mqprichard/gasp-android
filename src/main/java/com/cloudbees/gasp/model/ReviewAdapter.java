@@ -60,29 +60,7 @@ public class ReviewAdapter {
                 + " = " + id, null);
     }
 
-    public void insertRestaurant(Restaurant restaurant) {
-        ContentValues values = new ContentValues();
-        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_ID, restaurant.getId());
-        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME, restaurant.getName());
-        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE, restaurant.getWebsite());
-        long insertId = database.insert(GaspSQLiteHelper.RESTAURANTS_TABLE, null,
-                values);
-        if (insertId != -1) {
-            Log.d(TAG, "Inserted restaurant with id: " + insertId);
-        } else {
-            Log.e(TAG, "Error inserting restaurant with id: " + restaurant.getId());
-        }
-    }
-
-    public void deleteRestaurant(Restaurant restaurant) {
-        long id = restaurant.getId();
-        Log.d(TAG, "Deleting restaurant with id: " + id);
-        database.delete(GaspSQLiteHelper.RESTAURANTS_TABLE,
-                GaspSQLiteHelper.RESTAURANTS_COLUMN_ID
-                        + " = " + id, null);
-    }
-
-    public List<Review> getAllReviews() {
+    public List<Review> getAll() {
         List<Review> Reviews = new ArrayList<Review>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE,
@@ -98,7 +76,7 @@ public class ReviewAdapter {
         return Reviews;
     }
 
-    public List<String> getAllReviewsAsStrings() {
+    public List<String> getStringList() {
         List<String> reviewStrings = new ArrayList<String>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE,

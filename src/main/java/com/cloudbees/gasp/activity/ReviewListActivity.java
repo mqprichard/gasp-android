@@ -25,7 +25,7 @@ public class ReviewListActivity extends ListActivity {
         reviewAdapter = new ReviewAdapter(this);
         reviewAdapter.open();
 
-        List<Review> reviews = reviewAdapter.getAllReviews();
+        List<Review> reviews = reviewAdapter.getAll();
         Collections.reverse(reviews);
 
         // Use the SimpleCursorAdapter to show the
