@@ -15,11 +15,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by markprichard on 7/24/13.
  */
-public class AdapterTest extends AndroidTestCase implements IRestListener {
-    private static final String TAG = AdapterTest.class.getName();
+public class AdapterTest2 extends AndroidTestCase implements IRestListener2 {
+    private static final String TAG = AdapterTest2.class.getName();
     private static final String REVIEWS = "http://gasp.mqprichard.cloudbees.net/reviews";
 
-    AsyncRestTask asyncRestCall;
+    AsyncRestClient asyncRestCall;
     CountDownLatch signal;
 
 
@@ -31,15 +31,25 @@ public class AdapterTest extends AndroidTestCase implements IRestListener {
     @UiThreadTest
     public void testAsyncRestTask() throws InterruptedException {
         try {
-            asyncRestCall = new AsyncRestTask(Uri.parse(REVIEWS), this);
-            asyncRestCall.doRest();
+            asyncRestCall = new AsyncRestClient(Uri.parse(REVIEWS), this);
+            asyncRestCall.getIndex(1);
+            asyncRestCall.getAll();
             signal.await(30, TimeUnit.SECONDS);
         }
         catch (Exception e) {}
     }
 
     @Override
-    public void callCompleted(String result) {
+    public void onCompletedIndex(String result) {
+        assertNotNull(result);
+        Gson gson = new Gson();
+        Type type = new TypeToken<Review>() {}.getType();
+        Review review = gson.fromJson(result, type);
+        assertEquals(review.getId(), 1);
+    }
+
+    @Override
+    public void onCompletedAll(String result) {
         assertNotNull(result);
         Gson gson = new Gson();
         Type type = new TypeToken<List<Review>>() {}.getType();

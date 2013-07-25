@@ -5,16 +5,24 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by markprichard on 7/14/13.
  */
-public class UserAdapter {
+public class UserAdapter implements IRestListener {
     private static final String TAG = UserAdapter.class.getName();
+
+    private Uri mUri;
+    private AsyncRestTask mAsyncRestTask = new AsyncRestTask(mUri, this);
 
     private SQLiteDatabase database;
     private GaspSQLiteHelper dbHelper;
@@ -75,5 +83,16 @@ public class UserAdapter {
         user.setId(cursor.getInt(0));
         user.setName(cursor.getString(1));
         return user;
+    }
+
+    public void doSync() {
+        mAsyncRestTask.doRest();
+    }
+
+    public void callCompleted(String result) {
+        Log.d(TAG, result);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<User>>() {}.getType();
+        List<User> list = gson.fromJson(result, type);
     }
 }
