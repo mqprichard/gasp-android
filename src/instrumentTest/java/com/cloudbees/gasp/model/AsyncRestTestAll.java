@@ -34,7 +34,9 @@ public class AsyncRestTestAll extends AndroidTestCase implements IRestListener {
         try {
             asyncRestCall = new AsyncRestClient(Uri.parse(REVIEWS), this);
             asyncRestCall.getAll();
-            signal.await(30, TimeUnit.SECONDS);
+
+            // Allow 10 secs for the async REST call to complete
+            signal.await(10, TimeUnit.SECONDS);
         }
         catch (Exception e) {}
     }
