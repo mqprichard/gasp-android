@@ -20,9 +20,9 @@ public class AsyncRestClient {
     private static final String TAG = AsyncRestClient.class.getName();
 
     private Uri mBaseUri;
-    private IRestListener2 mListener;
+    private IRestListener mListener;
 
-    public AsyncRestClient(Uri baseUri, IRestListener2 listener) {
+    public AsyncRestClient(Uri baseUri, IRestListener listener) {
         this.mBaseUri = baseUri;
         this.mListener = listener;
     }
@@ -31,7 +31,7 @@ public class AsyncRestClient {
         AsyncRestCall restCall = new AsyncRestCall() {
             @Override
             protected void onPostExecute(String results) {
-                mListener.onCompletedAll(results);
+                mListener.onCompleted(results);
             }
         };
 
@@ -43,7 +43,7 @@ public class AsyncRestClient {
         AsyncRestCall restCall = new AsyncRestCall() {
             @Override
             protected void onPostExecute(String results) {
-                mListener.onCompletedIndex(results);
+                mListener.onCompleted(results);
             }
         };
 
