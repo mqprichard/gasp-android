@@ -28,7 +28,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.ReviewSyncActivity;
+import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.model.ReviewAdapter;
 import com.google.android.gcm.GCMBaseIntentService;
@@ -191,7 +191,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                                         setSmallIcon(R.drawable.ic_stat_gcm).
                                         build();
         String title = context.getString(R.string.app_name);
-        Intent notificationIntent = new Intent(context, ReviewSyncActivity.class);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);

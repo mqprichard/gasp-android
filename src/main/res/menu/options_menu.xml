@@ -19,7 +19,7 @@
     <!-- Typically, an application registers automatically, so options below
          are disabled. Uncomment them if you want to manually register or
          unregister the device (you will also need to uncomment the equivalent
-         options on ReviewSyncActivity.onOptionsItemSelected())
+         options on MainActivity.onOptionsItemSelected())
     -->
     <!--
     <item

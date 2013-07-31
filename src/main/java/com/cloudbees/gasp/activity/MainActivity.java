@@ -33,8 +33,12 @@ import android.widget.TextView;
 
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.gcm.ServerUtilities;
+import com.cloudbees.gasp.model.Restaurant;
+import com.cloudbees.gasp.model.RestaurantAdapter;
 import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.model.ReviewAdapter;
+import com.cloudbees.gasp.model.User;
+import com.cloudbees.gasp.model.UserAdapter;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -60,12 +64,17 @@ import static com.cloudbees.gasp.gcm.CommonUtilities.getServerUrl;
 /**
  * Main UI for the demo app.
  */
-public class ReviewSyncActivity extends Activity {
-    private static String TAG = ReviewSyncActivity.class.getName();
+public class MainActivity extends Activity {
+    private static String TAG = MainActivity.class.getName();
 
     private TextView mDisplay;
     private Uri mGaspReviewsUri;
-    private List<Review> mList;
+    private Uri mGaspRestaurantsUri;
+    private Uri mGaspUsersUri;
+
+    private List<Review> mReviewList;
+    private List<Restaurant> mRestaurantList;
+    private List<User> mUserList;
 
     private AsyncTask<Void, Void, Void> mRegisterTask;
 
@@ -77,10 +86,17 @@ public class ReviewSyncActivity extends Activity {
         // Subsequent activations will use the saved shared preferences from the device
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.i(TAG, "Using Gasp Server URI: " + gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
-        mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
+        Log.i(TAG, "Using Gasp Server Reviews URI: " + gaspSharedPreferences.getString("gasp_reviews_uri", ""));
+        mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
+        Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
+        mGaspRestaurantsUri = Uri.parse(gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
+        Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
+        mGaspUsersUri = Uri.parse(gaspSharedPreferences.getString("gasp_users_uri", ""));
 
+        //new AsyncRestClient(mGaspReviewsUri, this).getAll();
         new ReviewsRESTQuery().execute();
+        new RestaurantsRESTQuery().execute();
+        new UsersRESTQuery().execute();
 
         checkNotNull(getServerUrl(), "SERVER_URL");
         checkNotNull(getSenderId(), "SENDER_ID");
@@ -165,25 +181,25 @@ public class ReviewSyncActivity extends Activity {
 
             case R.id.gasp_settings:
                 Intent intent = new Intent();
-                intent.setClass(ReviewSyncActivity.this, SetPreferencesActivity.class);
+                intent.setClass(MainActivity.this, SetPreferencesActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_reviews_data:
                 intent = new Intent();
-                intent.setClass(ReviewSyncActivity.this, ReviewListActivity.class);
+                intent.setClass(MainActivity.this, ReviewListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_restaurants_data:
                 intent = new Intent();
-                intent.setClass(ReviewSyncActivity.this, RestaurantListActivity.class);
+                intent.setClass(MainActivity.this, RestaurantListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_users_data:
                 intent = new Intent();
-                intent.setClass(ReviewSyncActivity.this, UserListActivity.class);
+                intent.setClass(MainActivity.this, UserListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
@@ -218,6 +234,7 @@ public class ReviewSyncActivity extends Activity {
         }
     };
 
+
     private class ReviewsRESTQuery extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {
@@ -231,7 +248,7 @@ public class ReviewSyncActivity extends Activity {
                 HttpResponse response = httpClient.execute(httpGet, localContext);
                 responseBody = handler.handleResponse(response);
 
-                Log.d(TAG, responseBody);
+                Log.d(TAG, "Reviews: " + responseBody);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -245,20 +262,20 @@ public class ReviewSyncActivity extends Activity {
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<List<Review>>() {}.getType();
-                    mList = gson.fromJson(results, type);
+                    mReviewList = gson.fromJson(results, type);
 
                     ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
                     reviewsDB.open();
-                    ListIterator<Review> iterator = mList.listIterator();
-                    int reviews = 0;
+                    ListIterator<Review> iterator = mReviewList.listIterator();
+                    int index = 0;
                     while (iterator.hasNext()) {
                         Review review = iterator.next();
                         reviewsDB.insertReview(review);
-                        reviews = review.getId();
+                        index = review.getId();
                     }
                     reviewsDB.close();
 
-                    mDisplay.append("Loaded " + reviews + " reviews from " + mGaspReviewsUri +'\n');
+                    mDisplay.append("Loaded " + index + " reviews from " + mGaspReviewsUri +'\n');
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -266,4 +283,104 @@ public class ReviewSyncActivity extends Activity {
             }
         }
     }
+
+    private class RestaurantsRESTQuery extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            ResponseHandler<String> handler = new BasicResponseHandler();
+            HttpGet httpGet = new HttpGet(mGaspRestaurantsUri.toString());
+            String responseBody = null;
+
+            try {
+                HttpResponse response = httpClient.execute(httpGet, localContext);
+                responseBody = handler.handleResponse(response);
+
+                Log.d(TAG, "Restaurants: " + responseBody);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return responseBody;
+        }
+
+        @Override
+        protected void onPostExecute(String results) {
+            if (results!=null) {
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<Restaurant>>() {}.getType();
+                    mRestaurantList = gson.fromJson(results, type);
+
+                    RestaurantAdapter restaurantsDB = new RestaurantAdapter(getApplicationContext());
+                    restaurantsDB.open();
+                    ListIterator<Restaurant> iterator = mRestaurantList.listIterator();
+                    int index = 0;
+                    while (iterator.hasNext()) {
+                        Restaurant restaurant = iterator.next();
+                        restaurantsDB.insertRestaurant(restaurant);
+                        index = restaurant.getId();
+                    }
+                    restaurantsDB.close();
+
+                    mDisplay.append("Loaded " + index + " restaurants from " + mGaspRestaurantsUri +'\n');
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private class UsersRESTQuery extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            ResponseHandler<String> handler = new BasicResponseHandler();
+            HttpGet httpGet = new HttpGet(mGaspUsersUri.toString());
+            String responseBody = null;
+
+            try {
+                HttpResponse response = httpClient.execute(httpGet, localContext);
+                responseBody = handler.handleResponse(response);
+
+                Log.d(TAG, "Users: " + responseBody);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return responseBody;
+        }
+
+        @Override
+        protected void onPostExecute(String results) {
+            if (results!=null) {
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<User>>() {}.getType();
+                    mUserList = gson.fromJson(results, type);
+
+                    UserAdapter userDB = new UserAdapter(getApplicationContext());
+                    userDB.open();
+                    ListIterator<User> iterator = mUserList.listIterator();
+                    int index = 0;
+                    while (iterator.hasNext()) {
+                        User user = iterator.next();
+                        userDB.insertUser(user);
+                        index = user.getId();
+                    }
+                    userDB.close();
+
+                    mDisplay.append("Loaded " + index + " users from " + mGaspUsersUri +'\n');
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
 }
