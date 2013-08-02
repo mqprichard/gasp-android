@@ -1,10 +1,11 @@
-package com.cloudbees.gasp.model;
+package com.cloudbees.gasp.service;
 
 import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.test.UiThreadTest;
 import android.util.Log;
 
+import com.cloudbees.gasp.model.Review;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

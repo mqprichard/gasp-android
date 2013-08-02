@@ -1,4 +1,4 @@
-package com.cloudbees.gasp.model;
+package com.cloudbees.gasp.service;
 
 import android.net.Uri;
 import android.os.AsyncTask;

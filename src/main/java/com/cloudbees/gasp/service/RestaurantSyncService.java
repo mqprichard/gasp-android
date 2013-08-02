@@ -9,8 +9,6 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.gcm.R;
-import com.cloudbees.gasp.model.AsyncRestClient;
-import com.cloudbees.gasp.model.IRestListener;
 import com.cloudbees.gasp.model.Restaurant;
 import com.cloudbees.gasp.model.RestaurantAdapter;
 import com.google.gson.Gson;
