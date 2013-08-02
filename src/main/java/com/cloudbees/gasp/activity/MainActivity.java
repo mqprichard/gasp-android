@@ -38,6 +38,7 @@ import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.model.User;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
+import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gcm.GCMRegistrar;
 
@@ -55,6 +56,8 @@ public class MainActivity extends Activity {
     private static String TAG = MainActivity.class.getName();
 
     private TextView mDisplay;
+    private ResponseReceiver receiver;
+
     private Uri mGaspReviewsUri;
     private Uri mGaspRestaurantsUri;
     private Uri mGaspUsersUri;
@@ -80,16 +83,23 @@ public class MainActivity extends Activity {
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
         mGaspUsersUri = Uri.parse(gaspSharedPreferences.getString("gasp_users_uri", ""));
 
+        // Register Broadcast Receiver to listen for replies from data sync services
+        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new ResponseReceiver();
+        registerReceiver(receiver, filter);
+
+        // Intent Services handle initial data sync
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
-        reviewsIntent.putExtra(ReviewSyncService.PARAM_IN_MSG, "reviews");
+        reviewsIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "reviews");
         startService(reviewsIntent);
 
         Intent restaurantsIntent = new Intent(this, RestaurantSyncService.class);
-        restaurantsIntent.putExtra(RestaurantSyncService.PARAM_IN_MSG, "restaurants");
+        restaurantsIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "restaurants");
         startService(restaurantsIntent);
 
         Intent usersIntent = new Intent(this, UserSyncService.class);
-        usersIntent.putExtra(UserSyncService.PARAM_IN_MSG, "users");
+        usersIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "users");
         startService(usersIntent);
 
         checkNotNull(getServerUrl(), "SERVER_URL");
@@ -227,4 +237,14 @@ public class MainActivity extends Activity {
             mDisplay.append(newMessage + "\n");
         }
     };
+
+    public class ResponseReceiver extends BroadcastReceiver {
+        public static final String ACTION_RESP =
+                "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra(SyncIntentParams.PARAM_OUT_MSG);
+            Log.d(TAG, text);
+        }
+    }
 }

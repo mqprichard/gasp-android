@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.model.AsyncRestClient;
 import com.cloudbees.gasp.model.IRestListener;
@@ -25,8 +26,6 @@ import java.util.ListIterator;
 public class RestaurantSyncService extends IntentService implements IRestListener {
     private static final String TAG = RestaurantSyncService.class.getName();
 
-    public static final String PARAM_IN_MSG = "";
-    public static final String PARAM_OUT_MSG = "";
     private Uri mGaspRestaurantsUri;
 
     private void getGaspRestaurantsUriSharedPreferences() {
@@ -47,7 +46,7 @@ public class RestaurantSyncService extends IntentService implements IRestListene
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String msg = intent.getStringExtra(PARAM_IN_MSG);
+        String msg = intent.getStringExtra(SyncIntentParams.PARAM_IN_MSG);
 
         getGaspRestaurantsUriSharedPreferences();
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + getGaspRestaurantsUri());
@@ -77,7 +76,14 @@ public class RestaurantSyncService extends IntentService implements IRestListene
                 }
                 restaurantsDB.close();
 
-                Log.i(TAG, "Loaded " + index + " restaurants from " + mGaspRestaurantsUri + '\n');
+                String resultTxt = "Loaded " + index + " restaurants from " + mGaspRestaurantsUri;
+                Log.i(TAG, resultTxt + '\n');
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                broadcastIntent.putExtra(SyncIntentParams.PARAM_OUT_MSG, resultTxt);
+                sendBroadcast(broadcastIntent);
 
             } catch (Exception e) {
                 e.printStackTrace();
