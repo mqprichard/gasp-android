@@ -2,7 +2,6 @@ package com.cloudbees.gasp.model;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -69,8 +68,6 @@ public class AsyncRestClient {
             try {
                 HttpResponse response = httpClient.execute(httpGet, localContext);
                 responseBody = handler.handleResponse(response);
-
-                Log.d(TAG, responseBody);
             }
             catch (Exception e) {
                 e.printStackTrace();

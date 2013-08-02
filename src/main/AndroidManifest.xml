@@ -75,6 +75,11 @@
         <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity"/>
         <activity android:name="com.cloudbees.gasp.activity.UserListActivity"/>
 
+        <!-- Gasp! data synchronization activities -->
+        <service android:name="com.cloudbees.gasp.service.ReviewSyncService"/>
+        <service android:name="com.cloudbees.gasp.service.RestaurantSyncService"/>
+        <service android:name="com.cloudbees.gasp.service.UserSyncService"/>
+
         <!--
           BroadcastReceiver that will receive intents from GCM
           services and handle them to the custom IntentService.

@@ -37,7 +37,7 @@ Build using `gradle clean build` or use the gradle wrapper.
 
 Running the Demo Client
 -----------------------
-The easiest way to is run the app directly from Android Studio; alternatively deploy using adb and use `am start -n "com.cloudbees.gasp.gcm/com.cloudbees.gasp.activity.ReviewSyncActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER`.  Note that if you are running on an AVD emulator, you must configure it with a Google APIs target to use the GCM service.
+The easiest way to is run the app directly from Android Studio; alternatively deploy using adb and use `am start -n "com.cloudbees.gasp.gcm/com.cloudbees.gasp.activity.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER`.  Note that if you are running on an AVD emulator, you must configure it with a Google APIs target to use the GCM service.
 
 Resetting the Demo Client
 -------------------------

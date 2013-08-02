@@ -34,27 +34,14 @@ import android.widget.TextView;
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.gcm.ServerUtilities;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.RestaurantAdapter;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewAdapter;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.model.UserAdapter;
+import com.cloudbees.gasp.service.RestaurantSyncService;
+import com.cloudbees.gasp.service.ReviewSyncService;
+import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gcm.GCMRegistrar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
-
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.cloudbees.gasp.gcm.CommonUtilities.getDisplayMessageAction;
 import static com.cloudbees.gasp.gcm.CommonUtilities.getExtraMessage;
@@ -93,10 +80,17 @@ public class MainActivity extends Activity {
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
         mGaspUsersUri = Uri.parse(gaspSharedPreferences.getString("gasp_users_uri", ""));
 
-        //new AsyncRestClient(mGaspReviewsUri, this).getAll();
-        new ReviewsRESTQuery().execute();
-        new RestaurantsRESTQuery().execute();
-        new UsersRESTQuery().execute();
+        Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
+        reviewsIntent.putExtra(ReviewSyncService.PARAM_IN_MSG, "reviews");
+        startService(reviewsIntent);
+
+        Intent restaurantsIntent = new Intent(this, RestaurantSyncService.class);
+        restaurantsIntent.putExtra(RestaurantSyncService.PARAM_IN_MSG, "restaurants");
+        startService(restaurantsIntent);
+
+        Intent usersIntent = new Intent(this, UserSyncService.class);
+        usersIntent.putExtra(UserSyncService.PARAM_IN_MSG, "users");
+        startService(usersIntent);
 
         checkNotNull(getServerUrl(), "SERVER_URL");
         checkNotNull(getSenderId(), "SENDER_ID");
@@ -233,154 +227,4 @@ public class MainActivity extends Activity {
             mDisplay.append(newMessage + "\n");
         }
     };
-
-
-    private class ReviewsRESTQuery extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpContext localContext = new BasicHttpContext();
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            HttpGet httpGet = new HttpGet(mGaspReviewsUri.toString());
-            String responseBody = null;
-
-            try {
-                HttpResponse response = httpClient.execute(httpGet, localContext);
-                responseBody = handler.handleResponse(response);
-
-                Log.d(TAG, "Reviews: " + responseBody);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            return responseBody;
-        }
-
-        @Override
-        protected void onPostExecute(String results) {
-            if (results!=null) {
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<List<Review>>() {}.getType();
-                    mReviewList = gson.fromJson(results, type);
-
-                    ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
-                    reviewsDB.open();
-                    ListIterator<Review> iterator = mReviewList.listIterator();
-                    int index = 0;
-                    while (iterator.hasNext()) {
-                        Review review = iterator.next();
-                        reviewsDB.insertReview(review);
-                        index = review.getId();
-                    }
-                    reviewsDB.close();
-
-                    mDisplay.append("Loaded " + index + " reviews from " + mGaspReviewsUri +'\n');
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private class RestaurantsRESTQuery extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpContext localContext = new BasicHttpContext();
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            HttpGet httpGet = new HttpGet(mGaspRestaurantsUri.toString());
-            String responseBody = null;
-
-            try {
-                HttpResponse response = httpClient.execute(httpGet, localContext);
-                responseBody = handler.handleResponse(response);
-
-                Log.d(TAG, "Restaurants: " + responseBody);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            return responseBody;
-        }
-
-        @Override
-        protected void onPostExecute(String results) {
-            if (results!=null) {
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<List<Restaurant>>() {}.getType();
-                    mRestaurantList = gson.fromJson(results, type);
-
-                    RestaurantAdapter restaurantsDB = new RestaurantAdapter(getApplicationContext());
-                    restaurantsDB.open();
-                    ListIterator<Restaurant> iterator = mRestaurantList.listIterator();
-                    int index = 0;
-                    while (iterator.hasNext()) {
-                        Restaurant restaurant = iterator.next();
-                        restaurantsDB.insertRestaurant(restaurant);
-                        index = restaurant.getId();
-                    }
-                    restaurantsDB.close();
-
-                    mDisplay.append("Loaded " + index + " restaurants from " + mGaspRestaurantsUri +'\n');
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private class UsersRESTQuery extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpContext localContext = new BasicHttpContext();
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            HttpGet httpGet = new HttpGet(mGaspUsersUri.toString());
-            String responseBody = null;
-
-            try {
-                HttpResponse response = httpClient.execute(httpGet, localContext);
-                responseBody = handler.handleResponse(response);
-
-                Log.d(TAG, "Users: " + responseBody);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            return responseBody;
-        }
-
-        @Override
-        protected void onPostExecute(String results) {
-            if (results!=null) {
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<List<User>>() {}.getType();
-                    mUserList = gson.fromJson(results, type);
-
-                    UserAdapter userDB = new UserAdapter(getApplicationContext());
-                    userDB.open();
-                    ListIterator<User> iterator = mUserList.listIterator();
-                    int index = 0;
-                    while (iterator.hasNext()) {
-                        User user = iterator.next();
-                        userDB.insertUser(user);
-                        index = user.getId();
-                    }
-                    userDB.close();
-
-                    mDisplay.append("Loaded " + index + " users from " + mGaspUsersUri +'\n');
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
 }
