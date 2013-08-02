@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
     private static final String TAG = UserSyncServiceTest.class.getName();
+
+    UserAdapter userAdapter;
     CountDownLatch signal;
 
     public UserSyncServiceTest() {
@@ -22,7 +24,7 @@ public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
         signal = new CountDownLatch(1);
     }
 
-    protected void setUp() {
+    private void cleanDatabase() {
         UserAdapter userAdapter = new UserAdapter(getContext());
         userAdapter.open();
         try {
@@ -35,6 +37,10 @@ public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
         finally {
             userAdapter.close();
         }
+    }
+
+    protected void setUp() {
+        cleanDatabase();
     }
 
     public void testUserSyncIntent () throws InterruptedException {
@@ -43,27 +49,21 @@ public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
         // Allow 10 secs for the async REST call to complete
         signal.await(10, TimeUnit.SECONDS);
 
-        UserAdapter userAdapter = new UserAdapter(getContext());
-        userAdapter.open();
+        try {
+            userAdapter = new UserAdapter(getContext());
+            userAdapter.open();
 
-        List<User> users = userAdapter.getAll();
-        assertTrue(users.size() > 0);
+            List<User> users = userAdapter.getAll();
+            assertTrue(users.size() > 0);
+        }
+        finally {
+            userAdapter.close();
+        }
     }
 
     protected void tearDown() {
         signal.countDown();
 
-        UserAdapter userAdapter = new UserAdapter(getContext());
-        userAdapter.open();
-        try {
-            List<User> userList = userAdapter.getAll();
-            for (User user : userList) {
-                userAdapter.deleteUser(user);
-            }
-        }
-        catch (Exception e) {}
-        finally {
-            userAdapter.close();
-        }
+        cleanDatabase();
     }
 }

@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
     private static final String TAG = ReviewSyncServiceTest.class.getName();
+
+    ReviewAdapter reviewAdapter;
     CountDownLatch signal;
 
     public ReviewSyncServiceTest() {
@@ -22,7 +24,7 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
         signal = new CountDownLatch(1);
     }
 
-    protected void setUp() {
+    private void cleanDatabase() {
         ReviewAdapter reviewData = new ReviewAdapter(getContext());
         reviewData.open();
         try {
@@ -35,6 +37,10 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
         finally {
             reviewData.close();
         }
+    }
+
+    protected void setUp() {
+        cleanDatabase();
     }
 
     public void testReviewSyncIntent () throws InterruptedException {
@@ -43,27 +49,21 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
         // Allow 10 secs for the async REST call to complete
         signal.await(10, TimeUnit.SECONDS);
 
-        ReviewAdapter reviewAdapter = new ReviewAdapter(getContext());
-        reviewAdapter.open();
+        try {
+            reviewAdapter = new ReviewAdapter(getContext());
+            reviewAdapter.open();
 
-        List<Review> reviews = reviewAdapter.getAll();
-        assertTrue(reviews.size() > 1);
+            List<Review> reviews = reviewAdapter.getAll();
+            assertTrue(reviews.size() > 1);
+        }
+        finally {
+            reviewAdapter.close();
+        }
     }
 
     protected void tearDown() {
         signal.countDown();
 
-        ReviewAdapter reviewData = new ReviewAdapter(getContext());
-        reviewData.open();
-        try {
-            List<Review> reviewList = reviewData.getAll();
-            for (Review review : reviewList) {
-                reviewData.deleteReview(review);
-            }
-        }
-        catch(Exception e){}
-        finally {
-            reviewData.close();
-        }
+        cleanDatabase();
     }
 }

@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncService> {
     private static final String TAG = RestaurantSyncServiceTest.class.getName();
+
+    RestaurantAdapter restaurantAdapter;
     CountDownLatch signal;
 
     public RestaurantSyncServiceTest() {
@@ -22,7 +24,7 @@ public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncSer
         signal = new CountDownLatch(1);
     }
 
-    protected void setUp() {
+    private void cleanDatabase() {
         RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getContext());
         restaurantAdapter.open();
         try {
@@ -35,6 +37,10 @@ public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncSer
         finally {
             restaurantAdapter.close();
         }
+    }
+
+    protected void setUp() {
+        cleanDatabase();
     }
 
     public void testRestaurantSyncIntent () throws InterruptedException {
@@ -43,27 +49,21 @@ public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncSer
         // Allow 10 secs for the async REST call to complete
         signal.await(10, TimeUnit.SECONDS);
 
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getContext());
-        restaurantAdapter.open();
+        try {
+            restaurantAdapter = new RestaurantAdapter(getContext());
+            restaurantAdapter.open();
 
-        List<Restaurant> restaurantList = restaurantAdapter.getAll();
-        assertTrue(restaurantList.size() > 0);
+            List<Restaurant> restaurantList = restaurantAdapter.getAll();
+            assertTrue(restaurantList.size() > 0);
+        }
+        finally {
+            restaurantAdapter.close();
+        }
     }
 
     protected void tearDown() {
         signal.countDown();
 
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getContext());
-        restaurantAdapter.open();
-        try {
-            List<Restaurant> restaurantList = restaurantAdapter.getAll();
-            for (Restaurant restaurant : restaurantList) {
-                restaurantAdapter.deleteRestaurant(restaurant);
-            }
-        }
-        catch (Exception e) {}
-        finally {
-            restaurantAdapter.close();
-        }
+        cleanDatabase();
     }
 }
