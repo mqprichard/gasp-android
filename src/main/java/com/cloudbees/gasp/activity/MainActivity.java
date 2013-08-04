@@ -111,8 +111,11 @@ public class MainActivity extends Activity {
         GCMRegistrar.checkManifest(this);
         setContentView(R.layout.gcm_demo);
         mDisplay = (TextView) findViewById(R.id.display);
+
+        // Register BroadcastReceiver to handle GCM Updates
         registerReceiver(mHandleMessageReceiver,
                 new IntentFilter(getDisplayMessageAction()));
+
         final String regId = GCMRegistrar.getRegistrationId(this);
         if (regId.equals("")) {
             // Automatically registers application on startup.

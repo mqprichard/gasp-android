@@ -21,31 +21,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
-import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewAdapter;
+import com.cloudbees.gasp.service.ReviewUpdateService;
+import com.cloudbees.gasp.service.SyncIntentParams;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
-
-import java.lang.reflect.Type;
 
 import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
 import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
@@ -84,70 +67,17 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     protected void onMessage(Context context, Intent intent) {
-        Log.i(TAG, "Received message");
-        Log.i(TAG, "New Review: " + intent.getStringExtra("id"));
+        int index = Integer.parseInt(intent.getStringExtra("id"));
+        Log.i(TAG, "New Review: " + index);
 
         try {
-            SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            Uri mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
-            Uri reviewUri = Uri.parse(mGaspReviewsUri + "/" + intent.getStringExtra("id"));
+            Intent updateIntent = new Intent(this, ReviewUpdateService.class);
+            updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
+            startService(updateIntent);
 
-            ReviewsRESTQuery getReview = new ReviewsRESTQuery();
-            getReview.setEndpoint(reviewUri);
-            getReview.execute();
-
-            String message = "Loaded review from: " + reviewUri;
-            displayMessage(context, message);
-            generateNotification(context, "New Review: " + intent.getStringExtra("id"));
+            generateNotification(context, "New Review: " + index);
         } catch (Exception e) {
             Log.e(TAG, e.getStackTrace().toString());
-        }
-    }
-
-    private class ReviewsRESTQuery extends AsyncTask<Void, Void, String> {
-        Review mReview;
-        Uri mUri;
-
-        protected void setEndpoint(Uri endpoint) {
-            mUri = endpoint;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpContext localContext = new BasicHttpContext();
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            HttpGet httpGet = new HttpGet(mUri.toString());
-            String responseBody = null;
-
-            try {
-                HttpResponse response = httpClient.execute(httpGet, localContext);
-                responseBody = handler.handleResponse(response);
-
-                Log.d(TAG, responseBody);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            return responseBody;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result!=null) {
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<Review>() {}.getType();
-                    mReview = gson.fromJson(result, type);
-
-                    ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
-                    reviewsDB.open();
-                    reviewsDB.insertReview(mReview);
-                    reviewsDB.close();
-                } catch(Exception e) {
-                    Log.e(TAG, e.getStackTrace().toString());
-                }
-            }
         }
     }
 

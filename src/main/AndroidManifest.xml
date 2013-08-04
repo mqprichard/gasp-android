@@ -75,8 +75,11 @@
         <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity"/>
         <activity android:name="com.cloudbees.gasp.activity.UserListActivity"/>
 
-        <!-- Gasp! data synchronization activities -->
+        <!-- Gasp! data synchronization services -->
         <service android:name="com.cloudbees.gasp.service.ReviewSyncService"/>
+        <service android:name="com.cloudbees.gasp.service.RestaurantSyncService"/>
+        <service android:name="com.cloudbees.gasp.service.UserSyncService"/>
+        <service android:name="com.cloudbees.gasp.service.ReviewUpdateService"/>
         <service android:name="com.cloudbees.gasp.service.RestaurantSyncService"/>
         <service android:name="com.cloudbees.gasp.service.UserSyncService"/>
 
