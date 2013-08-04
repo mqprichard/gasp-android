@@ -25,8 +25,10 @@ import android.os.Build;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.SyncIntentParams;
+import com.cloudbees.gasp.service.UserUpdateService;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
 
@@ -68,14 +70,34 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(Context context, Intent intent) {
         int index = Integer.parseInt(intent.getStringExtra("id"));
-        Log.i(TAG, "New Review: " + index);
+        String table = intent.getStringExtra("table");
+        Log.i(TAG, "New" + table + ": " + index);
 
+        Intent updateIntent;
         try {
-            Intent updateIntent = new Intent(this, ReviewUpdateService.class);
-            updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
-            startService(updateIntent);
+            if (table.matches("reviews")) {
+                updateIntent = new Intent(this, ReviewUpdateService.class);
+                updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
+                startService(updateIntent);
+            }
+            else if (table.matches("restaurants")) {
+                updateIntent = new Intent(this, RestaurantUpdateService.class);
+                updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
+                startService(updateIntent);
+            }
+            else if (table.matches("users")) {
+                updateIntent = new Intent(this, UserUpdateService.class);
+                updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
+                startService(updateIntent);
+            }
+            else {
+                Log.e(TAG, "Error: unknown table: " + table);
+                return;
+            }
 
-            generateNotification(context, "New Review: " + index);
+            // Send notification message for message bar display etc
+            generateNotification(context, "New" + table + ": " + index);
+
         } catch (Exception e) {
             Log.e(TAG, e.getStackTrace().toString());
         }
@@ -117,7 +139,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new Notification.
                                         Builder(context).
-                                        setContentTitle("New Gasp! Review").
+                                        setContentTitle("New Gasp! Update").
                                         setSmallIcon(R.drawable.ic_stat_gcm).
                                         build();
         String title = context.getString(R.string.app_name);

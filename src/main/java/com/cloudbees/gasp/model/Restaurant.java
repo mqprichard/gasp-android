@@ -1,7 +1,7 @@
 package com.cloudbees.gasp.model;
 
 /**
- * Model class for Gasp! Users. The class is designed to be populated via a JSON call
+ * Model class for Gasp! Restaurants. The class is designed to be populated via a JSON call
  * to the Gasp! REST server: restaurant_id an user_id are parsed from the return data
  * to ensure that the on-device SQLite Database matches the gcm_demo Gasp! database.
  *
