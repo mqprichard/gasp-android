@@ -229,15 +229,18 @@ public class MainActivity extends Activity {
         }
     }
 
+    // BroadcastReceiver for GCMIntentService
     private final BroadcastReceiver mHandleMessageReceiver =
             new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String newMessage = intent.getExtras().getString(getExtraMessage());
-            mDisplay.append(newMessage + "\n");
-        }
-    };
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String newMessage = intent.getExtras().getString(getExtraMessage());
+                    Log.d(TAG,newMessage);
+                    mDisplay.append(newMessage + "\n");
+                }
+            };
 
+    // BroadcastReceiver for Gasp IntentService classes
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String ACTION_RESP =
                 "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
@@ -245,6 +248,7 @@ public class MainActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra(SyncIntentParams.PARAM_OUT_MSG);
             Log.d(TAG, text);
+            mDisplay.append(text + "\n");
         }
     }
 }

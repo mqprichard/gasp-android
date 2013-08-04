@@ -89,7 +89,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         try {
             SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            Uri mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_endpoint_uri", ""));
+            Uri mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
             Uri reviewUri = Uri.parse(mGaspReviewsUri + "/" + intent.getStringExtra("id"));
 
             ReviewsRESTQuery getReview = new ReviewsRESTQuery();
