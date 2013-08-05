@@ -56,7 +56,8 @@ public class MainActivity extends Activity {
     private static String TAG = MainActivity.class.getName();
 
     private TextView mDisplay;
-    private ResponseReceiver receiver;
+    private ResponseReceiver mGaspMessageReceiver;
+    private boolean mSynced = false;
 
     private Uri mGaspReviewsUri;
     private Uri mGaspRestaurantsUri;
@@ -86,8 +87,8 @@ public class MainActivity extends Activity {
         // Register Broadcast Receiver to listen for replies from data sync services
         IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new ResponseReceiver();
-        registerReceiver(receiver, filter);
+        mGaspMessageReceiver = new ResponseReceiver();
+        registerReceiver(mGaspMessageReceiver, filter);
 
         // Intent Services handle initial data sync
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
@@ -105,10 +106,10 @@ public class MainActivity extends Activity {
         checkNotNull(getServerUrl(), "SERVER_URL");
         checkNotNull(getSenderId(), "SENDER_ID");
         // Make sure the device has the proper dependencies.
-        GCMRegistrar.checkDevice(this);
+        GCMRegistrar.checkDevice(getApplicationContext());
         // Make sure the manifest was properly set - comment out this line
         // while developing the app, then uncomment it when it's ready.
-        GCMRegistrar.checkManifest(this);
+        GCMRegistrar.checkManifest(getApplicationContext());
         setContentView(R.layout.gcm_demo);
         mDisplay = (TextView) findViewById(R.id.display);
 
@@ -116,20 +117,20 @@ public class MainActivity extends Activity {
         registerReceiver(mHandleMessageReceiver,
                 new IntentFilter(getDisplayMessageAction()));
 
-        final String regId = GCMRegistrar.getRegistrationId(this);
+        final String regId = GCMRegistrar.getRegistrationId(getApplicationContext());
         if (regId.equals("")) {
             // Automatically registers application on startup.
             GCMRegistrar.register(this, getSenderId());
         } else {
             // Device is already registered on GCM, check server.
-            if (GCMRegistrar.isRegisteredOnServer(this)) {
+            if (GCMRegistrar.isRegisteredOnServer(getApplicationContext())) {
                 // Skips registration.
                 mDisplay.append(getString(R.string.already_registered) + "\n");
             } else {
                 // Try to register again, but not in the UI thread.
                 // It's also necessary to cancel the thread onDestroy(),
                 // hence the use of AsyncTask instead of a raw thread.
-                final Context context = this;
+                final Context context = getApplicationContext();
                 mRegisterTask = new AsyncTask<Void, Void, Void>() {
 
                     @Override
@@ -152,6 +153,16 @@ public class MainActivity extends Activity {
                 mRegisterTask.execute(null, null, null);
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -221,7 +232,8 @@ public class MainActivity extends Activity {
             mRegisterTask.cancel(true);
         }
         unregisterReceiver(mHandleMessageReceiver);
-        GCMRegistrar.onDestroy(this);
+        unregisterReceiver(mGaspMessageReceiver);
+        GCMRegistrar.onDestroy(getApplicationContext());
         super.onDestroy();
     }
 
@@ -243,7 +255,7 @@ public class MainActivity extends Activity {
                 }
             };
 
-    // BroadcastReceiver for Gasp IntentService classes
+    // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String ACTION_RESP =
                 "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
