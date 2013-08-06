@@ -2,20 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <EditTextPreference
             android:key="gasp_reviews_uri"
-            android:title="Gasp! Server Endpoint" 
-            android:dialogTitle="Gasp! Server Endpoint"             
+            android:title="Gasp! Reviews Settings"
+            android:dialogTitle="Gasp! Reviews URL"
             android:defaultValue="http://gasp.mqprichard.cloudbees.net/reviews" 
             />
     <EditTextPreference
             android:key="gasp_restaurants_uri"
-            android:title="Gasp! Server Endpoint"
-            android:dialogTitle="Gasp! Server Endpoint"
+            android:title="Gasp! Restaurants Settings"
+            android:dialogTitle="Gasp! Restaurants URL"
             android:defaultValue="http://gasp.mqprichard.cloudbees.net/restaurants"
             />
     <EditTextPreference
             android:key="gasp_users_uri"
-            android:title="Gasp! Server Endpoint"
-            android:dialogTitle="Gasp! Server Endpoint"
+            android:title="Gasp! Users Settings"
+            android:dialogTitle="Gasp! Users URL"
             android:defaultValue="http://gasp.mqprichard.cloudbees.net/users"
             />
 </PreferenceScreen>
