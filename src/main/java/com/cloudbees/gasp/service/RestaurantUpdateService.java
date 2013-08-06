@@ -71,7 +71,7 @@ public class RestaurantUpdateService extends IntentService implements IRestListe
                 restaurantsDB.insertRestaurant(mRestaurant);
                 restaurantsDB.close();
 
-                String resultTxt = "Loaded review: " + mRestaurant.getId();
+                String resultTxt = "Loaded restaurant: " + mRestaurant.getId();
                 Log.i(TAG, resultTxt + '\n');
 
                 Intent broadcastIntent = new Intent();

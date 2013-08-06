@@ -5,13 +5,14 @@ package com.cloudbees.gasp.model;
  * to the Gasp! REST server: restaurant_id an user_id are parsed from the return data
  * to ensure that the on-device SQLite Database matches the gcm_demo Gasp! database.
  *
- * +---------+--------------+------+-----+---------+----------------+
- * | Field   | Type         | Null | Key | Default | Extra          |
- * +---------+--------------+------+-----+---------+----------------+
- * | id      | int(11)      | NO   | PRI | NULL    | auto_increment |
- * | name    | varchar(255) | YES  |     | NULL    |                |
- * | website | varchar(255) | YES  |     | NULL    |                |
- * +---------+--------------+------+-----+---------+----------------+
+ +---------+--------------+------+-----+---------+----------------+
+ | Field   | Type         | Null | Key | Default | Extra          |
+ +---------+--------------+------+-----+---------+----------------+
+ | id      | int(11)      | NO   | PRI | NULL    | auto_increment |
+ | address | varchar(255) | YES  |     | NULL    |                |
+ | name    | varchar(255) | YES  |     | NULL    |                |
+ | website | varchar(255) | YES  |     | NULL    |                |
+ +---------+--------------+------+-----+---------+----------------+
  *
  * @author Mark Prichard
  */
@@ -19,6 +20,7 @@ public class Restaurant {
     private int id;
     private String name;
     private String website;
+    private String address;
     private String url;
 
     public int getId() {
@@ -46,6 +48,14 @@ public class Restaurant {
         this.website = website;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -56,7 +66,7 @@ public class Restaurant {
 
     @Override
     public String toString(){
-        return "User #" + this.getId() + ": "
-                + this.getName() + "(" + this.getWebsite() + ")";
+        return "Restaurant #" + this.getId() + ": "
+                + this.getName() + " (" + this.getWebsite() + ")";
     }
 }

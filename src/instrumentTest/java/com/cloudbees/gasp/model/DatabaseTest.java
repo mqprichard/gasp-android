@@ -16,6 +16,7 @@ public class DatabaseTest extends AndroidTestCase {
     private static final String testComment = "Test Comment";
     private static final String testName = "Test Name";
     private static final String testWebsite = "http://www.restaurant.com/";
+    private static final String testAddress = "1 Main Street USA";
 
     protected void setUp() {
         ReviewAdapter reviewData = new ReviewAdapter(getContext());
@@ -104,6 +105,7 @@ public class DatabaseTest extends AndroidTestCase {
         restaurant.setId(testId);
         restaurant.setName(testName);
         restaurant.setWebsite(testWebsite);
+        restaurant.setAddress(testAddress);
 
         restaurantData.open();
         restaurantData.insertRestaurant(restaurant);
@@ -113,6 +115,7 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(restaurantList.get(0).getId(), testId);
         assertEquals(restaurantList.get(0).getName(), testName);
         assertEquals(restaurantList.get(0).getWebsite(), testWebsite);
+        assertEquals(restaurantList.get(0).getAddress(), testAddress);
 
         restaurant.setId(testId + 1);
         restaurantData.insertRestaurant(restaurant);

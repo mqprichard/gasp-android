@@ -23,6 +23,7 @@ public class GaspSQLiteHelper extends SQLiteOpenHelper {
     public static final String RESTAURANTS_COLUMN_ID = "id";
     public static final String RESTAURANTS_COLUMN_NAME = "name";
     public static final String RESTAURANTS_COLUMN_WEBSITE = "website";
+    public static final String RESTAURANTS_COLUMN_ADDRESS = "address";
 
     public static final String REVIEWS_TABLE = "reviews";
     public static final String RESTAURANTS_TABLE = "restaurants";
@@ -33,19 +34,23 @@ public class GaspSQLiteHelper extends SQLiteOpenHelper {
 
     // SQL statements to create a new database.
     private static final String CREATE_REVIEWS_TABLE = "create table " +
-            REVIEWS_TABLE + " (" + REVIEWS_COLUMN_ID + " integer primary key, " +
+            REVIEWS_TABLE + " (" +
+            REVIEWS_COLUMN_ID + " integer primary key, " +
             REVIEWS_COLUMN_USER_ID + " integer not null, " +
             REVIEWS_COLUMN_RESTAURANT_ID + " integer not null, " +
             REVIEWS_COLUMN_COMMENT + " string, " +
             REVIEWS_COLUMN_STAR + " integer not null);";
 
     private static final String CREATE_RESTAURANTS_TABLE = "create table " +
-            RESTAURANTS_TABLE + " (" + RESTAURANTS_COLUMN_ID + " integer primary key, " +
-            RESTAURANTS_COLUMN_NAME + " string not null, " +
+            RESTAURANTS_TABLE + " (" +
+            RESTAURANTS_COLUMN_ID + " integer primary key, " +
+            RESTAURANTS_COLUMN_NAME + " string, " +
+            RESTAURANTS_COLUMN_ADDRESS + " string, " +
             RESTAURANTS_COLUMN_WEBSITE + " string);";
 
     private static final String CREATE_USERS_TABLE = "create table " +
-            USERS_TABLE + " (" + USERS_COLUMN_ID + " integer primary key, " +
+            USERS_TABLE + " (" +
+            USERS_COLUMN_ID + " integer primary key, " +
             USERS_COLUMN_NAME + " string not null);";
 
     public GaspSQLiteHelper(Context context) {
