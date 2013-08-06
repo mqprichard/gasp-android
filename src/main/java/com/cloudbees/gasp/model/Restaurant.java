@@ -5,14 +5,14 @@ package com.cloudbees.gasp.model;
  * to the Gasp! REST server: restaurant_id an user_id are parsed from the return data
  * to ensure that the on-device SQLite Database matches the gcm_demo Gasp! database.
  *
- +---------+--------------+------+-----+---------+----------------+
- | Field   | Type         | Null | Key | Default | Extra          |
- +---------+--------------+------+-----+---------+----------------+
- | id      | int(11)      | NO   | PRI | NULL    | auto_increment |
- | address | varchar(255) | YES  |     | NULL    |                |
- | name    | varchar(255) | YES  |     | NULL    |                |
- | website | varchar(255) | YES  |     | NULL    |                |
- +---------+--------------+------+-----+---------+----------------+
+ * +---------+--------------+------+-----+---------+----------------+
+ * | Field   | Type         | Null | Key | Default | Extra          |
+ * +---------+--------------+------+-----+---------+----------------+
+ * | id      | int(11)      | NO   | PRI | NULL    | auto_increment |
+ * | address | varchar(255) | YES  |     | NULL    |                |
+ * | name    | varchar(255) | YES  |     | NULL    |                |
+ * | website | varchar(255) | YES  |     | NULL    |                |
+ * +---------+--------------+------+-----+---------+----------------+
  *
  * @author Mark Prichard
  */
