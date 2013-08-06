@@ -3,6 +3,7 @@ package com.cloudbees.gasp.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -68,9 +69,14 @@ public class UserSyncService extends IntentService implements IRestListener {
                 ListIterator<User> iterator = users.listIterator();
                 int index = 0;
                 while (iterator.hasNext()) {
-                    User user = iterator.next();
-                    userDB.insertUser(user);
-                    index = user.getId();
+                    try {
+                        User user = iterator.next();
+                        userDB.insertUser(user);
+                        index = user.getId();
+                    } catch (SQLiteConstraintException e) {
+                        // Attempting to overwrite existing records will throw an exception
+                        // Ignore these as we want to re-sync on startup
+                    }
                 }
                 userDB.close();
 

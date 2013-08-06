@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -35,14 +36,20 @@ public class UserAdapter {
     }
 
     public void insertUser(User user) {
-        ContentValues values = new ContentValues();
-        values.put(GaspSQLiteHelper.USERS_COLUMN_ID, user.getId());
-        values.put(GaspSQLiteHelper.USERS_COLUMN_NAME, user.getName());
-        long insertId = database.insert(GaspSQLiteHelper.USERS_TABLE, null, values);
-        if (insertId != -1) {
-            Log.d(TAG, "Inserted user with id: " + insertId);
-        } else {
-            Log.e(TAG, "Error inserting user with id: " + user.getId());
+        try {
+            ContentValues values = new ContentValues();
+            values.put(GaspSQLiteHelper.USERS_COLUMN_ID, user.getId());
+            values.put(GaspSQLiteHelper.USERS_COLUMN_NAME, user.getName());
+            long insertId = database.insertOrThrow(GaspSQLiteHelper.USERS_TABLE, null, values);
+            if (insertId != -1) {
+                Log.d(TAG, "Inserted user with id: " + insertId);
+            } else {
+                Log.e(TAG, "Error inserting user with id: " + user.getId());
+            }
+        } catch (SQLiteConstraintException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

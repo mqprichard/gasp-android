@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -38,18 +39,23 @@ public class ReviewAdapter {
     }
 
     public void insertReview(Review review) {
-        ContentValues values = new ContentValues();
-        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_ID, review.getId());
-        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID, review.getRestaurant_id());
-        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID, review.getUser_id());
-        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT, review.getComment());
-        values.put(GaspSQLiteHelper.REVIEWS_COLUMN_STAR, review.getStar());
-        long insertId = database.insert(GaspSQLiteHelper.REVIEWS_TABLE, null,
-                values);
-        if (insertId != -1) {
-            Log.d(TAG, "Inserted review with id: " + insertId);
-        } else {
-            Log.e(TAG, "Error inserting review with id: " + review.getId());
+        try {
+            ContentValues values = new ContentValues();
+            values.put(GaspSQLiteHelper.REVIEWS_COLUMN_ID, review.getId());
+            values.put(GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID, review.getRestaurant_id());
+            values.put(GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID, review.getUser_id());
+            values.put(GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT, review.getComment());
+            values.put(GaspSQLiteHelper.REVIEWS_COLUMN_STAR, review.getStar());
+            long insertId = database.insertOrThrow(GaspSQLiteHelper.REVIEWS_TABLE, null, values);
+            if (insertId != -1) {
+                Log.d(TAG, "Inserted review with id: " + insertId);
+            } else {
+                Log.e(TAG, "Error inserting review with id: " + review.getId());
+            }
+        } catch (SQLiteConstraintException e){
+            throw e;
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 

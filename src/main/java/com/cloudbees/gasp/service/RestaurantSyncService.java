@@ -3,6 +3,7 @@ package com.cloudbees.gasp.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -68,9 +69,14 @@ public class RestaurantSyncService extends IntentService implements IRestListene
                 ListIterator<Restaurant> iterator = restaurants.listIterator();
                 int index = 0;
                 while (iterator.hasNext()) {
-                    Restaurant restaurant = iterator.next();
-                    restaurantsDB.insertRestaurant(restaurant);
-                    index = restaurant.getId();
+                    try {
+                        Restaurant restaurant = iterator.next();
+                        restaurantsDB.insertRestaurant(restaurant);
+                        index = restaurant.getId();
+                    } catch (SQLiteConstraintException e) {
+                        // Attempting to overwrite existing records will throw an exception
+                        // Ignore these as we want to re-sync on startup
+                    }
                 }
                 restaurantsDB.close();
 

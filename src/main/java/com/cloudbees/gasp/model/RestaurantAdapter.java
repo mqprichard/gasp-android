@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -36,16 +37,21 @@ public class RestaurantAdapter {
     }
 
     public void insertRestaurant(Restaurant restaurant) {
-        ContentValues values = new ContentValues();
-        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_ID, restaurant.getId());
-        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME, restaurant.getName());
-        values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE, restaurant.getWebsite());
-        long insertId = database.insert(GaspSQLiteHelper.RESTAURANTS_TABLE, null,
-                values);
-        if (insertId != -1) {
-            Log.d(TAG, "Inserted restaurant with id: " + insertId);
-        } else {
-            Log.e(TAG, "Error inserting restaurant with id: " + restaurant.getId());
+        try {
+            ContentValues values = new ContentValues();
+            values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_ID, restaurant.getId());
+            values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME, restaurant.getName());
+            values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE, restaurant.getWebsite());
+            long insertId = database.insertOrThrow(GaspSQLiteHelper.RESTAURANTS_TABLE, null, values);
+            if (insertId != -1) {
+                Log.d(TAG, "Inserted restaurant with id: " + insertId);
+            } else {
+                Log.e(TAG, "Error inserting restaurant with id: " + restaurant.getId());
+            }
+        } catch (SQLiteConstraintException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
