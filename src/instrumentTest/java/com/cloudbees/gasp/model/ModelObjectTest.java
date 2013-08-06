@@ -49,8 +49,8 @@ public class ModelObjectTest extends TestCase {
         assertEquals(restaurant.getWebsite(), testWebsite);
         assertEquals(restaurant.getUrl(), "/restaurants/" + testId);
         assertEquals(restaurant.getAddress(), testAddress);
-        assertEquals(restaurant.toString(), "User #" + testId + ": "
-                                            + testName + "(" + testWebsite + ")");
+        assertEquals(restaurant.toString(), "Restaurant #" + testId + ": "
+                                            + testName + " (" + testWebsite + ")");
     }
 
     public void testUser() {

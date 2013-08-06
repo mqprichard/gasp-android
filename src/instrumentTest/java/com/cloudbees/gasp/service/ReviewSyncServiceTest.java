@@ -54,7 +54,7 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
             reviewAdapter.open();
 
             List<Review> reviews = reviewAdapter.getAll();
-            assertTrue(reviews.size() > 1);
+            assertTrue(reviews.size() > 0);
         }
         finally {
             reviewAdapter.close();
