@@ -27,7 +27,7 @@ public final class CommonUtilities {
     /**
      * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
      */
-    static final String SERVER_URL = "http://gasp-gcm-server.mqprichard.cloudbees.net/gcm";
+    static final String SERVER_URL = "http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm";
 
     public static String getServerUrl() {
         return SERVER_URL;
