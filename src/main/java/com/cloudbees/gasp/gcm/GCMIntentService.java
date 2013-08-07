@@ -71,24 +71,21 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onMessage(Context context, Intent intent) {
         int index = Integer.parseInt(intent.getStringExtra("id"));
         String table = intent.getStringExtra("table");
-        Log.i(TAG, "New" + table + ": " + index);
+        Log.i(TAG, "New " + table + " update (" + index + ")");
 
         Intent updateIntent;
         try {
             if (table.matches("reviews")) {
-                updateIntent = new Intent(this, ReviewUpdateService.class);
-                updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
-                startService(updateIntent);
+                startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
+                        .putExtra(SyncIntentParams.PARAM_ID, index));
             }
             else if (table.matches("restaurants")) {
-                updateIntent = new Intent(this, RestaurantUpdateService.class);
-                updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
-                startService(updateIntent);
+                startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
+                        .putExtra(SyncIntentParams.PARAM_ID, index));
             }
             else if (table.matches("users")) {
-                updateIntent = new Intent(this, UserUpdateService.class);
-                updateIntent.putExtra(SyncIntentParams.PARAM_ID, index);
-                startService(updateIntent);
+                startService(new Intent(getApplicationContext(), UserUpdateService.class)
+                        .putExtra(SyncIntentParams.PARAM_ID, index));
             }
             else {
                 Log.e(TAG, "Error: unknown table: " + table);
@@ -96,7 +93,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             }
 
             // Send notification message for message bar display etc
-            generateNotification(context, "New" + table + ": " + index);
+            generateNotification(context, "New " + table + ": " + index);
 
         } catch (Exception e) {
             Log.e(TAG, e.getStackTrace().toString());

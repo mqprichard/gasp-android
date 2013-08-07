@@ -80,8 +80,8 @@
         <service android:name="com.cloudbees.gasp.service.RestaurantSyncService"/>
         <service android:name="com.cloudbees.gasp.service.UserSyncService"/>
         <service android:name="com.cloudbees.gasp.service.ReviewUpdateService"/>
-        <service android:name="com.cloudbees.gasp.service.RestaurantSyncService"/>
-        <service android:name="com.cloudbees.gasp.service.UserSyncService"/>
+        <service android:name="com.cloudbees.gasp.service.RestaurantUpdateService"/>
+        <service android:name="com.cloudbees.gasp.service.UserUpdateService"/>
 
         <!--
           BroadcastReceiver that will receive intents from GCM
