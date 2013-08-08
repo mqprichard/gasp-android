@@ -1,6 +1,20 @@
 package com.cloudbees.gasp.model;
 
 /**
+ * Copyright (c) 2013 Mark Prichard, CloudBees
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  * Model class for Gasp! Reviews. The class is designed to be populated via a JSON call
  * to the Gasp! REST server: restaurant_id an user_id are parsed from the return data
  * to ensure that the on-device SQLite Database matches the gcm_demo Gasp! database.
@@ -14,16 +28,12 @@ package com.cloudbees.gasp.model;
  * | restaurant_id | int(11)      | NO   | MUL | NULL    |                |
  * | user_id       | int(11)      | NO   | MUL | NULL    |                |
  * +---------------+--------------+------+-----+---------+----------------+
-
- *
- * @author Mark Prichard
  */
+
 public class Review {
     private int id;
     private String url;
-    private int restaurant_id;
     private String restaurant;
-    private int user_id;
     private String user;
     private int star;
     private String comment;
@@ -45,7 +55,6 @@ public class Review {
     }
 
     public void setRestaurant_id(int restaurant_id){
-        this.restaurant_id = restaurant_id;
         this.setRestaurant("/restaurants/" + restaurant_id);
     }
 
@@ -54,7 +63,6 @@ public class Review {
     }
 
     public void setUser_id(int user_id){
-        this.user_id = user_id;
         this.setUser("/users/" + user_id);
     }
 

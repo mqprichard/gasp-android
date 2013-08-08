@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.cloudbees.gasp.gcm;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -32,8 +32,8 @@ import com.cloudbees.gasp.service.UserUpdateService;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
 
-import static com.cloudbees.gasp.gcm.CommonUtilities.SENDER_ID;
 import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
+import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -44,7 +44,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     private static final String TAG = "GCMIntentService";
 
     public GCMIntentService() {
-        super(SENDER_ID);
+        super(getSenderId());
     }
 
     @Override
@@ -73,30 +73,31 @@ public class GCMIntentService extends GCMBaseIntentService {
         String table = intent.getStringExtra("table");
         Log.i(TAG, "New " + table + " update (" + index + ")");
 
-        Intent updateIntent;
         try {
-            if (table.matches("reviews")) {
-                startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
-                        .putExtra(SyncIntentParams.PARAM_ID, index));
-            }
-            else if (table.matches("restaurants")) {
-                startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
-                        .putExtra(SyncIntentParams.PARAM_ID, index));
-            }
-            else if (table.matches("users")) {
-                startService(new Intent(getApplicationContext(), UserUpdateService.class)
-                        .putExtra(SyncIntentParams.PARAM_ID, index));
-            }
-            else {
-                Log.e(TAG, "Error: unknown table: " + table);
-                return;
+            if (table != null) {
+                if (table.matches("reviews")) {
+                    startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
+                            .putExtra(SyncIntentParams.PARAM_ID, index));
+                }
+                else if (table.matches("restaurants")) {
+                    startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
+                            .putExtra(SyncIntentParams.PARAM_ID, index));
+                }
+                else if (table.matches("users")) {
+                    startService(new Intent(getApplicationContext(), UserUpdateService.class)
+                            .putExtra(SyncIntentParams.PARAM_ID, index));
+                }
+                else {
+                    Log.e(TAG, "Error: unknown table: " + table);
+                    return;
+                }
             }
 
             // Send notification message for message bar display etc
             generateNotification(context, "New " + table + ": " + index);
 
         } catch (Exception e) {
-            Log.e(TAG, e.getStackTrace().toString());
+            Log.e(TAG, e.toString());
         }
     }
 
@@ -130,8 +131,6 @@ public class GCMIntentService extends GCMBaseIntentService {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     // TODO Fix Notification version issues
     private static void generateNotification(Context context, String message) {
-        int icon = R.drawable.ic_stat_gcm;
-        long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new Notification.
@@ -139,13 +138,11 @@ public class GCMIntentService extends GCMBaseIntentService {
                                         setContentTitle("New Gasp! Update").
                                         setSmallIcon(R.drawable.ic_stat_gcm).
                                         build();
-        String title = context.getString(R.string.app_name);
+
         Intent notificationIntent = new Intent(context, MainActivity.class);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(0, notification);

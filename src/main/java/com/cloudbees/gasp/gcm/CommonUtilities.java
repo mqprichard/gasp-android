@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.cloudbees.gasp.gcm;
 
 import android.content.Context;
@@ -36,7 +37,7 @@ public final class CommonUtilities {
     /**
      * Google API project id registered to use GCM.
      */
-    static final String SENDER_ID = "960428562804";
+    private static final String SENDER_ID = "960428562804";
 
     public static String getSenderId() {
         return SENDER_ID;
@@ -51,7 +52,7 @@ public final class CommonUtilities {
     /**
      * Intent used to display a message in the screen.
      */
-    static final String DISPLAY_MESSAGE_ACTION =
+    private static final String DISPLAY_MESSAGE_ACTION =
             "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
 
     public static String getDisplayMessageAction() {
@@ -61,7 +62,7 @@ public final class CommonUtilities {
     /**
      * Intent's extra that contains the message to be displayed.
      */
-    static final String EXTRA_MESSAGE = "message";
+    private static final String EXTRA_MESSAGE = "message";
 
 
     public static String getExtraMessage() {

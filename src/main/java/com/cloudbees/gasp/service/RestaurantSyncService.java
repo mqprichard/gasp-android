@@ -20,8 +20,21 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Created by markprichard on 8/1/13.
+ * Copyright (c) 2013 Mark Prichard, CloudBees
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 public class RestaurantSyncService extends IntentService implements IRestListener {
     private static final String TAG = RestaurantSyncService.class.getName();
 
@@ -35,7 +48,7 @@ public class RestaurantSyncService extends IntentService implements IRestListene
         this.mGaspRestaurantsUri = Uri.parse(gaspReviewsUri);
     }
 
-    public Uri getGaspRestaurantsUri() {
+    private Uri getGaspRestaurantsUri() {
         return mGaspRestaurantsUri;
     }
 
@@ -45,8 +58,6 @@ public class RestaurantSyncService extends IntentService implements IRestListene
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String msg = intent.getStringExtra(SyncIntentParams.PARAM_IN_MSG);
-
         getGaspRestaurantsUriSharedPreferences();
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + getGaspRestaurantsUri());
 

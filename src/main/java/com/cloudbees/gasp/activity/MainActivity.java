@@ -1,18 +1,3 @@
-/*
- * Copyright 2012 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.cloudbees.gasp.activity;
 
 import android.app.Activity;
@@ -21,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -50,18 +34,27 @@ import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
 import static com.cloudbees.gasp.gcm.CommonUtilities.getServerUrl;
 
 /**
- * Main UI for the demo app.
+ * Copyright (c) 2013 Mark Prichard, CloudBees
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 public class MainActivity extends Activity {
-    private static String TAG = MainActivity.class.getName();
+    private static final String TAG = MainActivity.class.getName();
 
     private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
     private boolean mSynced = false;
-
-    private Uri mGaspReviewsUri;
-    private Uri mGaspRestaurantsUri;
-    private Uri mGaspUsersUri;
 
     private List<Review> mReviewList;
     private List<Restaurant> mRestaurantList;
@@ -78,11 +71,9 @@ public class MainActivity extends Activity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.i(TAG, "Using Gasp Server Reviews URI: " + gaspSharedPreferences.getString("gasp_reviews_uri", ""));
-        mGaspReviewsUri = Uri.parse(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
-        mGaspRestaurantsUri = Uri.parse(gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
-        mGaspUsersUri = Uri.parse(gaspSharedPreferences.getString("gasp_users_uri", ""));
+
 
         // Register Broadcast Receiver to listen for replies from data sync services
         IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
@@ -155,6 +146,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    /*
     @Override
     protected void onPause() {
         super.onPause();
@@ -164,6 +156,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
     }
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -249,9 +242,13 @@ public class MainActivity extends Activity {
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String newMessage = intent.getExtras().getString(getExtraMessage());
-                    Log.d(TAG,newMessage);
-                    mDisplay.append(newMessage + "\n");
+                    try {
+                        String newMessage = intent.getExtras().getString(getExtraMessage());
+                        Log.d(TAG,newMessage);
+                        mDisplay.append(newMessage + "\n");
+                    } catch(NullPointerException e) {
+                        Log.e(TAG, e.toString());
+                    }
                 }
             };
 
