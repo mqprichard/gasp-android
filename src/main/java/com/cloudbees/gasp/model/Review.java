@@ -1,34 +1,20 @@
-package com.cloudbees.gasp.model;
-
-/**
+/*
  * Copyright (c) 2013 Mark Prichard, CloudBees
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Model class for Gasp! Reviews. The class is designed to be populated via a JSON call
- * to the Gasp! REST server: restaurant_id an user_id are parsed from the return data
- * to ensure that the on-device SQLite Database matches the gcm_demo Gasp! database.
- *
- * +---------------+--------------+------+-----+---------+----------------+
- * | Field         | Type         | Null | Key | Default | Extra          |
- * +---------------+--------------+------+-----+---------+----------------+
- * | id            | int(11)      | NO   | PRI | NULL    | auto_increment |
- * | comment       | varchar(255) | YES  |     | NULL    |                |
- * | star          | int(11)      | YES  |     | NULL    |                |
- * | restaurant_id | int(11)      | NO   | MUL | NULL    |                |
- * | user_id       | int(11)      | NO   | MUL | NULL    |                |
- * +---------------+--------------+------+-----+---------+----------------+
  */
+
+package com.cloudbees.gasp.model;
 
 public class Review {
     private int id;
