@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AsyncRestTestAll extends AndroidTestCase implements IRestListener {
     private static final String TAG = AsyncRestTestAll.class.getName();
-    private static final String REVIEWS = "http://gasp.mqprichard.cloudbees.net/reviews";
+    private static final String REVIEWS = "http://gasp.partnerdemo.cloudbees.net/reviews";
 
     private CountDownLatch signal;
 
