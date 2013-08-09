@@ -111,7 +111,7 @@
           By default, it must be named .GCMIntentService, unless the
           application uses a custom BroadcastReceiver that redefines its name.
         -->
-        <service android:name="com.cloudbees.gasp.gcm.GCMIntentService" />
+        <service android:name="com.cloudbees.gasp.service.GCMIntentService" />
     </application>
 
 </manifest>

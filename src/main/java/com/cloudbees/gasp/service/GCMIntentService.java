@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cloudbees.gasp.gcm;
+package com.cloudbees.gasp.service;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -25,6 +25,8 @@ import android.os.Build;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.gcm.R;
+import com.cloudbees.gasp.gcm.ServerUtilities;
 import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.SyncIntentParams;
