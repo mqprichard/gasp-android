@@ -59,8 +59,8 @@ public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncSer
     public void testRestaurantSyncIntent () throws InterruptedException {
         startService(new Intent(getContext(), RestaurantSyncService.class));
 
-        // Allow 10 secs for the async REST call to complete
-        signal.await(10, TimeUnit.SECONDS);
+        // Allow 20 secs for the async REST call to complete
+        signal.await(20, TimeUnit.SECONDS);
 
         try {
             restaurantAdapter = new RestaurantAdapter(getContext());

@@ -47,8 +47,8 @@ public class AsyncRestTestIndex extends AndroidTestCase implements IRestListener
             AsyncRestClient asyncRestCall = new AsyncRestClient(Uri.parse(REVIEWS), this);
             asyncRestCall.getIndex(1);
 
-            // Allow 10 secs for the async REST call to complete
-            signal.await(10, TimeUnit.SECONDS);
+            // Allow 20 secs for the async REST call to complete
+            signal.await(20, TimeUnit.SECONDS);
         }
         catch (Exception e) {}
     }

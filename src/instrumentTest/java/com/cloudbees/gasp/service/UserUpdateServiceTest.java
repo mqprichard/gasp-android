@@ -61,8 +61,8 @@ public class UserUpdateServiceTest extends ServiceTestCase<UserUpdateService> {
         startService(new Intent(getContext(), UserUpdateService.class)
                 .putExtra(SyncIntentParams.PARAM_ID, 1));
 
-        // Allow 10 secs for the async REST call to complete
-        signal.await(10, TimeUnit.SECONDS);
+        // Allow 20 secs for the async REST call to complete
+        signal.await(20, TimeUnit.SECONDS);
 
         try {
             userAdapter = new UserAdapter(getContext());

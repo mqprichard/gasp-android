@@ -59,8 +59,8 @@ public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
     public void testUserSyncIntent () throws InterruptedException {
         startService(new Intent(getContext(), UserSyncService.class));
 
-        // Allow 10 secs for the async REST call to complete
-        signal.await(10, TimeUnit.SECONDS);
+        // Allow 20 secs for the async REST call to complete
+        signal.await(20, TimeUnit.SECONDS);
 
         try {
             userAdapter = new UserAdapter(getContext());
