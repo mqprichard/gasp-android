@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cloudbees.gasp.service;
+package com.cloudbees.gasp.gcm;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
