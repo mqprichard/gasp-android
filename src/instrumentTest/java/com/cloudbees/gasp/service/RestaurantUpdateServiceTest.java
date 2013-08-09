@@ -32,7 +32,7 @@ public class RestaurantUpdateServiceTest extends ServiceTestCase<RestaurantUpdat
     private RestaurantAdapter restaurantAdapter;
     private final CountDownLatch signal;
 
-    private RestaurantUpdateServiceTest() {
+    public RestaurantUpdateServiceTest() {
         super(RestaurantUpdateService.class);
         signal = new CountDownLatch(1);
     }
