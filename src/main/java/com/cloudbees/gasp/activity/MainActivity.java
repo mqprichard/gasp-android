@@ -174,14 +174,15 @@ public class MainActivity extends Activity {
              * register or unregister the device (you will also need to
              * uncomment the equivalent options on options_menu.xml).
              */
-            /*
+
             case R.id.options_register:
-                GCMRegistrar.register(this, SENDER_ID);
+                GCMRegistrar.register(this, getSenderId());
                 return true;
+
             case R.id.options_unregister:
                 GCMRegistrar.unregister(this);
                 return true;
-             */
+
             case R.id.options_clear:
                 mDisplay.setText(null);
                 return true;
