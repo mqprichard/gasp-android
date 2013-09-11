@@ -25,8 +25,6 @@ import android.os.Build;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
-import com.cloudbees.gasp.gcm.R;
-import com.cloudbees.gasp.gcm.ServerUtilities;
 import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.SyncIntentParams;
@@ -71,6 +69,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     protected void onMessage(Context context, Intent intent) {
+        if (!intent.hasExtra("id")) {
+            Log.d(TAG, "Message received");
+            generateNotification(context, "Gasp! Update");
+            return;
+        }
+
         int index = Integer.parseInt(intent.getStringExtra("id"));
         String table = intent.getStringExtra("table");
         Log.i(TAG, "New " + table + " update (" + index + ")");
