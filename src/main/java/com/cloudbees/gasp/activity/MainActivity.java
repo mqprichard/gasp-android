@@ -41,6 +41,7 @@ import com.cloudbees.gasp.service.ReviewSyncService;
 import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gcm.GCMRegistrar;
+import com.newrelic.agent.android.NewRelic;
 
 import java.util.List;
 
@@ -74,6 +75,10 @@ public class MainActivity extends Activity {
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
 
+        // Initilaize NewRelic monitoring agent
+        NewRelic.withApplicationToken(
+                "AA83f38cfac2e854342e6964065753db86d00c513c"
+        ).start(this.getApplication());
 
         // Register Broadcast Receiver to listen for replies from data sync services
         IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);

@@ -28,6 +28,9 @@
     <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- NewRelic Mobile Agent -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 

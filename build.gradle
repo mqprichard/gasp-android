@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.5.6'
+        classpath 'com.newrelic.agent.android:agent-gradle-plugin:2.426.0'
     }
 }
 
@@ -12,6 +13,7 @@ task wrapper(type: Wrapper) {
 }
 
 apply plugin: 'android'
+apply plugin: 'newrelic'
 
 repositories {
     mavenCentral()
@@ -25,6 +27,7 @@ dependencies {
     compile 'com.android.support:support-v4:13.0.0'
     compile 'com.google.android.gms:play-services:3.1.36'
     compile 'com.google.android.gcm:gcm-client:3'
+    compile 'com.newrelic.agent.android:android-agent:2.426.0'
 }
 
 android {
