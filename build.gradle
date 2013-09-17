@@ -28,6 +28,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:3.1.36'
     compile 'com.google.android.gcm:gcm-client:3'
     compile 'com.newrelic.agent.android:android-agent:2.426.0'
+    compile files('libs/TestFlightLib.jar')
 }
 
 android {
