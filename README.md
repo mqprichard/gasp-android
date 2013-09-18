@@ -3,6 +3,12 @@ Gasp! GCM for Android Demo Client
 
 Android demo client for the [gasp-gcm-server](https://github.com/mqprichard/gasp-gcm-server) application, which uses CloudBees PaaS and Foxweave to provide automatic data sync between the Gasp! server database and Android SQLite on-device data stores.  This demo application uses [Google Cloud Messaging for Android](http://developer.android.com/google/gcm/index.html) and was built with the latest preview of Android Studio with the Android gradle build system.
 
+> <img src="http://www.cloudbees.com/sites/all/themes/custom/cloudbees_zen/css/bidesign/_ui/images/logo.png"/>
+>
+> <b>Note</b>: <i>This repo is part of the Gasp demo project - a showcase of <a href="https://developer.cloudbees.com/bin/view/Mobile">cloudbees mobile services</a>.
+> You can see the big picture of the <a href="http://mobilepaas.cloudbees.com">showcase here</a>.
+> Feel free to fork and use this repo as a template.</i>
+
 Quick Overview
 --------------
 
