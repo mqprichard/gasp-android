@@ -19,8 +19,6 @@ package com.cloudbees.gasp.gcm;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.gcm.GCMRegistrar;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -65,7 +63,7 @@ public final class ServerUtilities {
                 displayMessage(context, context.getString(
                         R.string.server_registering, i, MAX_ATTEMPTS));
                 post(serverUrl, params);
-                GCMRegistrar.setRegisteredOnServer(context, true);
+                //GCMRegistrar.setRegisteredOnServer(context, true);
                 String message = context.getString(R.string.server_registered);
                 CommonUtilities.displayMessage(context, message);
                 return true;
@@ -106,7 +104,7 @@ public final class ServerUtilities {
         params.put("regId", regId);
         try {
             post(serverUrl, params);
-            GCMRegistrar.setRegisteredOnServer(context, false);
+            //GCMRegistrar.setRegisteredOnServer(context, false);
             String message = context.getString(R.string.server_unregistered);
             CommonUtilities.displayMessage(context, message);
         } catch (IOException e) {

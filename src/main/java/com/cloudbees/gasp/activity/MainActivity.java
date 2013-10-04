@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,40 +35,194 @@ import android.widget.TextView;
 
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.gcm.ServerUtilities;
-import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.User;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
 import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserSyncService;
-import com.google.android.gcm.GCMRegistrar;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.newrelic.agent.android.NewRelic;
 import com.testflightapp.lib.TestFlight;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.cloudbees.gasp.gcm.CommonUtilities.getDisplayMessageAction;
 import static com.cloudbees.gasp.gcm.CommonUtilities.getExtraMessage;
-import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
-import static com.cloudbees.gasp.gcm.CommonUtilities.getServerUrl;
 
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
 
     private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
-    private boolean mSynced = false;
+    //private boolean mSynced = false;
 
-    private List<Review> mReviewList;
-    private List<Restaurant> mRestaurantList;
-    private List<User> mUserList;
+    //private List<Review> mReviewList;
+    //private List<Restaurant> mRestaurantList;
+    //private List<User> mUserList;
+
+    private static final String SERVER_URL = "http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm";
+    private static final String SENDER_ID = "960428562804";
+    //private static final String DISPLAY_MESSAGE_ACTION = "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private AsyncTask<Void, Void, Void> mRegisterTask;
+
+    GoogleCloudMessaging gcm;
+    AtomicInteger msgId = new AtomicInteger();
+    Context context;
+    String regId;
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Stores the registration ID and the app versionCode in the application's
+     * {@code SharedPreferences}.
+     *
+     * @param context application's context.
+     * @param regId registration ID
+     */
+    private void storeRegistrationId(Context context, String regId) {
+        final SharedPreferences prefs = getGcmPreferences(context);
+        int appVersion = getAppVersion(context);
+        Log.i(TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_REG_ID, regId);
+        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.commit();
+    }
+
+    /**
+     * Gets the current registration ID for application on GCM service, if there is one.
+     * If result is empty, the app needs to register.
+     *
+     * @return registration ID, or empty string if there is no existing
+     *         registration ID.
+     */
+    private String getRegistrationId(Context context) {
+        final SharedPreferences prefs = getGcmPreferences(context);
+        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+        // Check if app was updated; if so, it must clear the registration ID
+        // since the existing regID is not guaranteed to work with the new
+        // app version.
+        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion) {
+            Log.i(TAG, "App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+
+    /**
+     * @return Application's {@code SharedPreferences}.
+     */
+    private SharedPreferences getGcmPreferences(Context context) {
+        // This sample app persists the registration ID in shared preferences, but
+        // how you store the regID in your app is up to you.
+        return getSharedPreferences(MainActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
+     * messages to your app. Not needed for this demo since the device sends upstream messages
+     * to a server that echoes back the message using the 'from' address in the message.
+     */
+    private void sendRegistrationIdToBackend() {
+        boolean registered = ServerUtilities.register(context, regId);
+        if (registered) Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
+        else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
+    }
+
+    /**
+     * Registers the application with GCM servers asynchronously.
+     * <p>
+     * Stores the registration ID and the app versionCode in the application's
+     * shared preferences.
+     */
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regId = gcm.register(SENDER_ID);
+                    msg = "Device registered: " + regId;
+
+                    // You should send the registration ID to your server over HTTP, so it
+                    // can use GCM/HTTP or CCS to send messages to your app.
+                    sendRegistrationIdToBackend();
+
+                    // Persist the regID - no need to register again.
+                    storeRegistrationId(context, regId);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                mDisplay.append(msg + "\n");
+            }
+        }.execute(null, null, null);
+    }
+
+    /**
+     * @return Application's version code from the {@code PackageManager}.
+     */
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = getApplicationContext();
+
+        setContentView(R.layout.gcm_demo);
+        mDisplay = (TextView) findViewById(R.id.display);
 
         // Load shared preferences from res/xml/preferences.xml (first time only)
         // Subsequent activations will use the saved shared preferences from the device
@@ -88,6 +244,9 @@ public class MainActivity extends Activity {
         mGaspMessageReceiver = new ResponseReceiver();
         registerReceiver(mGaspMessageReceiver, filter);
 
+        // Register BroadcastReceiver to handle GCM Updates
+        registerReceiver(mHandleMessageReceiver, new IntentFilter(getDisplayMessageAction()));
+
         // Intent Services handle initial data sync
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
         reviewsIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "reviews");
@@ -101,59 +260,19 @@ public class MainActivity extends Activity {
         usersIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "users");
         startService(usersIntent);
 
-        checkNotNull(getServerUrl(), "SERVER_URL");
-        checkNotNull(getSenderId(), "SENDER_ID");
-        // Make sure the device has the proper dependencies.
-        GCMRegistrar.checkDevice(getApplicationContext());
-        // Make sure the manifest was properly set - comment out this line
-        // while developing the app, then uncomment it when it's ready.
-        GCMRegistrar.checkManifest(getApplicationContext());
-        setContentView(R.layout.gcm_demo);
-        mDisplay = (TextView) findViewById(R.id.display);
+        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
+        if (checkPlayServices()) {
+            gcm = GoogleCloudMessaging.getInstance(this);
+            regId = getRegistrationId(context);
 
-        // Register BroadcastReceiver to handle GCM Updates
-        registerReceiver(mHandleMessageReceiver,
-                new IntentFilter(getDisplayMessageAction()));
-
-        final String regId = GCMRegistrar.getRegistrationId(getApplicationContext());
-        if (regId.equals("")) {
-            // Automatically registers application on startup.
-            GCMRegistrar.register(this, getSenderId());
-        } else {
-            // Device is already registered on GCM, check server.
-            if (GCMRegistrar.isRegisteredOnServer(getApplicationContext())) {
-                // Skips registration.
-                mDisplay.append(getString(R.string.already_registered) + "\n");
-            } else {
-                // Try to register again, but not in the UI thread.
-                // It's also necessary to cancel the thread onDestroy(),
-                // hence the use of AsyncTask instead of a raw thread.
-                final Context context = getApplicationContext();
-                mRegisterTask = new AsyncTask<Void, Void, Void>() {
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        boolean registered =
-                                ServerUtilities.register(context, regId);
-
-                        if (!registered) {
-                            GCMRegistrar.unregister(context);
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        mRegisterTask = null;
-                    }
-
-                };
-                mRegisterTask.execute(null, null, null);
+            if (regId.isEmpty()) {
+                registerInBackground();
             }
+        } else {
+            Log.i(TAG, "No valid Google Play Services APK found.");
         }
     }
 
-    /*
     @Override
     protected void onPause() {
         super.onPause();
@@ -162,8 +281,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Check device for Play Services APK.
+        checkPlayServices();
     }
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,19 +295,13 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            /*
-             * Typically, an application registers automatically, so options
-             * below are disabled. Uncomment them if you want to manually
-             * register or unregister the device (you will also need to
-             * uncomment the equivalent options on options_menu.xml).
-             */
 
             case R.id.options_register:
-                GCMRegistrar.register(this, getSenderId());
+                //GCMRegistrar.register(this, getSenderId());
                 return true;
 
             case R.id.options_unregister:
-                GCMRegistrar.unregister(this);
+                //GCMRegistrar.unregister(this);
                 return true;
 
             case R.id.options_clear:
@@ -234,7 +348,7 @@ public class MainActivity extends Activity {
         }
         unregisterReceiver(mHandleMessageReceiver);
         unregisterReceiver(mGaspMessageReceiver);
-        GCMRegistrar.onDestroy(getApplicationContext());
+        //GCMRegistrar.onDestroy(getApplicationContext());
         super.onDestroy();
     }
 

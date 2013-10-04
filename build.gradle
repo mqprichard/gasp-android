@@ -25,7 +25,7 @@ repositories {
 dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:support-v4:13.0.0'
-    compile 'com.google.android.gms:play-services:3.1.36'
+    compile 'com.google.android.gms:play-services:3.1.+'
     compile 'com.google.android.gcm:gcm-client:3'
     compile 'com.newrelic.agent.android:android-agent:2.426.0'
     compile files('libs/TestFlightLib.jar')
