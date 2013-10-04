@@ -56,15 +56,9 @@ public class MainActivity extends Activity {
 
     private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
-    //private boolean mSynced = false;
-
-    //private List<Review> mReviewList;
-    //private List<Restaurant> mRestaurantList;
-    //private List<User> mUserList;
 
     private static final String SERVER_URL = "http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm";
     private static final String SENDER_ID = "960428562804";
-    //private static final String DISPLAY_MESSAGE_ACTION = "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -297,11 +291,11 @@ public class MainActivity extends Activity {
         switch(item.getItemId()) {
 
             case R.id.options_register:
-                //GCMRegistrar.register(this, getSenderId());
+                // TODO: Add GCM register
                 return true;
 
             case R.id.options_unregister:
-                //GCMRegistrar.unregister(this);
+                // TODO: Add GCM unregister
                 return true;
 
             case R.id.options_clear:

@@ -17,6 +17,7 @@
 package com.cloudbees.gasp.gcm;
 
 import android.annotation.TargetApi;
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -29,8 +30,6 @@ import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserUpdateService;
-import com.google.android.gcm.GCMBaseIntentService;
-import com.google.android.gcm.GCMRegistrar;
 
 import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
 import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
@@ -38,7 +37,7 @@ import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
 /**
  * IntentService responsible for handling GCM messages.
  */
-public class GCMIntentService extends GCMBaseIntentService {
+public class GCMIntentService extends IntentService {
 
     @SuppressWarnings("hiding")
     private static final String TAG = "GCMIntentService";
@@ -47,31 +46,23 @@ public class GCMIntentService extends GCMBaseIntentService {
         super(getSenderId());
     }
 
-    @Override
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
         displayMessage(context, getString(R.string.gcm_registered));
         ServerUtilities.register(context, registrationId);
     }
 
-    @Override
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
         displayMessage(context, getString(R.string.gcm_unregistered));
-        if (GCMRegistrar.isRegisteredOnServer(context)) {
-            ServerUtilities.unregister(context, registrationId);
-        } else {
-            // This callback results from the call to unregister made on
-            // ServerUtilities when the registration to the server failed.
-            Log.i(TAG, "Ignoring unregister callback");
-        }
+        ServerUtilities.unregister(context, registrationId);
     }
 
     @Override
-    protected void onMessage(Context context, Intent intent) {
+    protected void onHandleIntent(Intent intent) {
         if (!intent.hasExtra("id")) {
             Log.d(TAG, "Message received");
-            generateNotification(context, "Gasp! Update");
+            generateNotification(getApplicationContext(), "Gasp! Update");
             return;
         }
 
@@ -100,35 +91,11 @@ public class GCMIntentService extends GCMBaseIntentService {
             }
 
             // Send notification message for message bar display etc
-            generateNotification(context, "New " + table + ": " + index);
+            generateNotification(getApplicationContext(), "New " + table + ": " + index);
 
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-    }
-
-    @Override
-    protected void onDeletedMessages(Context context, int total) {
-        Log.i(TAG, "Received deleted messages notification");
-        String message = getString(R.string.gcm_deleted, total);
-
-        displayMessage(context, message);
-        generateNotification(context, message);
-    }
-
-    @Override
-    public void onError(Context context, String errorId) {
-        Log.i(TAG, "Received error: " + errorId);
-        displayMessage(context, getString(R.string.gcm_error, errorId));
-    }
-
-    @Override
-    protected boolean onRecoverableError(Context context, String errorId) {
-        // log message
-        Log.i(TAG, "Received recoverable error: " + errorId);
-        displayMessage(context, getString(R.string.gcm_recoverable_error,
-                errorId));
-        return super.onRecoverableError(context, errorId);
     }
 
     /**
