@@ -16,13 +16,12 @@
 
 package com.cloudbees.gasp.gcm;
 
-import android.annotation.TargetApi;
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
@@ -38,6 +37,9 @@ import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
  * IntentService responsible for handling GCM messages.
  */
 public class GCMIntentService extends IntentService {
+    public static final int NOTIFICATION_ID = 1;
+    private NotificationManager mNotificationManager;
+    NotificationCompat.Builder builder;
 
     @SuppressWarnings("hiding")
     private static final String TAG = "GCMIntentService";
@@ -62,7 +64,7 @@ public class GCMIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (!intent.hasExtra("id")) {
             Log.d(TAG, "Message received");
-            generateNotification(getApplicationContext(), "Gasp! Update");
+            sendNotification("Gasp! Update");
             return;
         }
 
@@ -91,7 +93,7 @@ public class GCMIntentService extends IntentService {
             }
 
             // Send notification message for message bar display etc
-            generateNotification(getApplicationContext(), "New " + table + ": " + index);
+            sendNotification("New " + table + ": " + index);
 
         } catch (Exception e) {
             Log.e(TAG, e.toString());
@@ -99,26 +101,27 @@ public class GCMIntentService extends IntentService {
     }
 
     /**
-     * Issues a notification to inform the user that server has sent a message.
+     * Send a notification message that a new update has been recieved
+     * @param msg
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    // TODO Fix Notification version issues
-    private static void generateNotification(Context context, String message) {
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification.
-                                        Builder(context).
-                                        setContentTitle("New Gasp! Update").
-                                        setSmallIcon(R.drawable.ic_stat_gcm).
-                                        build();
+    private void sendNotification(String msg) {
+        mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
 
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_stat_gcm)
+                        .setContentTitle("New Gasp! Update")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(msg))
+                        .setContentText(msg);
 
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(0, notification);
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
+
 
 }
