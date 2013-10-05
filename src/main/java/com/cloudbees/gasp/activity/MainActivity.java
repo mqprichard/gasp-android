@@ -33,8 +33,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.cloudbees.gasp.gcm.GCMUtilities;
 import com.cloudbees.gasp.gcm.R;
-import com.cloudbees.gasp.gcm.ServerUtilities;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
 import com.cloudbees.gasp.service.SyncIntentParams;
@@ -48,8 +48,8 @@ import com.testflightapp.lib.TestFlight;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.cloudbees.gasp.gcm.CommonUtilities.getDisplayMessageAction;
-import static com.cloudbees.gasp.gcm.CommonUtilities.getExtraMessage;
+import static com.cloudbees.gasp.gcm.GCMUtilities.getDisplayMessageAction;
+import static com.cloudbees.gasp.gcm.GCMUtilities.getExtraMessage;
 
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
      * to a server that echoes back the message using the 'from' address in the message.
      */
     private void sendRegistrationIdToBackend() {
-        boolean registered = ServerUtilities.register(context, regId);
+        boolean registered = GCMUtilities.register(context, regId);
         if (registered) Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
         else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
     }

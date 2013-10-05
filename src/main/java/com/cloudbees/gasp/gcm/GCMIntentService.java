@@ -30,8 +30,8 @@ import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserUpdateService;
 
-import static com.cloudbees.gasp.gcm.CommonUtilities.displayMessage;
-import static com.cloudbees.gasp.gcm.CommonUtilities.getSenderId;
+import static com.cloudbees.gasp.gcm.GCMUtilities.displayMessage;
+import static com.cloudbees.gasp.gcm.GCMUtilities.getSenderId;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -51,13 +51,13 @@ public class GCMIntentService extends IntentService {
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
         displayMessage(context, getString(R.string.gcm_registered));
-        ServerUtilities.register(context, registrationId);
+        GCMUtilities.register(context, registrationId);
     }
 
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
         displayMessage(context, getString(R.string.gcm_unregistered));
-        ServerUtilities.unregister(context, registrationId);
+        GCMUtilities.unregister(context, registrationId);
     }
 
     @Override
