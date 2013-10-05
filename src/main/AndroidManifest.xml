@@ -88,14 +88,23 @@
         <service android:name="com.cloudbees.gasp.service.RestaurantUpdateService"/>
         <service android:name="com.cloudbees.gasp.service.UserUpdateService"/>
 
-        <!--
-          Application-specific subclass of GCMBaseIntentService that will
-          handle received messages.
+        <!-- BroadcastReceiver that will receive intents from GCM
+             services and hand them to the custom IntentService.
 
-          By default, it must be named .GCMIntentService, unless the
-          application uses a custom BroadcastReceiver that redefines its name.
-        -->
+             The com.google.android.c2dm.permission.SEND permission is necessary
+             so only GCM services can send data messages for the app.
+         -->
+        <receiver
+            android:name=".GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.google.android.gcm.demo.app" />
+            </intent-filter>
+        </receiver>
         <service android:name=".GCMIntentService" />
+
     </application>
 
 </manifest>

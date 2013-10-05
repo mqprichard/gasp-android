@@ -101,7 +101,7 @@ public class GCMIntentService extends IntentService {
     }
 
     /**
-     * Send a notification message that a new update has been recieved
+     * Send a notification message that a new update has been received
      * @param msg
      */
     private void sendNotification(String msg) {
