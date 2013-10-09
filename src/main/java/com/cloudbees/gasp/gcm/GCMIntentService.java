@@ -78,7 +78,6 @@ public class GCMIntentService extends IntentService {
 
                 int index = Integer.valueOf(extras.getString("id"));
                 String table = extras.getString("table");
-                Log.i(TAG, "New " + table + " update (" + index + ")");
 
                 try {
                     if (table != null) {
