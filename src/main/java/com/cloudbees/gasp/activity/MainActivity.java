@@ -46,9 +46,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.cloudbees.gasp.gcm.GCMUtilities.getDisplayMessageAction;
-import static com.cloudbees.gasp.gcm.GCMUtilities.getExtraMessage;
-
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
 
@@ -234,9 +231,6 @@ public class MainActivity extends Activity {
         mGaspMessageReceiver = new ResponseReceiver();
         registerReceiver(mGaspMessageReceiver, filter);
 
-        // Register BroadcastReceiver to handle GCM Updates
-        registerReceiver(mHandleMessageReceiver, new IntentFilter(getDisplayMessageAction()));
-
         // Intent Services handle initial data sync
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
         reviewsIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "reviews");
@@ -336,9 +330,8 @@ public class MainActivity extends Activity {
         if (mRegisterTask != null) {
             mRegisterTask.cancel(true);
         }
-        unregisterReceiver(mHandleMessageReceiver);
+
         unregisterReceiver(mGaspMessageReceiver);
-        //GCMRegistrar.onDestroy(getApplicationContext());
         super.onDestroy();
     }
 
@@ -348,21 +341,6 @@ public class MainActivity extends Activity {
                     getString(R.string.error_config, name));
         }
     }
-
-    // BroadcastReceiver for GCMIntentService
-    private final BroadcastReceiver mHandleMessageReceiver =
-            new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    try {
-                        String newMessage = intent.getExtras().getString(getExtraMessage());
-                        Log.d(TAG,newMessage);
-                        mDisplay.append(newMessage + "\n");
-                    } catch(NullPointerException e) {
-                        Log.e(TAG, e.toString());
-                    }
-                }
-            };
 
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
@@ -375,4 +353,5 @@ public class MainActivity extends Activity {
             mDisplay.append(text + "\n");
         }
     }
+
 }
