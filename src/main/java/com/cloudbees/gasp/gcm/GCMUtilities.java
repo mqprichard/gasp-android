@@ -21,6 +21,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.service.SyncIntentParams;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -57,9 +60,8 @@ public final class GCMUtilities {
 
     /**
      * Tag used on log messages.
-
      */
-    static final String TAG = "GCMDemo";
+    static final String TAG = GCMUtilities.class.getName();
 
     /**
      * Intent used to display a message in the screen.
@@ -91,9 +93,15 @@ public final class GCMUtilities {
      * @param message message to be displayed.
      */
     public static void displayMessage(Context context, String message) {
-        Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        context.sendBroadcast(intent);
+        //Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        //context.sendBroadcast(intent);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(SyncIntentParams.PARAM_OUT_MSG, message);
+        context.sendBroadcast(broadcastIntent);
     }
 
     private static final int MAX_ATTEMPTS = 5;
@@ -120,7 +128,6 @@ public final class GCMUtilities {
                 displayMessage(context, context.getString(
                         R.string.server_registering, i, MAX_ATTEMPTS));
                 post(serverUrl, params);
-                //GCMRegistrar.setRegisteredOnServer(context, true);
                 String message = context.getString(R.string.server_registered);
                 displayMessage(context, message);
                 return true;
@@ -161,7 +168,6 @@ public final class GCMUtilities {
         params.put("regId", regId);
         try {
             post(serverUrl, params);
-            //GCMRegistrar.setRegisteredOnServer(context, false);
             String message = context.getString(R.string.server_unregistered);
             displayMessage(context, message);
         } catch (IOException e) {

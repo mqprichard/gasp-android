@@ -342,6 +342,8 @@ public class MainActivity extends Activity {
         }
     }
 
+    //TODO: Add BroadcastReceiver for messages from GCMUtilities
+
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String ACTION_RESP =
