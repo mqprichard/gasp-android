@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Google Inc.
+ * Copyright (c) 2013 Mark Prichard, CloudBees
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -29,6 +31,7 @@ import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserUpdateService;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import static com.cloudbees.gasp.gcm.GCMUtilities.displayMessage;
 import static com.cloudbees.gasp.gcm.GCMUtilities.getSenderId;
@@ -41,7 +44,6 @@ public class GCMIntentService extends IntentService {
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
-    @SuppressWarnings("hiding")
     private static final String TAG = "GCMIntentService";
 
     public GCMIntentService() {
@@ -62,41 +64,49 @@ public class GCMIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (!intent.hasExtra("id")) {
-            Log.d(TAG, "Message received");
-            sendNotification("Gasp! Update");
-            return;
-        }
+        Bundle extras = intent.getExtras();
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+        String messageType = gcm.getMessageType(intent);
 
-        int index = Integer.parseInt(intent.getStringExtra("id"));
-        String table = intent.getStringExtra("table");
-        Log.i(TAG, "New " + table + " update (" + index + ")");
+        if (!extras.isEmpty()) {
+            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+                Log.i(TAG, "Send error: " + extras.toString());
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+                Log.i(TAG, "Deleted messages on server: " + extras.toString());
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                Log.i(TAG, "Received: " + extras.toString());
 
-        try {
-            if (table != null) {
-                if (table.matches("reviews")) {
-                    startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
-                            .putExtra(SyncIntentParams.PARAM_ID, index));
+                int index = Integer.valueOf(extras.getString("id"));
+                String table = extras.getString("table");
+                Log.i(TAG, "New " + table + " update (" + index + ")");
+
+                try {
+                    if (table != null) {
+                        if (table.matches("reviews")) {
+                            startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
+                                .putExtra(SyncIntentParams.PARAM_ID, index));
+                        }
+                        else if (table.matches("restaurants")) {
+                            startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
+                                .putExtra(SyncIntentParams.PARAM_ID, index));
+                        }
+                        else if (table.matches("users")) {
+                            startService(new Intent(getApplicationContext(), UserUpdateService.class)
+                                .putExtra(SyncIntentParams.PARAM_ID, index));
+                        }
+                        // Send notification message for message bar display etc
+                        sendNotification("New " + table + ": " + index);
+                    }
+                    else {
+                        Log.e(TAG, "Error: table not specified");
+                    }
+                    // Release the wake lock provided by the WakefulBroadcastReceiver.
+                    GCMBroadcastReceiver.completeWakefulIntent(intent);
                 }
-                else if (table.matches("restaurants")) {
-                    startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
-                            .putExtra(SyncIntentParams.PARAM_ID, index));
-                }
-                else if (table.matches("users")) {
-                    startService(new Intent(getApplicationContext(), UserUpdateService.class)
-                            .putExtra(SyncIntentParams.PARAM_ID, index));
-                }
-                else {
-                    Log.e(TAG, "Error: unknown table: " + table);
-                    return;
+                catch (Exception e) {
+                    Log.e(TAG, e.toString());
                 }
             }
-
-            // Send notification message for message bar display etc
-            sendNotification("New " + table + ": " + index);
-
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
         }
     }
 
@@ -115,8 +125,7 @@ public class GCMIntentService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_gcm)
                         .setContentTitle("New Gasp! Update")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);

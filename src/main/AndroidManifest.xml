@@ -103,7 +103,9 @@
                 <category android:name="com.google.android.gcm.demo.app" />
             </intent-filter>
         </receiver>
-        <service android:name=".GCMIntentService" />
+
+        <!-- Handles incoming messages from GCM -->
+        <service android:name="com.cloudbees.gasp.gcm.GCMIntentService" />
 
     </application>
 

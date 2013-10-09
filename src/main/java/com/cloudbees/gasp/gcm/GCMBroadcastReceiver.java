@@ -1,6 +1,7 @@
 package com.cloudbees.gasp.gcm;
 
 /**
+ * Copyright 2012 Google Inc.
  * Copyright (c) 2013 Mark Prichard, CloudBees
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +18,11 @@ package com.cloudbees.gasp.gcm;
  */
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 
 /**
@@ -33,15 +35,20 @@ import android.content.Intent;
  */
 
 // TODO: extend WakefulBroadcastReceiver
-public class GCMBroadcastReceiver extends BroadcastReceiver {
+public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
+    private final String TAG = GCMBroadcastReceiver.class.getName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "Received GCM Message");
+
         // Explicitly specify that GcmIntentService will handle the intent.
         ComponentName comp = new ComponentName(context.getPackageName(),
                 GCMIntentService.class.getName());
+
         // Start the service, keeping the device awake while it is launching.
-        //startWakefulService(context, (intent.setComponent(comp)));
+        startWakefulService(context, (intent.setComponent(comp)));
+
         setResultCode(Activity.RESULT_OK);
     }
 }

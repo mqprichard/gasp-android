@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Google Inc.
+ * Copyright (c) 2013 Mark Prichard, CloudBees
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ public final class GCMUtilities {
     /**
      * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
      */
-    static final String SERVER_URL = "http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm";
+    static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
 
     public static String getServerUrl() {
         return SERVER_URL;
@@ -212,8 +213,7 @@ public final class GCMUtilities {
             conn.setUseCaches(false);
             conn.setFixedLengthStreamingMode(bytes.length);
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded;charset=UTF-8");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
             // post the request
             OutputStream out = conn.getOutputStream();
             out.write(bytes);

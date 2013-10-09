@@ -42,8 +42,6 @@ import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.newrelic.agent.android.NewRelic;
-import com.testflightapp.lib.TestFlight;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,7 +55,7 @@ public class MainActivity extends Activity {
     private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
 
-    private static final String SERVER_URL = "http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm";
+    private static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
     private static final String SENDER_ID = "960428562804";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -172,8 +170,6 @@ public class MainActivity extends Activity {
                     regId = gcm.register(SENDER_ID);
                     msg = "Device registered: " + regId;
 
-                    // You should send the registration ID to your server over HTTP, so it
-                    // can use GCM/HTTP or CCS to send messages to your app.
                     sendRegistrationIdToBackend();
 
                     // Persist the regID - no need to register again.
@@ -226,11 +222,11 @@ public class MainActivity extends Activity {
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
 
-        // Initilaize NewRelic monitoring agent
-        NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
+        // Initialize NewRelic monitoring agent
+        //NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
 
         //Initialize TestFlight SDK agent
-        TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
+        //TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
 
         // Register Broadcast Receiver to listen for replies from data sync services
         IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
