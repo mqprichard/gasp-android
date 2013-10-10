@@ -97,7 +97,7 @@ public class RestaurantSyncService extends IntentService implements IRestListene
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                 broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(SyncIntentParams.PARAM_OUT_MSG, resultTxt);
+                broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
                 sendBroadcast(broadcastIntent);
 
             } catch (Exception e) {

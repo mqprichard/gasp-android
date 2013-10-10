@@ -29,7 +29,6 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
-import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserUpdateService;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -83,15 +82,15 @@ public class GCMIntentService extends IntentService {
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
-                                .putExtra(SyncIntentParams.PARAM_ID, index));
+                                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
                         }
                         else if (table.matches("restaurants")) {
                             startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
-                                .putExtra(SyncIntentParams.PARAM_ID, index));
+                                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
                         }
                         else if (table.matches("users")) {
                             startService(new Intent(getApplicationContext(), UserUpdateService.class)
-                                .putExtra(SyncIntentParams.PARAM_ID, index));
+                                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
                         }
                         // Send notification message for message bar display etc
                         sendNotification("New " + table + ": " + index);

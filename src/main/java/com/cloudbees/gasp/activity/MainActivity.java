@@ -37,7 +37,6 @@ import com.cloudbees.gasp.gcm.GCMUtilities;
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
-import com.cloudbees.gasp.service.SyncIntentParams;
 import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -233,15 +232,15 @@ public class MainActivity extends Activity {
 
         // Intent Services handle initial data sync
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
-        reviewsIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "reviews");
+        reviewsIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "reviews");
         startService(reviewsIntent);
 
         Intent restaurantsIntent = new Intent(this, RestaurantSyncService.class);
-        restaurantsIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "restaurants");
+        restaurantsIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "restaurants");
         startService(restaurantsIntent);
 
         Intent usersIntent = new Intent(this, UserSyncService.class);
-        usersIntent.putExtra(SyncIntentParams.PARAM_IN_MSG, "users");
+        usersIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "users");
         startService(usersIntent);
 
         // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
@@ -342,15 +341,16 @@ public class MainActivity extends Activity {
         }
     }
 
-    //TODO: Add BroadcastReceiver for messages from GCMUtilities
-
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
+        public static final String PARAM_IN_MSG = "syncSend";
+        public static final String PARAM_OUT_MSG = "syncRecv";
+        public static final String PARAM_ID = "id";
         public static final String ACTION_RESP =
                 "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
         @Override
         public void onReceive(Context context, Intent intent) {
-            String text = intent.getStringExtra(SyncIntentParams.PARAM_OUT_MSG);
+            String text = intent.getStringExtra(PARAM_OUT_MSG);
             Log.d(TAG, text);
             mDisplay.append(text + "\n");
         }

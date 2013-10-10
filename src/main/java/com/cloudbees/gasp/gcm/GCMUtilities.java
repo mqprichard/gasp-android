@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
-import com.cloudbees.gasp.service.SyncIntentParams;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -40,32 +39,23 @@ import java.util.Random;
  */
 public final class GCMUtilities {
 
-    /**
-     * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
-     */
+    static final String TAG = GCMUtilities.class.getName();
+
+    // Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
     static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
 
     public static String getServerUrl() {
         return SERVER_URL;
     }
 
-    /**
-     * Google API project id registered to use GCM.
-     */
+    // Google API project id registered to use GCM.
     private static final String SENDER_ID = "960428562804";
 
     public static String getSenderId() {
         return SENDER_ID;
     }
 
-    /**
-     * Tag used on log messages.
-     */
-    static final String TAG = GCMUtilities.class.getName();
-
-    /**
-     * Intent used to display a message in the screen.
-     */
+    // Intent used to display a message in the screen.
     private static final String DISPLAY_MESSAGE_ACTION =
             "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
 
@@ -73,9 +63,7 @@ public final class GCMUtilities {
         return DISPLAY_MESSAGE_ACTION;
     }
 
-    /**
-     * Intent's extra that contains the message to be displayed.
-     */
+    //Intent's extra that contains the message to be displayed.
     private static final String EXTRA_MESSAGE = "message";
 
 
@@ -93,14 +81,10 @@ public final class GCMUtilities {
      * @param message message to be displayed.
      */
     public static void displayMessage(Context context, String message) {
-        //Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
-        //intent.putExtra(EXTRA_MESSAGE, message);
-        //context.sendBroadcast(intent);
-
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(SyncIntentParams.PARAM_OUT_MSG, message);
+        broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, message);
         context.sendBroadcast(broadcastIntent);
     }
 

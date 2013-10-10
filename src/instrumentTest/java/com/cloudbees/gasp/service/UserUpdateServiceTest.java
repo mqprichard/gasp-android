@@ -3,6 +3,7 @@ package com.cloudbees.gasp.service;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
+import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.model.User;
 import com.cloudbees.gasp.model.UserAdapter;
 
@@ -59,7 +60,7 @@ public class UserUpdateServiceTest extends ServiceTestCase<UserUpdateService> {
 
     public void testUserUpdateIntent () throws InterruptedException {
         startService(new Intent(getContext(), UserUpdateService.class)
-                .putExtra(SyncIntentParams.PARAM_ID, 1));
+                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, 1));
 
         // Allow 20 secs for the async REST call to complete
         signal.await(20, TimeUnit.SECONDS);

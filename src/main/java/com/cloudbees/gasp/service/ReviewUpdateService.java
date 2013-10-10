@@ -55,7 +55,7 @@ public class ReviewUpdateService extends IntentService implements IRestListener 
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int index = intent.getIntExtra(SyncIntentParams.PARAM_ID, 0);
+        int index = intent.getIntExtra(MainActivity.ResponseReceiver.PARAM_ID, 0);
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");
@@ -89,7 +89,7 @@ public class ReviewUpdateService extends IntentService implements IRestListener 
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                 broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(SyncIntentParams.PARAM_OUT_MSG, resultTxt);
+                broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
                 sendBroadcast(broadcastIntent);
 
             } catch (Exception e) {
