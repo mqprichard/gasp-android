@@ -33,7 +33,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.cloudbees.gasp.gcm.GCMUtilities;
+import com.cloudbees.gasp.gcm.GCMRegistration;
 import com.cloudbees.gasp.gcm.R;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
      * to a server that echoes back the message using the 'from' address in the message.
      */
     private void sendRegistrationIdToBackend() {
-        boolean registered = GCMUtilities.register(context, regId);
+        boolean registered = GCMRegistration.register(context, regId);
         if (registered) Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
         else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
     }

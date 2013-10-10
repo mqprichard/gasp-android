@@ -37,9 +37,9 @@ import java.util.Random;
 /**
  * Helper class used to communicate with the demo server.
  */
-public final class GCMUtilities {
+public final class GCMRegistration {
 
-    static final String TAG = GCMUtilities.class.getName();
+    static final String TAG = GCMRegistration.class.getName();
 
     // Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
     static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
