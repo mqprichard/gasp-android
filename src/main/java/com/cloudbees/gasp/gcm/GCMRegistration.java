@@ -109,8 +109,8 @@ public final class GCMRegistration {
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             Log.d(TAG, "Attempt #" + i + " to register");
             try {
-                displayMessage(context, context.getString(
-                        R.string.server_registering, i, MAX_ATTEMPTS));
+                //displayMessage(context, context.getString(
+                        //R.string.server_registering, i, MAX_ATTEMPTS));
                 post(serverUrl, params);
                 String message = context.getString(R.string.server_registered);
                 displayMessage(context, message);

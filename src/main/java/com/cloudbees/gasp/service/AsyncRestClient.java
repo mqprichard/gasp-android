@@ -18,6 +18,7 @@ package com.cloudbees.gasp.service;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,6 +28,9 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+
+import java.io.IOException;
+import java.util.Random;
 
 class AsyncRestClient {
     private static final String TAG = AsyncRestClient.class.getName();
@@ -63,6 +67,10 @@ class AsyncRestClient {
         restCall.execute();
     }
 
+    private static final int MAX_ATTEMPTS = 5;
+    private static final int BACKOFF_MILLI_SECONDS = 2000;
+    private static final Random random = new Random();
+
     private abstract class AsyncRestCall extends AsyncTask<Void, Void, String> {
         private Uri mRestUri;
 
@@ -78,13 +86,34 @@ class AsyncRestClient {
             HttpGet httpGet = new HttpGet(mRestUri.toString());
             String responseBody = null;
 
-            try {
-                HttpResponse response = httpClient.execute(httpGet, localContext);
-                responseBody = handler.handleResponse(response);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
+
+            for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+                Log.d(TAG, "Attempt #" + i + " to connect to " + mBaseUri);
+
+                try {
+                    HttpResponse response = httpClient.execute(httpGet, localContext);
+                    responseBody = handler.handleResponse(response);
+                    break;
+
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to connect to " + mBaseUri + " on attempt " + i, e);
+                    if (i == MAX_ATTEMPTS) {
+                        break;
+                    }
+                    try {
+                        Log.d(TAG, "Sleeping for " + backoff + " ms before retry");
+                            Thread.sleep(backoff);
+                        } catch (InterruptedException e1) {
+                            // Activity finished before we complete - exit.
+                            Log.d(TAG, "Thread interrupted: abort remaining retries!");
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                        // increase backoff exponentially
+                        backoff *= 2;
+                    }
+                }
             return responseBody;
         }
 
