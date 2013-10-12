@@ -38,28 +38,13 @@ import static com.cloudbees.gasp.gcm.GCMRegistration.getSenderId;
  * IntentService responsible for handling GCM messages.
  */
 public class GCMIntentService extends IntentService {
-    public static final int NOTIFICATION_ID = 1;
-    //NotificationCompat.Builder builder;
-
     private static final String TAG = "GCMIntentService";
+
+    public static final int NOTIFICATION_ID = 1;
 
     public GCMIntentService() {
         super(getSenderId());
     }
-
-    /*
-    protected void onRegistered(Context context, String registrationId) {
-        Log.i(TAG, "Device registered: regId = " + registrationId);
-        displayMessage(context, getString(R.string.gcm_registered));
-        GCMRegistration.register(context, registrationId);
-    }
-
-    protected void onUnregistered(Context context, String registrationId) {
-        Log.i(TAG, "Device unregistered");
-        displayMessage(context, getString(R.string.gcm_unregistered));
-        GCMRegistration.unregister(context, registrationId);
-    }
-    */
 
     @Override
     protected void onHandleIntent(Intent intent) {

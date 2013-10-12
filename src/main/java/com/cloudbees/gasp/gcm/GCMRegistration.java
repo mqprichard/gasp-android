@@ -38,15 +38,10 @@ import java.util.Random;
  * Helper class used to communicate with the demo server.
  */
 public final class GCMRegistration {
-
     static final String TAG = GCMRegistration.class.getName();
 
     // Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
     static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
-
-    //public static String getServerUrl() {
-    //    return SERVER_URL;
-    //}
 
     // Google API project id registered to use GCM.
     private static final String SENDER_ID = "960428562804";
@@ -54,22 +49,6 @@ public final class GCMRegistration {
     public static String getSenderId() {
         return SENDER_ID;
     }
-
-    // Intent used to display a message in the screen.
-    //private static final String DISPLAY_MESSAGE_ACTION =
-    //        "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
-
-    //public static String getDisplayMessageAction() {
-    //    return DISPLAY_MESSAGE_ACTION;
-    //}
-
-    //Intent's extra that contains the message to be displayed.
-    //private static final String EXTRA_MESSAGE = "message";
-
-
-    //public static String getExtraMessage() {
-    //    return EXTRA_MESSAGE;
-    //}
 
     /**
      * Notifies UI to display a message.

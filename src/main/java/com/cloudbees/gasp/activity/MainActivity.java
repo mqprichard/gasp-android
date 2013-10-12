@@ -386,15 +386,6 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-    /*
-    private void checkNotNull(Object reference, String name) {
-        if (reference == null) {
-            throw new NullPointerException(
-                    getString(R.string.error_config, name));
-        }
-    }
-    */
-
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String PARAM_IN_MSG = "syncSend";
