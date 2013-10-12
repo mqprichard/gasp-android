@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
      * @return registration ID, or empty string if there is no existing
      *         registration ID.
      */
-    private String getRegistrationId(Context context) {
+    public String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGcmPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
@@ -277,14 +277,70 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        final String regId;
 
+        switch(item.getItemId()) {
+            // (Re-)register with Gasp GCM  Server
             case R.id.options_register:
-                // TODO: Add GCM register
+                try {
+                    if (! (regId = getRegistrationId(context)).isEmpty()) {
+                        new AsyncTask<Void, Void, String>() {
+                            @Override
+                            protected String doInBackground(Void... params) {
+                                try {
+                                    GCMRegistration.register(context, regId);
+                                    return ("Registered Id: " + regId);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                                return ("Unregister failed for Id: " + regId);
+                            }
+
+                            @Override
+                            protected void onPostExecute(String msg) {
+                                mDisplay.append(msg + "\n");
+                            }
+                        }.execute(null, null, null);
+
+                    }
+                    else {
+                        Log.e(TAG, "Registration Id not found");
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return true;
 
+            // Unregister with Gasp GCM Server
             case R.id.options_unregister:
-                // TODO: Add GCM unregister
+                if (! (regId = getRegistrationId(context)).isEmpty()) {
+                    try{
+                        new AsyncTask<Void, Void, String>() {
+                            @Override
+                            protected String doInBackground(Void... params) {
+                                try {
+                                    GCMRegistration.unregister(context, regId);
+                                    return ("Unregistered Id: " + regId);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                                return ("Unregister failed for Id: " + regId);
+                            }
+
+                            @Override
+                            protected void onPostExecute(String msg) {
+                                mDisplay.append(msg + "\n");
+                            }
+                        }.execute(null, null, null);
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Log.e(TAG, "Registration Id not found");
+                }
                 return true;
 
             case R.id.options_clear:
