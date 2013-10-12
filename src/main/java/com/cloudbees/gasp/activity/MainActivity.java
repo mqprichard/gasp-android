@@ -114,7 +114,7 @@ public class MainActivity extends Activity {
      * @return registration ID, or empty string if there is no existing
      *         registration ID.
      */
-    String getRegistrationId(Context context) {
+    private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGcmPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
