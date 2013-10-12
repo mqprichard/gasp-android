@@ -44,9 +44,9 @@ public final class GCMRegistration {
     // Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
     static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
 
-    public static String getServerUrl() {
-        return SERVER_URL;
-    }
+    //public static String getServerUrl() {
+    //    return SERVER_URL;
+    //}
 
     // Google API project id registered to use GCM.
     private static final String SENDER_ID = "960428562804";
@@ -56,20 +56,20 @@ public final class GCMRegistration {
     }
 
     // Intent used to display a message in the screen.
-    private static final String DISPLAY_MESSAGE_ACTION =
-            "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
+    //private static final String DISPLAY_MESSAGE_ACTION =
+    //        "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
 
-    public static String getDisplayMessageAction() {
-        return DISPLAY_MESSAGE_ACTION;
-    }
+    //public static String getDisplayMessageAction() {
+    //    return DISPLAY_MESSAGE_ACTION;
+    //}
 
     //Intent's extra that contains the message to be displayed.
-    private static final String EXTRA_MESSAGE = "message";
+    //private static final String EXTRA_MESSAGE = "message";
 
 
-    public static String getExtraMessage() {
-        return EXTRA_MESSAGE;
-    }
+    //public static String getExtraMessage() {
+    //    return EXTRA_MESSAGE;
+    //}
 
     /**
      * Notifies UI to display a message.
@@ -159,6 +159,7 @@ public final class GCMRegistration {
                 Log.e(TAG, "Failed to unregister on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     message = context.getString(R.string.server_unregister_error, e.getMessage());
+                    displayMessage(context, message);
                     break;
                 }
                 try {
