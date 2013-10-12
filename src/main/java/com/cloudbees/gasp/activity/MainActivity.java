@@ -43,7 +43,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
@@ -53,16 +52,16 @@ public class MainActivity extends Activity {
 
     private static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
     private static final String SENDER_ID = "960428562804";
-    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private AsyncTask<Void, Void, Void> mRegisterTask;
 
-    GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
-    Context context;
-    String regId;
+    private GoogleCloudMessaging gcm;
+    //AtomicInteger msgId = new AtomicInteger();
+    private Context context;
+    private String regId;
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -108,7 +107,7 @@ public class MainActivity extends Activity {
      * @return registration ID, or empty string if there is no existing
      *         registration ID.
      */
-    public String getRegistrationId(Context context) {
+    String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGcmPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
@@ -158,7 +157,7 @@ public class MainActivity extends Activity {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String msg;
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
@@ -190,14 +189,16 @@ public class MainActivity extends Activity {
      * @return Application's version code from the {@code PackageManager}.
      */
     private static int getAppVersion(Context context) {
+        PackageInfo packageInfo;
         try {
-            PackageInfo packageInfo = context.getPackageManager()
+            packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
             throw new RuntimeException("Could not get package name: " + e);
+        } catch (NullPointerException e) {
+            throw new RuntimeException("NPE getting package name: " + e);
         }
+        return packageInfo.versionCode;
     }
 
 
@@ -254,11 +255,6 @@ public class MainActivity extends Activity {
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -390,12 +386,14 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
+    /*
     private void checkNotNull(Object reference, String name) {
         if (reference == null) {
             throw new NullPointerException(
                     getString(R.string.error_config, name));
         }
     }
+    */
 
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {

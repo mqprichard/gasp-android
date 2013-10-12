@@ -32,7 +32,6 @@ import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.UserUpdateService;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import static com.cloudbees.gasp.gcm.GCMRegistration.displayMessage;
 import static com.cloudbees.gasp.gcm.GCMRegistration.getSenderId;
 
 /**
@@ -40,8 +39,7 @@ import static com.cloudbees.gasp.gcm.GCMRegistration.getSenderId;
  */
 public class GCMIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
+    //NotificationCompat.Builder builder;
 
     private static final String TAG = "GCMIntentService";
 
@@ -49,6 +47,7 @@ public class GCMIntentService extends IntentService {
         super(getSenderId());
     }
 
+    /*
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
         displayMessage(context, getString(R.string.gcm_registered));
@@ -60,6 +59,7 @@ public class GCMIntentService extends IntentService {
         displayMessage(context, getString(R.string.gcm_unregistered));
         GCMRegistration.unregister(context, registrationId);
     }
+    */
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -67,18 +67,18 @@ public class GCMIntentService extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
 
-        if (!extras.isEmpty()) {
-            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                Log.i(TAG, "Send error: " + extras.toString());
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-                Log.i(TAG, "Deleted messages on server: " + extras.toString());
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                Log.i(TAG, "Received: " + extras.toString());
+        try {
+            if (!extras.isEmpty()) {
+                if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+                    Log.i(TAG, "Send error: " + extras.toString());
+                } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+                    Log.i(TAG, "Deleted messages on server: " + extras.toString());
+                } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                    Log.i(TAG, "Received: " + extras.toString());
 
-                int index = Integer.valueOf(extras.getString("id"));
-                String table = extras.getString("table");
+                    int index = Integer.valueOf(extras.getString("id"));
+                    String table = extras.getString("table");
 
-                try {
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
@@ -101,19 +101,18 @@ public class GCMIntentService extends IntentService {
                     // Release the wake lock provided by the WakefulBroadcastReceiver.
                     GCMBroadcastReceiver.completeWakefulIntent(intent);
                 }
-                catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Send a notification message that a new update has been received
-     * @param msg
+     * @param msg Notification message
      */
     private void sendNotification(String msg) {
-        mNotificationManager = (NotificationManager)
+        NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
