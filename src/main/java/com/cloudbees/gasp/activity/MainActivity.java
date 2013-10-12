@@ -41,6 +41,8 @@ import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.newrelic.agent.android.NewRelic;
+import com.testflightapp.lib.TestFlight;
 
 import java.io.IOException;
 
@@ -220,11 +222,8 @@ public class MainActivity extends Activity {
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
 
-        // Initialize NewRelic monitoring agent
-        //NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
-
-        //Initialize TestFlight SDK agent
-        //TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
+        // Add support for third-party libraries
+        //addThirdPartyLibs();
 
         // Register Broadcast Receiver to listen for replies from data sync services
         IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
@@ -270,6 +269,17 @@ public class MainActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
         return true;
+    }
+
+    /**
+     * Add Support for third-party monitoring libraries
+     */
+    private void addThirdPartyLibs() {
+        // Initialize NewRelic monitoring agent
+        NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
+
+        // Initialize TestFlight SDK agent
+        TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
     }
 
     /**
