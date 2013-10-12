@@ -395,7 +395,8 @@ public class MainActivity extends Activity {
         if (mRegisterTask != null) {
             mRegisterTask.cancel(true);
         }
-
+        // Unregister from Gasp GCM Server
+        doUnregister();
         unregisterReceiver(mGaspMessageReceiver);
         super.onDestroy();
     }
