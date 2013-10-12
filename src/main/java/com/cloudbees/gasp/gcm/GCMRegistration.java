@@ -35,20 +35,18 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 /**
- * Helper class used to communicate with the demo server.
+ * Helper class used to communicate with the Gasp! GCM Push Notification server.
  */
 public final class GCMRegistration {
     static final String TAG = GCMRegistration.class.getName();
 
-    // Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
-    static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
+    // Control backoff/retry behaviour for HTTP Post requests
+    private static final int MAX_ATTEMPTS = 5;
+    private static final int BACKOFF_MILLI_SECONDS = 2000;
+    private static final Random random = new Random();
 
-    // Google API project id registered to use GCM.
-    private static final String SENDER_ID = "960428562804";
-
-    public static String getSenderId() {
-        return SENDER_ID;
-    }
+    // Base URL of the Gasp! GCM Push Server
+    private static final String SERVER_URL = MainActivity.getSERVER_URL();
 
     /**
      * Notifies UI to display a message.
@@ -66,10 +64,6 @@ public final class GCMRegistration {
         broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, message);
         context.sendBroadcast(broadcastIntent);
     }
-
-    private static final int MAX_ATTEMPTS = 5;
-    private static final int BACKOFF_MILLI_SECONDS = 2000;
-    private static final Random random = new Random();
 
     /**
      * Register this account/device pair within the server.

@@ -32,8 +32,6 @@ import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.UserUpdateService;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import static com.cloudbees.gasp.gcm.GCMRegistration.getSenderId;
-
 /**
  * IntentService responsible for handling GCM messages.
  */
@@ -43,7 +41,7 @@ public class GCMIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
 
     public GCMIntentService() {
-        super(getSenderId());
+        super(TAG);
     }
 
     @Override

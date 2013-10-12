@@ -49,20 +49,24 @@ import java.io.IOException;
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
 
-    private TextView mDisplay;
-    private ResponseReceiver mGaspMessageReceiver;
+    // Base URL of the Gasp! GCM Push Server
+    private static String SERVER_URL;
+    public static String getSERVER_URL() {
+        return SERVER_URL;
+    }
 
-    //TODO: Add SERVER_URL to SharedPreferences
-    private static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
+    // Google API project id registered to use GCM.
     private static final String SENDER_ID = "960428562804";
+
+    // Constants used for GCM Registration
     private static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private AsyncTask<Void, Void, Void> mRegisterTask;
-
+    private TextView mDisplay;
+    private ResponseReceiver mGaspMessageReceiver;
     private GoogleCloudMessaging gcm;
-    //AtomicInteger msgId = new AtomicInteger();
     private Context context;
     private String regId;
 
@@ -221,6 +225,8 @@ public class MainActivity extends Activity {
         Log.i(TAG, "Using Gasp Server Reviews URI: " + gaspSharedPreferences.getString("gasp_reviews_uri", ""));
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
         Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
+        Log.i(TAG, "Using Gasp GCM Push Server URI: " + gaspSharedPreferences.getString("gasp_push_uri", ""));
+        SERVER_URL = gaspSharedPreferences.getString("gasp_push_uri", "");
 
         // Add support for third-party libraries
         //addThirdPartyLibs();
