@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
     private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
 
+    //TODO: Add SERVER_URL to SharedPreferences
     private static final String SERVER_URL = "http://gasp-push-server.partnerdemo.cloudbees.net/gcm";
     private static final String SENDER_ID = "960428562804";
     private static final String PROPERTY_REG_ID = "registration_id";

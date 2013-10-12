@@ -28,6 +28,7 @@ dependencies {
     compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.android.gms:play-services:3.2.+'
     compile 'com.newrelic.agent.android:android-agent:2.426.0'
+    compile 'com.google.code.geocoder-java:geocoder-java:0.15'
     compile files('libs/TestFlightLib.jar')
 }
 
