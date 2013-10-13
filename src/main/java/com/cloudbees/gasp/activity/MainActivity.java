@@ -144,55 +144,6 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
-     * messages to your app. Not needed for this demo since the device sends upstream messages
-     * to a server that echoes back the message using the 'from' address in the message.
-     */
-    private void sendRegistrationIdToBackend() {
-        boolean registered = GCMRegistration.register(context, regId);
-        if (registered) Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
-        else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
-    }
-
-    /**
-     * Registers the application with GCM servers asynchronously.
-     * <p>
-     * Stores the registration ID and the app versionCode in the application's
-     * shared preferences.
-     */
-    private void registerInBackground() {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg;
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(context);
-                    }
-                    regId = gcm.register(SENDER_ID);
-                    msg = "Device registered: " + regId;
-
-                    sendRegistrationIdToBackend();
-
-                    // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regId);
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-                    // If there is an error, don't just keep trying to register.
-                    // Require the user to click a button again, or perform
-                    // exponential back-off.
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                mDisplay.append(msg + "\n");
-            }
-        }.execute(null, null, null);
-    }
-
-    /**
      * @return Application's version code from the {@code PackageManager}.
      */
     private static int getAppVersion(Context context) {
@@ -208,6 +159,143 @@ public class MainActivity extends Activity {
         return packageInfo.versionCode;
     }
 
+    /**
+     * Add Support for third-party monitoring libraries
+     */
+    private void addThirdPartyLibs() {
+        // Initialize NewRelic monitoring agent
+        NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
+
+        // Initialize TestFlight SDK agent
+        TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
+    }
+
+    /**
+     * Registers the application with GCM/Gasp Push Notification Server.
+     * <p>
+     * Stores the registration ID and the app versionCode in the application's
+     * shared preferences. Use when first registering with GCM/Gasp Push Server.
+     */
+    private void doRegisterGCM() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg;
+                try {
+                    // Register device with Google Cloud Messaging
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regId = gcm.register(SENDER_ID);
+                    msg = "Device registered: " + regId;
+
+                    // Register with Gasp GCM Push Notification Server
+                    boolean registered = GCMRegistration.register(context, regId);
+                    if (registered) Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
+                    else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
+
+                    // Persist the regID - no need to register again.
+                    storeRegistrationId(context, regId);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    // TODO:
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                mDisplay.append(msg + "\n");
+            }
+        }.execute(null, null, null);
+    }
+
+    /**
+     * Unregister Device with Gasp GCM Server (for Options Menu)
+     * Assumes Registration ID is already set, does not register Device with GCM
+     */
+    private void doUnregisterGasp() {
+        if (! (regId = getRegistrationId(context)).isEmpty()) {
+            try{
+                new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        try {
+                            GCMRegistration.unregister(context, regId);
+                            return ("Unregistered Id: " + regId);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        return ("Unregister failed for Id: " + regId);
+                    }
+
+                    @Override
+                    protected void onPostExecute(String msg) {
+                        mDisplay.append(msg + "\n");
+                    }
+                }.execute(null, null, null);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Log.e(TAG, "Registration Id not found");
+        }
+    }
+
+    /**
+     * Register Device with Gasp GCM Server (for Options Menu)
+     * Assumes Registration ID is already set, does not register Device with GCM
+     */
+    private void doRegisterGasp() {
+        try {
+            if (! (regId = getRegistrationId(context)).isEmpty()) {
+                new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        try {
+                            if (GCMRegistration.register(context, regId))
+                                return ("Registered Id: " + regId);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        return ("Unregister failed for Id: " + regId);
+                    }
+
+                    @Override
+                    protected void onPostExecute(String msg) {
+                        mDisplay.append(msg + "\n");
+                    }
+                }.execute(null, null, null);
+
+            }
+            else {
+                Log.e(TAG, "Registration Id not found");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // BroadcastReceiver for Gasp sync/update messages
+    public class ResponseReceiver extends BroadcastReceiver {
+        public static final String PARAM_IN_MSG = "syncSend";
+        public static final String PARAM_OUT_MSG = "syncRecv";
+        public static final String PARAM_ID = "id";
+        public static final String ACTION_RESP =
+                "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra(PARAM_OUT_MSG);
+            Log.d(TAG, text);
+            mDisplay.append(text + "\n");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -256,7 +344,7 @@ public class MainActivity extends Activity {
             regId = getRegistrationId(context);
 
             if (regId.isEmpty()) {
-                registerInBackground();
+                doRegisterGCM();
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
@@ -277,84 +365,6 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    /**
-     * Add Support for third-party monitoring libraries
-     */
-    private void addThirdPartyLibs() {
-        // Initialize NewRelic monitoring agent
-        NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
-
-        // Initialize TestFlight SDK agent
-        TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
-    }
-
-    /**
-     * Unregister Device with Gasp GCM Server
-     */
-    private void doUnregister() {
-        if (! (regId = getRegistrationId(context)).isEmpty()) {
-            try{
-                new AsyncTask<Void, Void, String>() {
-                    @Override
-                    protected String doInBackground(Void... params) {
-                        try {
-                            GCMRegistration.unregister(context, regId);
-                            return ("Unregistered Id: " + regId);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                        return ("Unregister failed for Id: " + regId);
-                    }
-
-                    @Override
-                    protected void onPostExecute(String msg) {
-                        mDisplay.append(msg + "\n");
-                    }
-                }.execute(null, null, null);
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            Log.e(TAG, "Registration Id not found");
-        }
-    }
-
-    /**
-     * Register Device's Registration Id with Gasp! GCM Server
-     */
-    private void doRegister() {
-        try {
-            if (! (regId = getRegistrationId(context)).isEmpty()) {
-                new AsyncTask<Void, Void, String>() {
-                    @Override
-                    protected String doInBackground(Void... params) {
-                        try {
-                            GCMRegistration.register(context, regId);
-                            return ("Registered Id: " + regId);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                        return ("Unregister failed for Id: " + regId);
-                    }
-
-                    @Override
-                    protected void onPostExecute(String msg) {
-                        mDisplay.append(msg + "\n");
-                    }
-                }.execute(null, null, null);
-
-            }
-            else {
-                Log.e(TAG, "Registration Id not found");
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final String regId;
@@ -362,12 +372,12 @@ public class MainActivity extends Activity {
         switch(item.getItemId()) {
             // (Re-)register with Gasp GCM  Server
             case R.id.options_register:
-                doRegister();
+                doRegisterGasp();
                 return true;
 
             // Unregister with Gasp GCM Server
             case R.id.options_unregister:
-                doUnregister();
+                doUnregisterGasp();
                 return true;
 
             case R.id.options_clear:
@@ -413,24 +423,8 @@ public class MainActivity extends Activity {
             mRegisterTask.cancel(true);
         }
         // Unregister from Gasp GCM Server
-        doUnregister();
+        doUnregisterGasp();
         unregisterReceiver(mGaspMessageReceiver);
         super.onDestroy();
     }
-
-    // BroadcastReceiver for Gasp sync/update messages
-    public class ResponseReceiver extends BroadcastReceiver {
-        public static final String PARAM_IN_MSG = "syncSend";
-        public static final String PARAM_OUT_MSG = "syncRecv";
-        public static final String PARAM_ID = "id";
-        public static final String ACTION_RESP =
-                "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String text = intent.getStringExtra(PARAM_OUT_MSG);
-            Log.d(TAG, text);
-            mDisplay.append(text + "\n");
-        }
-    }
-
 }
