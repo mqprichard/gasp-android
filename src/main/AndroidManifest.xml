@@ -16,7 +16,7 @@
   ~ limitations under the License.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cloudbees.gasp.gcm"
+    package="com.cloudbees.gasp"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -40,10 +40,10 @@
 
     <!-- Creates a custom permission so only this app can receive its messages. -->
     <permission
-        android:name="com.cloudbees.gasp.gcm.permission.C2D_MESSAGE"
+        android:name="com.cloudbees.gasp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission
-        android:name="com.cloudbees.gasp.gcm.permission.C2D_MESSAGE" />
+        android:name="com.cloudbees.gasp.permission.C2D_MESSAGE" />
 
     <!-- Main activity. -->
     <application
@@ -92,12 +92,12 @@
              so only GCM services can send data messages for the app.
          -->
         <receiver
-            android:name=".GCMBroadcastReceiver"
+            android:name="com.cloudbees.gasp.gcm.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <!-- Receives the actual messages. -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.google.android.gcm.demo.app" />
+                <category android:name="com.google.android.demo.app" />
             </intent-filter>
         </receiver>
 

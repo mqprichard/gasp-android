@@ -30,6 +30,7 @@ import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.UserUpdateService;
+import com.cloudbees.gasp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 /**

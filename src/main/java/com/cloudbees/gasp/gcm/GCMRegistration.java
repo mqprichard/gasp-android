@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.R;
 
 import java.io.IOException;
 import java.io.OutputStream;

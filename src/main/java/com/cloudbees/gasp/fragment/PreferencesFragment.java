@@ -19,7 +19,7 @@ package com.cloudbees.gasp.fragment;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
-import com.cloudbees.gasp.gcm.R;
+import com.cloudbees.gasp.R;
 
 public class PreferencesFragment extends PreferenceFragment {
 

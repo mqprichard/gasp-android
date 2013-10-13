@@ -20,7 +20,7 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
-import com.cloudbees.gasp.gcm.R;
+import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.model.ReviewAdapter;
 

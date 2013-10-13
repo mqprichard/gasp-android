@@ -34,7 +34,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cloudbees.gasp.gcm.GCMRegistration;
-import com.cloudbees.gasp.gcm.R;
+import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
 import com.cloudbees.gasp.service.UserSyncService;
