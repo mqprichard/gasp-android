@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  */
 
-public class AsyncRestTestAll extends AndroidTestCase implements IRestListener {
+public class AsyncRestTestAll extends AndroidTestCase implements IRESTListener {
     private static final String TAG = AsyncRestTestAll.class.getName();
     private static final String REVIEWS = "http://gasp.partnerdemo.cloudbees.net/reviews";
 
@@ -44,7 +44,7 @@ public class AsyncRestTestAll extends AndroidTestCase implements IRestListener {
     @UiThreadTest
     public void testAsyncRestTask() throws InterruptedException {
         try {
-            AsyncRestClient asyncRestCall = new AsyncRestClient(Uri.parse(REVIEWS), this);
+            AsyncRESTClient asyncRestCall = new AsyncRESTClient(Uri.parse(REVIEWS), this);
             asyncRestCall.getAll();
 
             // Allow 20 secs for the async REST call to complete
