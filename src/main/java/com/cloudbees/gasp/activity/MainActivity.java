@@ -390,7 +390,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final String regId;
+        //final String regId;
 
         switch(item.getItemId()) {
             // (Re-)register with Gasp GCM  Server

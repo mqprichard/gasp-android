@@ -73,23 +73,27 @@ public class TwitterAuthenticationFragment extends RESTResponderFragment {
     }
 
     private void requestOAuthToken() {
-        MainActivity activity = (MainActivity) getActivity();
+        try {
+            MainActivity activity = (MainActivity) getActivity();
 
-        Intent intent = new Intent(activity, RESTIntentService.class);
-        intent.setData(Uri.parse(twitterApiOAuthToken));
+            Intent intent = new Intent(activity, RESTIntentService.class);
+            intent.setData(Uri.parse(twitterApiOAuthToken));
 
-        Bundle params = new Bundle();
-        params.putString("grant_type", "client_credentials");
+            Bundle params = new Bundle();
+            params.putString("grant_type", "client_credentials");
 
-        Bundle headers = new Bundle();
-        headers.putString("Authorization", doEncoding());
+            Bundle headers = new Bundle();
+            headers.putString("Authorization", doEncoding());
 
-        intent.putExtra(RESTIntentService.EXTRA_HTTP_VERB, RESTIntentService.POST);
-        intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
-        intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
-        intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+            intent.putExtra(RESTIntentService.EXTRA_HTTP_VERB, RESTIntentService.POST);
+            intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
+            intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
+            intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
 
-        activity.startService(intent);
+            activity.startService(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
