@@ -32,13 +32,13 @@ import org.apache.http.protocol.HttpContext;
 import java.io.IOException;
 import java.util.Random;
 
-class AsyncRestClient {
-    private static final String TAG = AsyncRestClient.class.getName();
+class AsyncRESTClient {
+    private static final String TAG = AsyncRESTClient.class.getName();
 
     private final Uri mBaseUri;
-    private final IRestListener mListener;
+    private final IRESTListener mListener;
 
-    public AsyncRestClient(Uri baseUri, IRestListener listener) {
+    public AsyncRESTClient(Uri baseUri, IRESTListener listener) {
         this.mBaseUri = baseUri;
         this.mListener = listener;
     }

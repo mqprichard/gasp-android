@@ -396,7 +396,7 @@ public class MainActivity extends Activity {
 
             case R.id.gasp_menu_twitter:
                 intent = new Intent();
-                intent.setClass(MainActivity.this, TwitterRestServiceActivity.class);
+                intent.setClass(MainActivity.this, TwitterStreamActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 

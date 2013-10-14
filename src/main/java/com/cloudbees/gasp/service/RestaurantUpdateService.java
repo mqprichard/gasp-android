@@ -32,7 +32,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-public class RestaurantUpdateService extends IntentService implements IRestListener {
+public class RestaurantUpdateService extends IntentService implements IRESTListener {
     private static final String TAG = RestaurantUpdateService.class.getName();
 
     private Uri mGaspRestaurantsUri;
@@ -63,7 +63,7 @@ public class RestaurantUpdateService extends IntentService implements IRestListe
         else {
             getGaspRestaurantsUriSharedPreferences();
 
-            AsyncRestClient asyncRestCall = new AsyncRestClient(mGaspRestaurantsUri, this);
+            AsyncRESTClient asyncRestCall = new AsyncRESTClient(mGaspRestaurantsUri, this);
             asyncRestCall.getIndex(index);
         }
     }

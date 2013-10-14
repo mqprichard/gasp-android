@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 
-import com.cloudbees.gasp.service.RestIntentService;
+import com.cloudbees.gasp.service.RESTIntentService;
 
 /**
  * Closely modeled on Neil Goodman's Android REST tutorials
@@ -30,7 +30,7 @@ import com.cloudbees.gasp.service.RestIntentService;
  *
  * @author Mark Prichard
  */
-public abstract class RestResponderFragment extends Fragment {
+public abstract class RESTResponderFragment extends Fragment {
     
     private final ResultReceiver mReceiver;
     
@@ -38,13 +38,13 @@ public abstract class RestResponderFragment extends Fragment {
     // but be careful because Fragments are required to have only zero-arg
     // constructors. Normally you don't want to use constructors at all
     // with Fragments.
-    public RestResponderFragment() {
+    public RESTResponderFragment() {
         mReceiver = new ResultReceiver(new Handler()) {
 
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
-                if (resultData != null && resultData.containsKey(RestIntentService.REST_RESULT)) {
-                    onRESTResult(resultCode, resultData.getString(RestIntentService.REST_RESULT));
+                if (resultData != null && resultData.containsKey(RESTIntentService.REST_RESULT)) {
+                    onRESTResult(resultCode, resultData.getString(RESTIntentService.REST_RESULT));
                 }
                 else {
                     onRESTResult(resultCode, null);
@@ -61,7 +61,7 @@ public abstract class RestResponderFragment extends Fragment {
         // This tells our Activity to keep the same instance of this
         // Fragment when the Activity is re-created during lifecycle
         // events. This is what we want because this Fragment should
-        // be available to receive results from our RestIntentService no
+        // be available to receive results from our RESTIntentService no
         // matter what the Activity is doing.
         setRetainInstance(true);
     }

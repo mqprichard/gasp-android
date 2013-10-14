@@ -52,8 +52,8 @@ import java.util.List;
  *
  * @author Mark Prichard
  */
-public class RestIntentService extends IntentService {
-    private static final String TAG = RestIntentService.class.getName();
+public class RESTIntentService extends IntentService {
+    private static final String TAG = RESTIntentService.class.getName();
     
     public static final int GET    = 0x1;
     public static final int POST   = 0x2;
@@ -66,7 +66,7 @@ public class RestIntentService extends IntentService {
     
     public static final String REST_RESULT = "com.cloudbees.gasp.REST_RESULT";
 
-    public RestIntentService() {
+    public RESTIntentService() {
         super(TAG);
     }
     

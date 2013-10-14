@@ -32,7 +32,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-public class ReviewUpdateService extends IntentService implements IRestListener {
+public class ReviewUpdateService extends IntentService implements IRESTListener {
     private static final String TAG = ReviewUpdateService.class.getName();
 
     private Uri mGaspReviewsUri;
@@ -63,7 +63,7 @@ public class ReviewUpdateService extends IntentService implements IRestListener 
         else {
             getGaspReviewsUriSharedPreferences();
 
-            AsyncRestClient asyncRestCall = new AsyncRestClient(mGaspReviewsUri, this);
+            AsyncRESTClient asyncRestCall = new AsyncRESTClient(mGaspReviewsUri, this);
             asyncRestCall.getIndex(index);
         }
     }

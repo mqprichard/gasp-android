@@ -35,7 +35,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ListIterator;
 
-public class RestaurantSyncService extends IntentService implements IRestListener {
+public class RestaurantSyncService extends IntentService implements IRESTListener {
     private static final String TAG = RestaurantSyncService.class.getName();
 
     private Uri mGaspRestaurantsUri;
@@ -61,7 +61,7 @@ public class RestaurantSyncService extends IntentService implements IRestListene
         getGaspRestaurantsUriSharedPreferences();
         Log.i(TAG, "Using Gasp Server Restaurants URI: " + getGaspRestaurantsUri());
 
-        AsyncRestClient asyncRestCall = new AsyncRestClient(getGaspRestaurantsUri(), this);
+        AsyncRESTClient asyncRestCall = new AsyncRESTClient(getGaspRestaurantsUri(), this);
         asyncRestCall.getAll();
     }
 

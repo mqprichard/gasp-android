@@ -25,8 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.activity.TwitterRestServiceActivity;
-import com.cloudbees.gasp.service.RestIntentService;
+import com.cloudbees.gasp.activity.TwitterStreamActivity;
+import com.cloudbees.gasp.service.RESTIntentService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +43,7 @@ import java.util.List;
  *
  * @author Mark Prichard
  */
-public class TwitterResponderFragment extends RestResponderFragment {
+public class TwitterResponderFragment extends RESTResponderFragment {
     private static final String TAG = TwitterResponderFragment.class.getName();
     
     // We cache our stored tweets here so that we can return right away
@@ -62,16 +62,16 @@ public class TwitterResponderFragment extends RestResponderFragment {
     }
 
     private void setTweets() {
-        TwitterRestServiceActivity activity = (TwitterRestServiceActivity) getActivity();
+        TwitterStreamActivity activity = (TwitterStreamActivity) getActivity();
         
         if (mTweets == null && activity != null) {
             // This is where we make our REST call to the service. We also pass in our ResultReceiver
-            // defined in the RestResponderFragment super class.
+            // defined in the RESTResponderFragment super class.
             
             // We will explicitly call our Service since we probably want to keep it as a private
             // component in our app. You could do this with Intent actions as well, but you have
             // to make sure you define your intent filters correctly in your manifest.
-            Intent intent = new Intent(activity, RestIntentService.class);
+            Intent intent = new Intent(activity, RESTIntentService.class);
             intent.setData(Uri.parse("http://search.twitter.com/search.json"));
             
             // Here we are going to place our REST call parameters. Note that
@@ -80,10 +80,10 @@ public class TwitterResponderFragment extends RestResponderFragment {
             Bundle params = new Bundle();
             params.putString("q", "cloudbees");
             
-            intent.putExtra(RestIntentService.EXTRA_PARAMS, params);
-            intent.putExtra(RestIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+            intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
+            intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
             
-            // Here we send our Intent to our RestIntentService.
+            // Here we send our Intent to our RESTIntentService.
             activity.startService(intent);
         }
         else if (activity != null) {

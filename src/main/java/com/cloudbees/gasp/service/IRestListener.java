@@ -16,6 +16,6 @@
 
 package com.cloudbees.gasp.service;
 
-public interface IRestListener {
+public interface IRESTListener {
     void onCompleted(String results);
 }

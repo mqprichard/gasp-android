@@ -69,11 +69,11 @@
 
         <!-- Gasp! Twitter stream activity -->
         <activity
-            android:name=".activity.TwitterRestServiceActivity"
+            android:name=".activity.TwitterStreamActivity"
             android:label="@string/gasp_twitter"></activity>
 
         <!-- Gasp! REST data services -->
-        <service android:name=".service.RestIntentService" />
+        <service android:name=".service.RESTIntentService" />
 
         <!-- Gasp! database activities -->
         <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity" />

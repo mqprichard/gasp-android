@@ -36,8 +36,8 @@ import com.cloudbees.gasp.R;
  *
  * @author Mark Prichard
  */
-public class TwitterRestServiceActivity extends Activity {
-    private final String TAG = TwitterRestServiceActivity.class.getName();
+public class TwitterStreamActivity extends Activity {
+    private final String TAG = TwitterStreamActivity.class.getName();
     
     private ArrayAdapter<String> mAdapter;
     
@@ -89,7 +89,7 @@ public class TwitterRestServiceActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Single menu item only - need to handle multiple items if added
         Intent intent = new Intent();
-        intent.setClass(TwitterRestServiceActivity.this, SetPreferencesActivity.class);
+        intent.setClass(TwitterStreamActivity.this, SetPreferencesActivity.class);
         startActivityForResult(intent, 0); 
         
         return true;
