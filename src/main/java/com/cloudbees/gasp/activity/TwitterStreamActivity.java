@@ -35,7 +35,18 @@ import com.cloudbees.gasp.fragment.TwitterResponderFragment;
  */
 public class TwitterStreamActivity extends Activity {
     private final String TAG = TwitterStreamActivity.class.getName();
-    
+
+    // Twitter API v1.1 OAuth Token
+    private static String twitterOAuthToken = "";
+
+    public static String getTwitterOAuthToken() {
+        return twitterOAuthToken;
+    }
+
+    public static void setTwitterOAuthToken(String twitterOAuthToken) {
+        TwitterStreamActivity.twitterOAuthToken = twitterOAuthToken;
+    }
+
     private ArrayAdapter<String> mAdapter;
     
     @Override
@@ -57,18 +68,13 @@ public class TwitterStreamActivity extends Activity {
         // RESTResponderFragments call setRetainedInstance(true) in their onCreate() method. So that means
         // we need to check if our FragmentManager is already storing an instance of the responder.
         TwitterResponderFragment responder =
-                (TwitterResponderFragment) fm.findFragmentByTag("RESTResponder");
+                (TwitterResponderFragment) fm.findFragmentByTag("TwitterResponder");
         if (responder == null) {
             responder = new TwitterResponderFragment();
-            
-            // We add the fragment using a Tag since it has no views. It will make the Twitter REST call
-            // for us each time this Activity is created.
-            ft.add(responder, "RESTResponder");
+
+            ft.add(responder, "TwitterResponder");
         }
 
-        // Make sure you commit the FragmentTransaction or your fragments
-        // won't get added to your FragmentManager. Forgetting to call ft.commit()
-        // is a really common mistake when starting out with Fragments.
         ft.commit();
     }
 

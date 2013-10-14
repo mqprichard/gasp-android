@@ -59,12 +59,12 @@ public class RESTIntentService extends IntentService {
     public static final int POST   = 0x2;
     public static final int PUT    = 0x3;
     public static final int DELETE = 0x4;
-    
+
     public static final String EXTRA_HTTP_VERB       = "com.cloudbees.gasp.EXTRA_HTTP_VERB";
     public static final String EXTRA_PARAMS          = "com.cloudbees.gasp.EXTRA_PARAMS";
+    public static final String EXTRA_HEADERS         = "com.cloudbees.gasp.EXTRA_HEADERS";
     public static final String EXTRA_RESULT_RECEIVER = "com.cloudbees.gasp.EXTRA_RESULT_RECEIVER";
-    
-    public static final String REST_RESULT = "com.cloudbees.gasp.REST_RESULT";
+    public static final String REST_RESULT           = "com.cloudbees.gasp.REST_RESULT";
 
     public RESTIntentService() {
         super(TAG);
@@ -80,13 +80,15 @@ public class RESTIntentService extends IntentService {
             return;
         }
 
-        int            verb     = extras.getInt(EXTRA_HTTP_VERB, GET);
-        Bundle         params   = extras.getParcelable(EXTRA_PARAMS);
+        int verb = extras.getInt(EXTRA_HTTP_VERB, GET);
+        Bundle params = extras.getParcelable(EXTRA_PARAMS);
+        Bundle headers = extras.getParcelable(EXTRA_HEADERS);
         ResultReceiver receiver = extras.getParcelable(EXTRA_RESULT_RECEIVER);
-        
+
         try {
             HttpRequestBase request = null;
 
+            // Get query params from Bundle and build URL
             switch (verb) {
                 case GET: {
                     request = new HttpGet();
@@ -103,12 +105,7 @@ public class RESTIntentService extends IntentService {
                 case POST: {
                     request = new HttpPost();
                     request.setURI(new URI(action.toString()));
-                    
-                    // Attach form entity if necessary. Note: some REST APIs
-                    // require you to POST JSON. This is easy to do, simply use
-                    // postRequest.setHeader('Content-Type', 'application/json')
-                    // and StringEntity instead. Same thing for the PUT case 
-                    // below.
+
                     HttpPost postRequest = (HttpPost) request;
                     
                     if (params != null) {
@@ -121,8 +118,7 @@ public class RESTIntentService extends IntentService {
                 case PUT: {
                     request = new HttpPut();
                     request.setURI(new URI(action.toString()));
-                    
-                    // Attach form entity if necessary.
+
                     HttpPut putRequest = (HttpPut) request;
                     
                     if (params != null) {
@@ -131,6 +127,11 @@ public class RESTIntentService extends IntentService {
                     }
                 }
                 break;
+            }
+
+            // Get Headers from Bundle
+            for (BasicNameValuePair header: paramsToList(headers)){
+                request.setHeader(header.getName(), header.getValue());
             }
             
             if (request != null) {
@@ -144,7 +145,7 @@ public class RESTIntentService extends IntentService {
                 StatusLine responseStatus = response.getStatusLine();
                 int        statusCode     = responseStatus != null ? responseStatus.getStatusCode() : 0;
                 
-                if (responseEntity != null) {
+                if ((responseEntity != null) && (responseStatus.getStatusCode() == 200)) {
                     Bundle resultData = new Bundle();
                     resultData.putString(REST_RESULT, EntityUtils.toString(responseEntity));
                     receiver.send(statusCode, resultData);
@@ -170,13 +171,14 @@ public class RESTIntentService extends IntentService {
             Log.e(TAG, "There was a problem when sending the request.", e);
             receiver.send(0, null);
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void attachUriWithQuery(HttpRequestBase request, Uri uri, Bundle params) {
         try {
             if (params == null) {
-                // No params were given or they have already been
-                // attached to the Uri.
                 request.setURI(new URI(uri.toString()));
             }
             else {
@@ -219,10 +221,7 @@ public class RESTIntentService extends IntentService {
         
         for (String key : params.keySet()) {
             Object value = params.get(key);
-            
-            // We can only put Strings in a form entity, so we call the toString()
-            // method to enforce. We also probably don't need to check for null here
-            // but we do anyway because Bundle.get() can return null.
+
             if (value != null) formList.add(new BasicNameValuePair(key, value.toString()));
         }
         

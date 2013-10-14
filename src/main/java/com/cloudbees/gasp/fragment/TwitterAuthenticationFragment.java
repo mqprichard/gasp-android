@@ -26,7 +26,10 @@ import android.widget.Toast;
 
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.activity.TwitterStreamActivity;
+import com.cloudbees.gasp.model.TwitterTokenResponse;
 import com.cloudbees.gasp.service.RESTIntentService;
+import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -61,15 +64,15 @@ public class TwitterAuthenticationFragment extends RESTResponderFragment {
         }
         return authEncodedBase64;
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getOAuthToken();
+        requestOAuthToken();
     }
 
-    private void getOAuthToken() {
+    private void requestOAuthToken() {
         MainActivity activity = (MainActivity) getActivity();
 
         Intent intent = new Intent(activity, RESTIntentService.class);
@@ -88,19 +91,21 @@ public class TwitterAuthenticationFragment extends RESTResponderFragment {
 
         activity.startService(intent);
     }
-    
+
     @Override
     public void onRESTResult(int code, String result) {
         if (code == 200 && result != null) {
-            Log.d(TAG, result);
-        }
-        else {
+            TwitterTokenResponse twitterToken = new Gson().fromJson(result, TwitterTokenResponse.class);
+            TwitterStreamActivity.setTwitterOAuthToken(twitterToken.getAccess_token());
+            Log.d(TAG, "Twitter OAuth Access Token: " + twitterToken.getAccess_token());
+            Log.d(TAG, "Twitter OAuth Token Type: " + twitterToken.getToken_type());
+        } else {
             Activity activity = getActivity();
             if (activity != null) {
-                Toast.makeText(activity, 
-                                getResources().getString(R.string.gasp_twitter_auth_error),
-                                Toast.LENGTH_SHORT)
-                                .show();
+                Toast.makeText(activity,
+                        getResources().getString(R.string.gasp_twitter_auth_error),
+                        Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     }

@@ -285,6 +285,23 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * Request a Twitter API v1.1 OAuth Token
+     * Uses TwitterAuthenticationFragment
+     */
+    private void requestTwitterOAuthToken() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        TwitterAuthenticationFragment responder =
+                (TwitterAuthenticationFragment) fm.findFragmentByTag("TwitterAuthentication");
+        if (responder == null) {
+            responder = new TwitterAuthenticationFragment();
+
+            ft.add(responder, "TwitterAuthentication");
+        }
+        ft.commit();
+    }
+
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String PARAM_IN_MSG = "syncSend";
@@ -353,17 +370,8 @@ public class MainActivity extends Activity {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
 
-        // Get Twitter OAuth Token
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        TwitterAuthenticationFragment responder =
-                (TwitterAuthenticationFragment) fm.findFragmentByTag("RESTResponder");
-        if (responder == null) {
-            responder = new TwitterAuthenticationFragment();
-
-            ft.add(responder, "RESTResponder");
-        }
-        ft.commit();
+        // Request Twitter OAuth Token
+        requestTwitterOAuthToken();
     }
 
     @Override

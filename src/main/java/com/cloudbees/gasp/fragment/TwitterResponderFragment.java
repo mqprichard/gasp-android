@@ -60,12 +60,17 @@ public class TwitterResponderFragment extends RESTResponderFragment {
         
         if (mTweets == null && activity != null) {
             Intent intent = new Intent(activity, RESTIntentService.class);
-            intent.setData(Uri.parse("http://search.twitter.com/search.json"));
+            intent.setData(Uri.parse("https://api.twitter.com/1.1/search/tweets.json"));
 
             Bundle params = new Bundle();
             params.putString("q", "cloudbees");
+            params.putString("count", "10");
+
+            Bundle headers = new Bundle();
+            headers. putString("Authorization", "Bearer " + TwitterStreamActivity.getTwitterOAuthToken());
             
             intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
+            intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
             intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
 
             activity.startService(intent);
@@ -82,9 +87,6 @@ public class TwitterResponderFragment extends RESTResponderFragment {
     
     @Override
     public void onRESTResult(int code, String result) {
-        Log.d(TAG, "Result code: " + code);
-        Log.d(TAG, "Result data: " + result);
-
         if (code == 200 && result != null) {
             mTweets = getTweetsFromJson(result);
             setTweets();
@@ -106,7 +108,7 @@ public class TwitterResponderFragment extends RESTResponderFragment {
         
         try {
             JSONObject tweetsWrapper = (JSONObject) new JSONTokener(json).nextValue();
-            JSONArray  tweets        = tweetsWrapper.getJSONArray("results");
+            JSONArray  tweets        = tweetsWrapper.getJSONArray("statuses");
             
             for (int i = 0; i < tweets.length(); i++) {
                 JSONObject tweet = tweets.getJSONObject(i);
