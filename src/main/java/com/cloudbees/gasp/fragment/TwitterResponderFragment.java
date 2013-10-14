@@ -25,8 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.activity.TwitterRESTServiceActivity;
-import com.cloudbees.gasp.service.RESTService;
+import com.cloudbees.gasp.activity.TwitterRestServiceActivity;
+import com.cloudbees.gasp.service.RestIntentService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,8 +43,8 @@ import java.util.List;
  *
  * @author Mark Prichard
  */
-public class TwitterSearchResponderFragment extends RESTResponderFragment {
-    private static final String TAG = TwitterSearchResponderFragment.class.getName();
+public class TwitterResponderFragment extends RestResponderFragment {
+    private static final String TAG = TwitterResponderFragment.class.getName();
     
     // We cache our stored tweets here so that we can return right away
     // on multiple calls to setTweets() during the Activity lifecycle events (such
@@ -62,16 +62,16 @@ public class TwitterSearchResponderFragment extends RESTResponderFragment {
     }
 
     private void setTweets() {
-        TwitterRESTServiceActivity activity = (TwitterRESTServiceActivity) getActivity();
+        TwitterRestServiceActivity activity = (TwitterRestServiceActivity) getActivity();
         
         if (mTweets == null && activity != null) {
             // This is where we make our REST call to the service. We also pass in our ResultReceiver
-            // defined in the RESTResponderFragment super class.
+            // defined in the RestResponderFragment super class.
             
             // We will explicitly call our Service since we probably want to keep it as a private
             // component in our app. You could do this with Intent actions as well, but you have
             // to make sure you define your intent filters correctly in your manifest.
-            Intent intent = new Intent(activity, RESTService.class);
+            Intent intent = new Intent(activity, RestIntentService.class);
             intent.setData(Uri.parse("http://search.twitter.com/search.json"));
             
             // Here we are going to place our REST call parameters. Note that
@@ -80,10 +80,10 @@ public class TwitterSearchResponderFragment extends RESTResponderFragment {
             Bundle params = new Bundle();
             params.putString("q", "cloudbees");
             
-            intent.putExtra(RESTService.EXTRA_PARAMS, params);
-            intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+            intent.putExtra(RestIntentService.EXTRA_PARAMS, params);
+            intent.putExtra(RestIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
             
-            // Here we send our Intent to our RESTService.
+            // Here we send our Intent to our RestIntentService.
             activity.startService(intent);
         }
         else if (activity != null) {
@@ -104,6 +104,8 @@ public class TwitterSearchResponderFragment extends RESTResponderFragment {
     public void onRESTResult(int code, String result) {
         // Here is where we handle our REST response. This is similar to the 
         // LoaderCallbacks<D>.onLoadFinished() call from the previous tutorial.
+        Log.d(TAG, "Result code: " + code);
+        Log.d(TAG, "Result data: " + result);
         
         // Check to see if we got an HTTP 200 code and have some data.
         if (code == 200 && result != null) {
@@ -119,7 +121,7 @@ public class TwitterSearchResponderFragment extends RESTResponderFragment {
             Activity activity = getActivity();
             if (activity != null) {
                 Toast.makeText(activity, 
-                                getResources().getString(R.string.gasp_network_error), 
+                                getResources().getString(R.string.gasp_twitter_error),
                                 Toast.LENGTH_SHORT)
                                 .show();
             }

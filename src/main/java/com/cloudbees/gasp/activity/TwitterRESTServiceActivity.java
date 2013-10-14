@@ -26,7 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.cloudbees.gasp.fragment.TwitterSearchResponderFragment;
+import com.cloudbees.gasp.fragment.TwitterResponderFragment;
 import com.cloudbees.gasp.R;
 
 /**
@@ -36,7 +36,8 @@ import com.cloudbees.gasp.R;
  *
  * @author Mark Prichard
  */
-public class TwitterRESTServiceActivity extends Activity {
+public class TwitterRestServiceActivity extends Activity {
+    private final String TAG = TwitterRestServiceActivity.class.getName();
     
     private ArrayAdapter<String> mAdapter;
     
@@ -58,10 +59,10 @@ public class TwitterRESTServiceActivity extends Activity {
         
         // RESTResponderFragments call setRetainedInstance(true) in their onCreate() method. So that means
         // we need to check if our FragmentManager is already storing an instance of the responder.
-        TwitterSearchResponderFragment responder =
-                (TwitterSearchResponderFragment) fm.findFragmentByTag("RESTResponder");
+        TwitterResponderFragment responder =
+                (TwitterResponderFragment) fm.findFragmentByTag("RESTResponder");
         if (responder == null) {
-            responder = new TwitterSearchResponderFragment();
+            responder = new TwitterResponderFragment();
             
             // We add the fragment using a Tag since it has no views. It will make the Twitter REST call
             // for us each time this Activity is created.
@@ -88,7 +89,7 @@ public class TwitterRESTServiceActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Single menu item only - need to handle multiple items if added
         Intent intent = new Intent();
-        intent.setClass(TwitterRESTServiceActivity.this, SetPreferencesActivity.class);
+        intent.setClass(TwitterRestServiceActivity.this, SetPreferencesActivity.class);
         startActivityForResult(intent, 0); 
         
         return true;

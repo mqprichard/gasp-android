@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2013 Mark Prichard, CloudBees
   ~ Copyright 2012 Google Inc.
   ~
@@ -18,10 +17,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cloudbees.gasp"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <!-- GCM requires Android SDK version 2.2 (API level 8) or above. -->
-    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="18"/>
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="18" />
 
     <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -42,8 +43,7 @@
     <permission
         android:name="com.cloudbees.gasp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission
-        android:name="com.cloudbees.gasp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.cloudbees.gasp.permission.C2D_MESSAGE" />
 
     <!-- Main activity. -->
     <application
@@ -58,29 +58,35 @@
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- Gasp! preferences activity -->
         <activity
-                android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
-                android:label="@string/gasp_preferences" >
-        </activity>
+            android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
+            android:label="@string/gasp_preferences"></activity>
+
+        <!-- Gasp! Twitter stream activity -->
+        <activity
+            android:name=".activity.TwitterRestServiceActivity"
+            android:label="@string/gasp_twitter"></activity>
+
+        <!-- Gasp! REST data services -->
+        <service android:name=".service.RestIntentService" />
 
         <!-- Gasp! database activities -->
-        <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity"/>
-        <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity"/>
-        <activity android:name="com.cloudbees.gasp.activity.UserListActivity"/>
+        <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity" />
+        <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity" />
+        <activity android:name="com.cloudbees.gasp.activity.UserListActivity" />
 
         <!-- Gasp! data synchronization services -->
-        <service android:name="com.cloudbees.gasp.service.ReviewSyncService"/>
-        <service android:name="com.cloudbees.gasp.service.RestaurantSyncService"/>
-        <service android:name="com.cloudbees.gasp.service.UserSyncService"/>
-        <service android:name="com.cloudbees.gasp.service.ReviewUpdateService"/>
-        <service android:name="com.cloudbees.gasp.service.RestaurantUpdateService"/>
-        <service android:name="com.cloudbees.gasp.service.UserUpdateService"/>
+        <service android:name="com.cloudbees.gasp.service.ReviewSyncService" />
+        <service android:name="com.cloudbees.gasp.service.RestaurantSyncService" />
+        <service android:name="com.cloudbees.gasp.service.UserSyncService" />
+        <service android:name="com.cloudbees.gasp.service.ReviewUpdateService" />
+        <service android:name="com.cloudbees.gasp.service.RestaurantUpdateService" />
+        <service android:name="com.cloudbees.gasp.service.UserUpdateService" />
 
         <!-- Handles incoming messages from GCM -->
         <service android:name="com.cloudbees.gasp.gcm.GCMIntentService" />
@@ -93,7 +99,7 @@
          -->
         <receiver
             android:name="com.cloudbees.gasp.gcm.GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <!-- Receives the actual messages. -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

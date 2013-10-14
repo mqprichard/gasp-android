@@ -17,10 +17,10 @@ apply plugin: 'newrelic'
 
 repositories {
     mavenCentral()
-    mavenLocal()
-    //maven {
-        //url "https://repository-partnerdemo.forge.cloudbees.com/release/"
-    //}
+    //mavenLocal()
+    maven {
+        url "https://repository-partnerdemo.forge.cloudbees.com/release/"
+    }
 }
 
 dependencies {
