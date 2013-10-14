@@ -45,19 +45,13 @@ import java.util.List;
  */
 public class TwitterResponderFragment extends RESTResponderFragment {
     private static final String TAG = TwitterResponderFragment.class.getName();
-    
-    // We cache our stored tweets here so that we can return right away
-    // on multiple calls to setTweets() during the Activity lifecycle events (such
-    // as when the user rotates their device). In a real application we would want
-    // to cache this data in a more sophisticated way, probably using SQLite and
-    // Content Providers, but for the demo and simple apps this will do.
+
     private List<String> mTweets;
     
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        
-        // This gets called each time our Activity has finished creating itself.
+
         setTweets();
     }
 

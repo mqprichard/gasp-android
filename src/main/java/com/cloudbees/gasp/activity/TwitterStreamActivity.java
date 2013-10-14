@@ -20,14 +20,11 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.cloudbees.gasp.fragment.TwitterResponderFragment;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.fragment.TwitterResponderFragment;
 
 /**
  * Closely modeled on Neil Goodman's Android REST tutorials
@@ -79,19 +76,4 @@ public class TwitterStreamActivity extends Activity {
         return mAdapter;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Single menu item only - need to handle multiple items if added
-        Intent intent = new Intent();
-        intent.setClass(TwitterStreamActivity.this, SetPreferencesActivity.class);
-        startActivityForResult(intent, 0); 
-        
-        return true;
-    }
 }

@@ -17,6 +17,8 @@
 package com.cloudbees.gasp.activity;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +35,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.cloudbees.gasp.gcm.GCMRegistration;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.fragment.TwitterAuthenticationFragment;
+import com.cloudbees.gasp.gcm.GCMRegistration;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
 import com.cloudbees.gasp.service.UserSyncService;
@@ -349,6 +352,18 @@ public class MainActivity extends Activity {
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
+
+        // Get Twitter OAuth Token
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        TwitterAuthenticationFragment responder =
+                (TwitterAuthenticationFragment) fm.findFragmentByTag("RESTResponder");
+        if (responder == null) {
+            responder = new TwitterAuthenticationFragment();
+
+            ft.add(responder, "RESTResponder");
+        }
+        ft.commit();
     }
 
     @Override

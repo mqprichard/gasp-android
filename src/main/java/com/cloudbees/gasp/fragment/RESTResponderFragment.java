@@ -33,11 +33,7 @@ import com.cloudbees.gasp.service.RESTIntentService;
 public abstract class RESTResponderFragment extends Fragment {
     
     private final ResultReceiver mReceiver;
-    
-    // We are going to use a constructor here to make our ResultReceiver,
-    // but be careful because Fragments are required to have only zero-arg
-    // constructors. Normally you don't want to use constructors at all
-    // with Fragments.
+
     public RESTResponderFragment() {
         mReceiver = new ResultReceiver(new Handler()) {
 
@@ -57,12 +53,8 @@ public abstract class RESTResponderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // This tells our Activity to keep the same instance of this
-        // Fragment when the Activity is re-created during lifecycle
-        // events. This is what we want because this Fragment should
-        // be available to receive results from our RESTIntentService no
-        // matter what the Activity is doing.
+
+        // Keep this instance if Activity is re-created
         setRetainInstance(true);
     }
     
@@ -70,6 +62,5 @@ public abstract class RESTResponderFragment extends Fragment {
         return mReceiver;
     }
 
-    // Implementers of this Fragment will handle the result here.
     abstract public void onRESTResult(int code, String result);
 }
