@@ -102,7 +102,6 @@ public class TwitterResponderFragment extends RESTResponderFragment {
         }
     }
 
-    // TODO: Replace with Gson
     private static List<String> getTweetsFromJson(String json) {
         ArrayList<String> tweetList = new ArrayList<String>();
         
