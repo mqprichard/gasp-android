@@ -44,14 +44,19 @@ import java.net.URLEncoder;
 public class TwitterAuthenticationFragment extends RESTResponderFragment {
     private static final String TAG = TwitterAuthenticationFragment.class.getName();
 
-    private String twitterApiOAuthToken = "https://api.twitter.com/oauth2/token";
+    private static final String twitterApiOAuthToken = "https://api.twitter.com/oauth2/token";
+
+    public String getTwitterApiOAuthToken() {
+        return twitterApiOAuthToken;
+    }
+
     private String authEncodedBase64 = "";
 
     private static final String consumerKey = "VtBCY5oJxMteTAd6o9IpA";
     private static final String consumerSecret = "WN6Al8vAzIZDwfZmfZfGJrAFiMDjNHky9qfarMaPePY";
     private static final String charSet = "UTF-8";
 
-    private String doEncoding() {
+    public String getEncodedBase64Credentials() {
         try {
             String urlEncoded = URLEncoder.encode(consumerKey, charSet)
                     + ":"
@@ -83,7 +88,7 @@ public class TwitterAuthenticationFragment extends RESTResponderFragment {
             params.putString("grant_type", "client_credentials");
 
             Bundle headers = new Bundle();
-            headers.putString("Authorization", doEncoding());
+            headers.putString("Authorization", getEncodedBase64Credentials());
 
             intent.putExtra(RESTIntentService.EXTRA_HTTP_VERB, RESTIntentService.POST);
             intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
