@@ -1,9 +1,11 @@
 package com.cloudbees.gasp.location;
 
+import android.app.Fragment;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.model.Place;
+import com.cloudbees.gasp.activity.PlacesActivity;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
@@ -27,32 +29,36 @@ import java.net.URLEncoder;
  * limitations under the License.
  */
 
-public class PlacesSearch extends AsyncTask<Void, Void, String> {
-    private static final String TAG = PlacesSearch.class.getName();
-
-    private Query mQuery;
-    private Places mPlaces;
-
-    public Places getPlaces() {
-        return mPlaces;
-    }
+public class PlacesSearchFragment extends Fragment {
+    private static final String TAG = PlacesSearchFragment.class.getName();
 
     private final String keyword = "Restaurant";
     private final String encoding = "utf8";
-    private String jsonOutput;
 
-    public PlacesSearch(Query query) {
+    private Query mQuery;
+    private String jsonOutput;
+    private String token;
+    boolean haveToken = false;
+
+    PlacesActivity activity = (PlacesActivity) getActivity();
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    public void placesSearch(Query query) {
         mQuery = query;
         Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
         Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
         Log.d(TAG, "Radius: " + query.getRadius());
         Log.d(TAG, "next_page_token: " + query.getNext_page_token());
-    }
 
-    @Override
-    protected String doInBackground(Void... params) {
-        try {
-            String search = GooglePlacesClient.PLACES_API_BASE
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    String search = GooglePlacesClient.PLACES_API_BASE
                             + GooglePlacesClient.TYPE_SEARCH
                             + GooglePlacesClient.OUT_JSON
                             + "?sensor=false"
@@ -60,30 +66,32 @@ public class PlacesSearch extends AsyncTask<Void, Void, String> {
                             + "&keyword=" + URLEncoder.encode(keyword, encoding)
                             + "&location=" + String.valueOf(mQuery.getLat()) + "," + String.valueOf(mQuery.getLng())
                             + "&radius=" + String.valueOf(mQuery.getRadius());
-            if (!mQuery.getNext_page_token().isEmpty()) {
-                search += "&pagetoken=" + URLEncoder.encode(mQuery.getNext_page_token(), encoding);
+                    if (!mQuery.getNext_page_token().isEmpty()) {
+                        search += "&pagetoken=" + URLEncoder.encode(mQuery.getNext_page_token(), encoding);
+                    }
+                    jsonOutput = GooglePlacesClient.doGet(new URL(search));
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception: ", e);
+                }
+                return jsonOutput;
             }
-            jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: ", e);
-        }
-        return jsonOutput;
-    }
+            @Override
+            protected void onPostExecute(String jsonOutput) {
+                super.onPostExecute(jsonOutput);
+                Places places = new Gson().fromJson(jsonOutput, Places.class);
 
-    @Override
-    protected void onPostExecute(String jsonOutput) {
-        super.onPostExecute(jsonOutput);
-        mPlaces = new Gson().fromJson(jsonOutput, Places.class);
+                try {
+                    Log.d(TAG, "Status: " + places.getStatus());
 
-        try {
-            Log.d(TAG, "Status: " + mPlaces.getStatus());
-            for (Place place : mPlaces.getResults()) {
-                Log.d(TAG, place.getName());
+                    PlacesActivity activity = (PlacesActivity) getActivity();
+                    activity.putOnMap(places);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            Log.d(TAG, "next_page_token: " + mPlaces.getNext_page_token());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        }.execute();
     }
 }

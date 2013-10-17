@@ -18,6 +18,7 @@
 
     <string name="app_name">Gasp!</string>
     <string name="gasp_twitter">Gasp! Twitter Stream</string>
+    <string name="gasp_places">Google Places API Search</string>
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>

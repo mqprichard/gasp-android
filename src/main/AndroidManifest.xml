@@ -75,6 +75,9 @@
         <!-- Gasp! REST data services -->
         <service android:name=".service.RESTIntentService" />
 
+        <!-- Gasp! Google Places API activity -->
+        <activity android:name="com.cloudbees.gasp.activity.PlacesActivity" />
+
         <!-- Gasp! database activities -->
         <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity" />
         <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity" />

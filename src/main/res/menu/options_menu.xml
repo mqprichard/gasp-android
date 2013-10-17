@@ -64,4 +64,9 @@
         android:title="@string/gasp_twitter"
         android:showAsAction="never">
     </item>
+    <item
+        android:id="@+id/gasp_menu_places"
+        android:title="@string/gasp_places"
+        android:showAsAction="never">
+    </item>
 </menu>

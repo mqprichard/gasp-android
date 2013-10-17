@@ -441,6 +441,12 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return true;
 
+            case R.id.gasp_menu_places:
+                intent = new Intent();
+                intent.setClass(MainActivity.this, PlacesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
