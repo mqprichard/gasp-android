@@ -27,6 +27,13 @@ public class Query {
 
     private String reference = "";
 
+    public Query(double lat, double lng, int radius, String next_page_token) {
+        this.lat = lat;
+        this.lng = lng;
+        this.radius = radius;
+        this.next_page_token = next_page_token;
+    }
+
     public double getLat() {
         return lat;
     }
@@ -53,5 +60,33 @@ public class Query {
 
     public String getAddressString() {
         return addressString;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void setNext_page_token(String next_page_token) {
+        this.next_page_token = next_page_token;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddressString(String addressString) {
+        this.addressString = addressString;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 }
