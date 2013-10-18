@@ -29,46 +29,43 @@ import java.net.URLEncoder;
  * limitations under the License.
  */
 
-public class PlacesSearchFragment extends Fragment {
-    private static final String TAG = PlacesSearchFragment.class.getName();
+public class NearbySearchFragment extends Fragment {
+    private static final String TAG = NearbySearchFragment.class.getName();
 
-    private final String keyword = "Restaurant";
+    private final String keywords = "Restaurant|food|cafe";
     private final String encoding = "utf8";
 
     private Query mQuery;
     private String jsonOutput;
-    private String token;
-    boolean haveToken = false;
 
-    PlacesActivity activity = (PlacesActivity) getActivity();
+    //PlacesActivity activity = (PlacesActivity) getActivity();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void placesSearch(Query query) {
+    public void placeDetails(Query query) {
         mQuery = query;
         Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
         Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
         Log.d(TAG, "Radius: " + query.getRadius());
-        Log.d(TAG, "next_page_token: " + query.getNext_page_token());
+        Log.d(TAG, "Name: " + query.getName());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.PLACES_API_BASE
-                            + GooglePlacesClient.TYPE_SEARCH
+                            + GooglePlacesClient.TYPE_NEARBY
                             + GooglePlacesClient.OUT_JSON
                             + "?sensor=false"
                             + "&key=" + GooglePlacesClient.API_KEY
-                            + "&keyword=" + URLEncoder.encode(keyword, encoding)
                             + "&location=" + String.valueOf(mQuery.getLat()) + "," + String.valueOf(mQuery.getLng())
-                            + "&radius=" + String.valueOf(mQuery.getRadius());
-                    if (!mQuery.getNext_page_token().isEmpty()) {
-                        search += "&pagetoken=" + URLEncoder.encode(mQuery.getNext_page_token(), encoding);
-                    }
+                            + "&radius=" + String.valueOf(mQuery.getRadius())
+                            + "&types=" + keywords
+                            + "&name=" + URLEncoder.encode(mQuery.getName(), encoding);
+
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
@@ -80,13 +77,12 @@ public class PlacesSearchFragment extends Fragment {
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
-                Places places = new Gson().fromJson(jsonOutput, Places.class);
-
                 try {
+                    Places places = new Gson().fromJson(jsonOutput, Places.class);
                     Log.d(TAG, "Status: " + places.getStatus());
 
                     PlacesActivity activity = (PlacesActivity) getActivity();
-                    activity.putOnMap(places);
+                    // TODO callback to PlacesActivity
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -6,7 +6,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.location.PlacesSearchFragment;
+import com.cloudbees.gasp.location.LocationSearchFragment;
 import com.cloudbees.gasp.model.Place;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
@@ -49,10 +49,10 @@ public class PlacesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PlacesSearchFragment searchFragment = new PlacesSearchFragment();
+        LocationSearchFragment searchFragment = new LocationSearchFragment();
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(searchFragment, "PlacesSearchFragment");
+        ft.add(searchFragment, "LocationSearchFragment");
         ft.commit();
 
         Query query = new Query (lat, lng, radius, "");

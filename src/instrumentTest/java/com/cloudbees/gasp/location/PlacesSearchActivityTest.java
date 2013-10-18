@@ -32,7 +32,7 @@ public class PlacesSearchActivityTest extends ActivityUnitTestCase<PlacesActivit
 
     private CountDownLatch signal;
     private PlacesActivity testActivity;
-    private PlacesSearchFragment testFragment;
+    private LocationSearchFragment testFragment;
 
     private static final double lat = 37.3750274;
     private static final double lng = -122.1142916;
@@ -44,11 +44,13 @@ public class PlacesSearchActivityTest extends ActivityUnitTestCase<PlacesActivit
         try {
             Intent intent = new Intent(getInstrumentation().getTargetContext(), PlacesActivity.class);
             startActivity(intent, null, null);
+
             testActivity = getActivity();
-            testFragment = new PlacesSearchFragment();
+            testFragment = new LocationSearchFragment();
+
             FragmentManager fm = testActivity.getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.add(testFragment, "PlacesSearchFragment");
+            ft.add(testFragment, "LocationSearchFragment");
             ft.commit();
         } catch (Exception e) {
             e.printStackTrace();
