@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.PlacesActivity;
 import com.cloudbees.gasp.model.PlaceDetails;
 import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
@@ -29,7 +28,7 @@ import java.net.URLEncoder;
  * limitations under the License.
  */
 
-public class PlaceDetailsFragment extends Fragment {
+public abstract class PlaceDetailsFragment extends Fragment {
     private static final String TAG = PlaceDetailsFragment.class.getName();
 
     private final String keyword = "Restaurant";
@@ -37,8 +36,6 @@ public class PlaceDetailsFragment extends Fragment {
 
     private Query mQuery;
     private String jsonOutput;
-
-    //PlacesActivity activity = (PlacesActivity) getActivity();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -71,10 +68,11 @@ public class PlaceDetailsFragment extends Fragment {
                 super.onPostExecute(jsonOutput);
                 try {
                     PlaceDetails placeDetails = new Gson().fromJson(jsonOutput, PlaceDetails.class);
-                    Log.d(TAG, "Status: " + placeDetails.getStatus());
 
-                    PlacesActivity activity = (PlacesActivity) getActivity();
-                    // TODO callback to PlacesActivity
+                    if (placeDetails.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(placeDetails);
+                    else
+                        onFailure(placeDetails.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -82,4 +80,8 @@ public class PlaceDetailsFragment extends Fragment {
             }
         }.execute();
     }
+
+    // Callbacks to calling Activity
+    abstract public void onSuccess(PlaceDetails placeDetails);
+    abstract public void onFailure(String status);
 }

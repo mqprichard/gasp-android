@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.PlacesActivity;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
@@ -29,7 +28,7 @@ import java.net.URLEncoder;
  * limitations under the License.
  */
 
-public class NearbySearchFragment extends Fragment {
+public abstract class NearbySearchFragment extends Fragment {
     private static final String TAG = NearbySearchFragment.class.getName();
 
     private final String keywords = "Restaurant|food|cafe";
@@ -37,8 +36,6 @@ public class NearbySearchFragment extends Fragment {
 
     private Query mQuery;
     private String jsonOutput;
-
-    //PlacesActivity activity = (PlacesActivity) getActivity();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -79,10 +76,11 @@ public class NearbySearchFragment extends Fragment {
                 super.onPostExecute(jsonOutput);
                 try {
                     Places places = new Gson().fromJson(jsonOutput, Places.class);
-                    Log.d(TAG, "Status: " + places.getStatus());
 
-                    PlacesActivity activity = (PlacesActivity) getActivity();
-                    // TODO callback to PlacesActivity
+                    if (places.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(places);
+                    else
+                        onFailure(places.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -90,4 +88,8 @@ public class NearbySearchFragment extends Fragment {
             }
         }.execute();
     }
+
+    // Callbacks to calling Activity
+    abstract public void onSuccess(Places places);
+    abstract public void onFailure(String status);
 }

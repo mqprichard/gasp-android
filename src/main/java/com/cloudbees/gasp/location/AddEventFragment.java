@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.PlacesActivity;
 import com.cloudbees.gasp.model.EventResponse;
 import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
@@ -28,7 +27,7 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public class AddEventFragment extends Fragment {
+public abstract class AddEventFragment extends Fragment {
     private static final String TAG = AddEventFragment.class.getName();
 
     private final String keywords = "Restaurant|food|cafe";
@@ -36,8 +35,6 @@ public class AddEventFragment extends Fragment {
 
     private Query mQuery;
     private String jsonOutput;
-
-    //PlacesActivity activity = (PlacesActivity) getActivity();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -70,10 +67,11 @@ public class AddEventFragment extends Fragment {
                 super.onPostExecute(jsonOutput);
                 try {
                     EventResponse eventResponse = new Gson().fromJson(jsonOutput, EventResponse.class);
-                    Log.d(TAG, "Status: " + eventResponse.getStatus());
 
-                    PlacesActivity activity = (PlacesActivity) getActivity();
-                    // TODO callback to PlacesActivity
+                    if (eventResponse.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(eventResponse);
+                    else
+                        onFailure(eventResponse.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -81,4 +79,8 @@ public class AddEventFragment extends Fragment {
             }
         }.execute();
     }
+
+    // Callbacks to calling Activity
+    abstract public void onSuccess(EventResponse eventResponse);
+    abstract public void onFailure(String status);
 }
