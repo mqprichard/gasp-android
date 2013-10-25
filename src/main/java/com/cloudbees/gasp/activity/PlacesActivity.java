@@ -39,24 +39,44 @@ public class PlacesActivity extends Activity {
         for (Place place : places.getResults()) {
             Log.d(TAG, place.getName());
         }
-        Log.d(TAG, "Next page Token: " + places.getNext_page_token());
+    }
+
+    public void checkToken(Places places) {
         if (! places.getNext_page_token().isEmpty()) {
             token = places.getNext_page_token();
+            Log.d(TAG, "Next page Token: " + places.getNext_page_token());
         }
+    }
+
+    private void getLocations() {
+        LocationSearchFragment searchFragment = new LocationSearchFragment() {
+            public void onSuccess(Places places) {
+                putOnMap(places);
+                checkToken(places);
+            }
+            public void onFailure(String status) {
+                Log.e(TAG, "Google Places API search failed: status = " + status );
+            }
+        };
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(searchFragment, "LocationSearchFragment");
+        ft.commit();
+
+        Query query = new Query (lat, lng, radius, token);
+        searchFragment.placesSearch(query);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LocationSearchFragment searchFragment = new LocationSearchFragment();
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(searchFragment, "LocationSearchFragment");
-        ft.commit();
-
-        Query query = new Query (lat, lng, radius, "");
-        searchFragment.placesSearch(query);
+        try {
+            getLocations();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

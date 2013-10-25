@@ -44,8 +44,6 @@ import com.cloudbees.gasp.service.UserSyncService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.newrelic.agent.android.NewRelic;
-import com.testflightapp.lib.TestFlight;
 
 import java.io.IOException;
 
@@ -167,10 +165,13 @@ public class MainActivity extends Activity {
      */
     private void addThirdPartyLibs() {
         // Initialize NewRelic monitoring agent
-        NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
+        //NewRelic.withApplicationToken("AA83f38cfac2e854342e6964065753db86d00c513c").start(this.getApplication());
 
         // Initialize TestFlight SDK agent
-        TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
+        //TestFlight.takeOff(this.getApplication(), "6f8d819d-c09b-4080-b06d-1f048f0b6fcb");
+
+        // Initialise Vessel
+        //VesselSDK.initialize(getApplicationContext(), "a0RNYlBzaU9qUlVMckt1RlZmdEJjcWx6" );
     }
 
     /**
@@ -320,6 +321,8 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        addThirdPartyLibs();
 
         context = getApplicationContext();
 

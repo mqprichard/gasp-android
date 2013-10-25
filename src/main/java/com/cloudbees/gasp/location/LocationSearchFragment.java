@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.PlacesActivity;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
@@ -29,7 +28,7 @@ import java.net.URLEncoder;
  * limitations under the License.
  */
 
-public class LocationSearchFragment extends Fragment {
+abstract public class LocationSearchFragment extends Fragment {
     private static final String TAG = LocationSearchFragment.class.getName();
 
     private final String keyword = "Restaurant";
@@ -78,13 +77,15 @@ public class LocationSearchFragment extends Fragment {
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
-                Places places = new Gson().fromJson(jsonOutput, Places.class);
-
                 try {
-                    Log.d(TAG, "Status: " + places.getStatus());
+                    Places places = new Gson().fromJson(jsonOutput, Places.class);
 
-                    PlacesActivity activity = (PlacesActivity) getActivity();
-                    activity.putOnMap(places);
+                    if (places.getStatus().equalsIgnoreCase("OK")) {
+                        onSuccess(places);
+                    }
+                    else {
+                        onFailure(places.getStatus());
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -92,4 +93,8 @@ public class LocationSearchFragment extends Fragment {
             }
         }.execute();
     }
+
+    // Callbacks to calling Activity
+    abstract public void onSuccess(Places places);
+    abstract public void onFailure(String status);
 }
