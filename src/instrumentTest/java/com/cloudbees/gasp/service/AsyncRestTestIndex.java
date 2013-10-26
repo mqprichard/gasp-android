@@ -2,7 +2,6 @@ package com.cloudbees.gasp.service;
 
 import android.net.Uri;
 import android.test.AndroidTestCase;
-import android.test.UiThreadTest;
 import android.util.Log;
 
 import com.cloudbees.gasp.model.Review;
@@ -41,7 +40,6 @@ public class AsyncRestTestIndex extends AndroidTestCase implements IRESTListener
         signal = new CountDownLatch(1);
     }
 
-    @UiThreadTest
     public void testAsyncRestTask() throws InterruptedException {
         try {
             AsyncRESTClient asyncRestCall = new AsyncRESTClient(Uri.parse(REVIEWS), this);
