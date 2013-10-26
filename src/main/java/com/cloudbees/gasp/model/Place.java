@@ -46,4 +46,12 @@ public class Place {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
 }

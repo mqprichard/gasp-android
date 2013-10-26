@@ -37,7 +37,7 @@ public class PlacesActivity extends Activity {
 
     public void putOnMap(Places places) {
         for (Place place : places.getResults()) {
-            Log.d(TAG, place.getName());
+            Log.d(TAG, place.getName() + " " + place.getReference());
         }
     }
 
