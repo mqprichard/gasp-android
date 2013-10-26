@@ -84,7 +84,7 @@ public class GooglePlacesClient {
         return search;
     }
 
-    public static String getQueryStringPlaceDetails(Query query) {
+    public static String getQueryStringPlaceDetails(String reference) {
         String search = "";
         try {
             search = GooglePlacesClient.PLACES_API_BASE
@@ -92,7 +92,7 @@ public class GooglePlacesClient {
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
                     + "&key=" + GooglePlacesClient.API_KEY
-                    + "&reference=" + URLEncoder.encode(keyword, encoding);
+                    + "&reference=" + URLEncoder.encode(reference, encoding);
         } catch (Exception e) {
             e.printStackTrace();
         }
