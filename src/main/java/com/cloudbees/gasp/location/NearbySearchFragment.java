@@ -42,7 +42,7 @@ public abstract class NearbySearchFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void placeDetails(Query query) {
+    public void nearbySearch(Query query) {
         mQuery = query;
         Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
         Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
@@ -62,6 +62,9 @@ public abstract class NearbySearchFragment extends Fragment {
                             + "&radius=" + String.valueOf(mQuery.getRadius())
                             + "&types=" + keywords
                             + "&name=" + URLEncoder.encode(mQuery.getName(), encoding);
+                    if (!mQuery.getNext_page_token().isEmpty()) {
+                        search += "&pagetoken=" + URLEncoder.encode(mQuery.getNext_page_token(), encoding);
+                    }
 
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 

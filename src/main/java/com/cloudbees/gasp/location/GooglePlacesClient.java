@@ -2,12 +2,15 @@ package com.cloudbees.gasp.location;
 
 import android.util.Log;
 
+import com.cloudbees.gasp.model.Query;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -36,6 +39,93 @@ public class GooglePlacesClient {
     public static final String TYPE_EVENT_DELETE = "/event/delete";
     public static final String OUT_JSON = "/json";
     public static final String API_KEY = "AIzaSyD8RPFcX_YY3-M21yGGaww2_NBPLHsjU5o";
+
+    private static final String keyword = "Restaurant";
+    private static final String keywords = "Restaurant|food|cafe";
+    private static final String encoding = "utf8";
+
+    public static String getQueryStringLocationSearch(Query query) {
+        String search = "";
+        try {
+            search = GooglePlacesClient.PLACES_API_BASE
+                    + GooglePlacesClient.TYPE_SEARCH
+                    + GooglePlacesClient.OUT_JSON
+                    + "?sensor=false"
+                    + "&key=" + GooglePlacesClient.API_KEY
+                    + "&keyword=" + URLEncoder.encode(keyword, encoding)
+                    + "&location=" + String.valueOf(query.getLat()) + "," + String.valueOf(query.getLng())
+                    + "&radius=" + String.valueOf(query.getRadius());
+            if (!query.getNext_page_token().isEmpty()) {
+                search += "&pagetoken=" + URLEncoder.encode(query.getNext_page_token(), encoding);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return search;
+    }
+
+    public static String getQueryStringNearbySearch(Query query) {
+        String search = "";
+        try {
+            search = GooglePlacesClient.PLACES_API_BASE
+                    + GooglePlacesClient.TYPE_NEARBY
+                    + GooglePlacesClient.OUT_JSON
+                    + "?sensor=false"
+                    + "&key=" + GooglePlacesClient.API_KEY
+                    + "&location=" + String.valueOf(query.getLat()) + "," + String.valueOf(query.getLng())
+                    + "&radius=" + String.valueOf(query.getRadius())
+                    + "&types=" + keywords;
+            if (!query.getNext_page_token().isEmpty()) {
+                search += "&pagetoken=" + URLEncoder.encode(query.getNext_page_token(), encoding);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return search;
+    }
+
+    public static String getQueryStringPlaceDetails(Query query) {
+        String search = "";
+        try {
+            search = GooglePlacesClient.PLACES_API_BASE
+                    + GooglePlacesClient.TYPE_DETAILS
+                    + GooglePlacesClient.OUT_JSON
+                    + "?sensor=false"
+                    + "&key=" + GooglePlacesClient.API_KEY
+                    + "&reference=" + URLEncoder.encode(keyword, encoding);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return search;
+    }
+
+    public String getQueryStringAddEvent(Query query) {
+        String search = "";
+        try {
+            search = GooglePlacesClient.PLACES_API_BASE
+                    + GooglePlacesClient.TYPE_NEARBY
+                    + GooglePlacesClient.OUT_JSON
+                    + "?sensor=false"
+                    + "&key=" + GooglePlacesClient.API_KEY;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return search;
+    }
+
+    public String getQueryStringDeleteEvent(Query query) {
+        String search = "";
+        try {
+            search = GooglePlacesClient.PLACES_API_BASE
+                    + GooglePlacesClient.TYPE_NEARBY
+                    + GooglePlacesClient.OUT_JSON
+                    + "?sensor=false"
+                    + "&key=" + GooglePlacesClient.API_KEY;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return search;
+    }
 
     public static String doGet(URL url) {
         HttpURLConnection conn = null;

@@ -37,8 +37,6 @@ abstract public class LocationSearchFragment extends Fragment {
     private Query mQuery;
     private String jsonOutput;
 
-    //PlacesActivity activity = (PlacesActivity) getActivity();
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
