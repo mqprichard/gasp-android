@@ -28,6 +28,7 @@ public class PlaceDetail {
     private String international_phone_number;
     private Geometry geometry;
     private String id;
+    PlaceEvent events[];
 
     public String getName() {
         return name;
@@ -55,5 +56,13 @@ public class PlaceDetail {
 
     public String getId() {
         return id;
+    }
+
+    public PlaceEvent[] getEvents() {
+        return events;
+    }
+
+    public void setEvents(PlaceEvent[] events) {
+        this.events = events;
     }
 }

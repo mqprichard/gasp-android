@@ -2,6 +2,7 @@ package com.cloudbees.gasp.location;
 
 import android.util.Log;
 
+import com.cloudbees.gasp.model.EventRequest;
 import com.cloudbees.gasp.model.Query;
 
 import java.io.DataOutputStream;
@@ -99,11 +100,11 @@ public class GooglePlacesClient {
         return search;
     }
 
-    public String getQueryStringAddEvent(Query query) {
+    public static String getQueryStringAddEvent(EventRequest eventRequest) {
         String search = "";
         try {
             search = GooglePlacesClient.PLACES_API_BASE
-                    + GooglePlacesClient.TYPE_NEARBY
+                    + GooglePlacesClient.TYPE_EVENT_ADD
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
                     + "&key=" + GooglePlacesClient.API_KEY;
@@ -113,11 +114,11 @@ public class GooglePlacesClient {
         return search;
     }
 
-    public String getQueryStringDeleteEvent(Query query) {
+    public static String getQueryStringDeleteEvent(EventRequest eventRequest) {
         String search = "";
         try {
             search = GooglePlacesClient.PLACES_API_BASE
-                    + GooglePlacesClient.TYPE_NEARBY
+                    + GooglePlacesClient.TYPE_EVENT_DELETE
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
                     + "&key=" + GooglePlacesClient.API_KEY;
