@@ -10,7 +10,6 @@ import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
 
 import java.net.URL;
-import java.net.URLEncoder;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -35,7 +34,7 @@ public abstract class NearbySearchFragment extends Fragment {
     private final String encoding = "utf8";
 
     private Query mQuery;
-    private String jsonOutput;
+    private String mJsonOutput;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -53,25 +52,13 @@ public abstract class NearbySearchFragment extends Fragment {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.PLACES_API_BASE
-                            + GooglePlacesClient.TYPE_NEARBY
-                            + GooglePlacesClient.OUT_JSON
-                            + "?sensor=false"
-                            + "&key=" + GooglePlacesClient.API_KEY
-                            + "&location=" + String.valueOf(mQuery.getLat()) + "," + String.valueOf(mQuery.getLng())
-                            + "&radius=" + String.valueOf(mQuery.getRadius())
-                            + "&types=" + keywords
-                            + "&name=" + URLEncoder.encode(mQuery.getName(), encoding);
-                    if (!mQuery.getNext_page_token().isEmpty()) {
-                        search += "&pagetoken=" + URLEncoder.encode(mQuery.getNext_page_token(), encoding);
-                    }
-
-                    jsonOutput = GooglePlacesClient.doGet(new URL(search));
+                    String search = GooglePlacesClient.getQueryStringNearbySearch(mQuery);
+                    mJsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
                     Log.e(TAG, "Exception: ", e);
                 }
-                return jsonOutput;
+                return mJsonOutput;
             }
 
             @Override

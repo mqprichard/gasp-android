@@ -111,7 +111,7 @@ public class PlaceEventsTest extends AndroidTestCase {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String requestString = GooglePlacesClient.getQueryStringAddEvent(eventRequest);
+                    String requestString = GooglePlacesClient.getQueryStringAddEvent();
                     Log.d(TAG, requestString);
                     jsonOutput = GooglePlacesClient.doPost(
                             new Gson().toJson(eventRequest, EventRequest.class), new URL(requestString));
@@ -156,7 +156,7 @@ public class PlaceEventsTest extends AndroidTestCase {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String requestString = GooglePlacesClient.getQueryStringDeleteEvent(eventRequest);
+                    String requestString = GooglePlacesClient.getQueryStringDeleteEvent();
                     Log.d(TAG, requestString);
                     jsonOutput = GooglePlacesClient.doPost(
                             new Gson().toJson(eventRequest, EventRequest.class), new URL(requestString));

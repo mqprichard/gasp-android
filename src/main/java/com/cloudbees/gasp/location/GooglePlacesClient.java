@@ -2,7 +2,6 @@ package com.cloudbees.gasp.location;
 
 import android.util.Log;
 
-import com.cloudbees.gasp.model.EventRequest;
 import com.cloudbees.gasp.model.Query;
 
 import java.io.DataOutputStream;
@@ -33,7 +32,6 @@ public class GooglePlacesClient {
     private static final String TAG = GooglePlacesClient.class.getName();
 
     public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    public static final String TYPE_SEARCH = "/search";
     public static final String TYPE_DETAILS = "/details";
     public static final String TYPE_NEARBY = "/nearbysearch";
     public static final String TYPE_EVENT_ADD = "/event/add";
@@ -41,29 +39,8 @@ public class GooglePlacesClient {
     public static final String OUT_JSON = "/json";
     public static final String API_KEY = "AIzaSyD8RPFcX_YY3-M21yGGaww2_NBPLHsjU5o";
 
-    private static final String keyword = "Restaurant";
     private static final String keywords = "Restaurant|food|cafe";
     private static final String encoding = "utf8";
-
-    public static String getQueryStringLocationSearch(Query query) {
-        String search = "";
-        try {
-            search = GooglePlacesClient.PLACES_API_BASE
-                    + GooglePlacesClient.TYPE_SEARCH
-                    + GooglePlacesClient.OUT_JSON
-                    + "?sensor=false"
-                    + "&key=" + GooglePlacesClient.API_KEY
-                    + "&keyword=" + URLEncoder.encode(keyword, encoding)
-                    + "&location=" + String.valueOf(query.getLat()) + "," + String.valueOf(query.getLng())
-                    + "&radius=" + String.valueOf(query.getRadius());
-            if (!query.getNext_page_token().isEmpty()) {
-                search += "&pagetoken=" + URLEncoder.encode(query.getNext_page_token(), encoding);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return search;
-    }
 
     public static String getQueryStringNearbySearch(Query query) {
         String search = "";
@@ -100,7 +77,7 @@ public class GooglePlacesClient {
         return search;
     }
 
-    public static String getQueryStringAddEvent(EventRequest eventRequest) {
+    public static String getQueryStringAddEvent() {
         String search = "";
         try {
             search = GooglePlacesClient.PLACES_API_BASE
@@ -114,7 +91,7 @@ public class GooglePlacesClient {
         return search;
     }
 
-    public static String getQueryStringDeleteEvent(EventRequest eventRequest) {
+    public static String getQueryStringDeleteEvent() {
         String search = "";
         try {
             search = GooglePlacesClient.PLACES_API_BASE

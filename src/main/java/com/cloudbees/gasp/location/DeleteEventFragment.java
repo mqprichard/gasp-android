@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.cloudbees.gasp.model.EventRequest;
 import com.cloudbees.gasp.model.EventResponse;
-import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
 
 import java.net.URL;
@@ -30,36 +30,32 @@ import java.net.URL;
 public abstract class DeleteEventFragment extends Fragment {
     private static final String TAG = DeleteEventFragment.class.getName();
 
-    private final String keywords = "Restaurant|food|cafe";
-    private final String encoding = "utf8";
-
-    private Query mQuery;
-    private String jsonOutput;
+    private EventRequest mEventRequest;
+    private String mJsonOutput;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void deleteEvent(String jsonInput) {
-        final String jsonEvent = jsonInput;
+    public void deleteEvent(EventRequest eventRequest) {
+        mEventRequest = eventRequest;
+
+        Log.d(TAG, "Event reference: " + eventRequest.getReference());
+        Log.d(TAG, "Event reference: " + eventRequest.getEvent_id());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.PLACES_API_BASE
-                            + GooglePlacesClient.TYPE_NEARBY
-                            + GooglePlacesClient.OUT_JSON
-                            + "?sensor=false"
-                            + "&key=" + GooglePlacesClient.API_KEY;
-
-                    jsonOutput = GooglePlacesClient.doPost(jsonEvent, new URL(search));
+                    String search = GooglePlacesClient.getQueryStringDeleteEvent();
+                    mJsonOutput = GooglePlacesClient.doPost(
+                            new Gson().toJson(mEventRequest, EventRequest.class), new URL(search));
 
                 } catch (Exception e) {
                     Log.e(TAG, "Exception: ", e);
                 }
-                return jsonOutput;
+                return mJsonOutput;
             }
 
             @Override

@@ -6,7 +6,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.location.LocationSearchFragment;
+import com.cloudbees.gasp.location.NearbySearchFragment;
 import com.cloudbees.gasp.model.Place;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
@@ -49,7 +49,8 @@ public class PlacesActivity extends Activity {
     }
 
     private void getLocations() {
-        LocationSearchFragment searchFragment = new LocationSearchFragment() {
+        //LocationSearchFragment searchFragment = new LocationSearchFragment() {
+        NearbySearchFragment searchFragment = new NearbySearchFragment() {
             public void onSuccess(Places places) {
                 putOnMap(places);
                 checkToken(places);
@@ -64,7 +65,7 @@ public class PlacesActivity extends Activity {
         ft.commit();
 
         Query query = new Query (lat, lng, radius, token);
-        searchFragment.placesSearch(query);
+        searchFragment.nearbySearch(query);
     }
 
     @Override

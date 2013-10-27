@@ -10,7 +10,6 @@ import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
 
 import java.net.URL;
-import java.net.URLEncoder;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -31,9 +30,6 @@ import java.net.URLEncoder;
 public abstract class PlaceDetailsFragment extends Fragment {
     private static final String TAG = PlaceDetailsFragment.class.getName();
 
-    private final String keyword = "Restaurant";
-    private final String encoding = "utf8";
-
     private Query mQuery;
     private String jsonOutput;
 
@@ -43,18 +39,13 @@ public abstract class PlaceDetailsFragment extends Fragment {
     }
 
     public void placeDetails(Query query) {
+        mQuery = query;
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.PLACES_API_BASE
-                            + GooglePlacesClient.TYPE_DETAILS
-                            + GooglePlacesClient.OUT_JSON
-                            + "?sensor=false"
-                            + "&key=" + GooglePlacesClient.API_KEY
-                            + "&reference=" + URLEncoder.encode(keyword, encoding);
-
+                    String search = GooglePlacesClient.getQueryStringPlaceDetails(mQuery.getReference());
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
