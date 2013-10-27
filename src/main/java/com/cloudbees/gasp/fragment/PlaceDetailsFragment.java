@@ -1,11 +1,12 @@
-package com.cloudbees.gasp.location;
+package com.cloudbees.gasp.fragment;
 
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.model.Places;
+import com.cloudbees.gasp.location.GooglePlacesClient;
+import com.cloudbees.gasp.model.PlaceDetails;
 import com.cloudbees.gasp.model.Query;
 import com.google.gson.Gson;
 
@@ -27,50 +28,43 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class NearbySearchFragment extends Fragment {
-    private static final String TAG = NearbySearchFragment.class.getName();
-
-    private final String keywords = "Restaurant|food|cafe";
-    private final String encoding = "utf8";
+public abstract class PlaceDetailsFragment extends Fragment {
+    private static final String TAG = PlaceDetailsFragment.class.getName();
 
     private Query mQuery;
-    private String mJsonOutput;
+    private String jsonOutput;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void nearbySearch(Query query) {
+    public void placeDetails(Query query) {
         mQuery = query;
-        Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
-        Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
-        Log.d(TAG, "Radius: " + query.getRadius());
-        Log.d(TAG, "Name: " + query.getName());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.getQueryStringNearbySearch(mQuery);
-                    mJsonOutput = GooglePlacesClient.doGet(new URL(search));
+                    String search = GooglePlacesClient.getQueryStringPlaceDetails(mQuery.getReference());
+                    jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
                     Log.e(TAG, "Exception: ", e);
                 }
-                return mJsonOutput;
+                return jsonOutput;
             }
 
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
-                    Places places = new Gson().fromJson(jsonOutput, Places.class);
+                    PlaceDetails placeDetails = new Gson().fromJson(jsonOutput, PlaceDetails.class);
 
-                    if (places.getStatus().equalsIgnoreCase("OK"))
-                        onSuccess(places);
+                    if (placeDetails.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(placeDetails);
                     else
-                        onFailure(places.getStatus());
+                        onFailure(placeDetails.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -80,6 +74,6 @@ public abstract class NearbySearchFragment extends Fragment {
     }
 
     // Callbacks to calling Activity
-    abstract public void onSuccess(Places places);
+    abstract public void onSuccess(PlaceDetails placeDetails);
     abstract public void onFailure(String status);
 }

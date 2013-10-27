@@ -1,12 +1,13 @@
-package com.cloudbees.gasp.location;
+package com.cloudbees.gasp.fragment;
 
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.model.PlaceDetails;
-import com.cloudbees.gasp.model.Query;
+import com.cloudbees.gasp.location.GooglePlacesClient;
+import com.cloudbees.gasp.model.EventRequest;
+import com.cloudbees.gasp.model.EventResponse;
 import com.google.gson.Gson;
 
 import java.net.URL;
@@ -27,43 +28,50 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class PlaceDetailsFragment extends Fragment {
-    private static final String TAG = PlaceDetailsFragment.class.getName();
+public abstract class AddEventFragment extends Fragment {
+    private static final String TAG = AddEventFragment.class.getName();
 
-    private Query mQuery;
-    private String jsonOutput;
+    private EventRequest mEventRequest;
+    private String mJsonOutput;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void placeDetails(Query query) {
-        mQuery = query;
+    public void addEvent(EventRequest eventRequest) {
+        mEventRequest = eventRequest;
+
+        Log.d(TAG, "Event reference: " + eventRequest.getReference());
+        Log.d(TAG, "Event summary: " + eventRequest.getSummary());
+        Log.d(TAG, "Event url: "+ eventRequest.getUrl());
+        Log.d(TAG, "Event duration: " + eventRequest.getDuration());
+        Log.d(TAG, "Event language: " + eventRequest.getLanguage());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.getQueryStringPlaceDetails(mQuery.getReference());
-                    jsonOutput = GooglePlacesClient.doGet(new URL(search));
+                    String search = GooglePlacesClient.getQueryStringAddEvent();
+                    mJsonOutput = GooglePlacesClient.doPost(
+                            new Gson().toJson(mEventRequest, EventRequest.class), new URL(search));
 
                 } catch (Exception e) {
                     Log.e(TAG, "Exception: ", e);
                 }
-                return jsonOutput;
+                return mJsonOutput;
             }
 
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
-                    PlaceDetails placeDetails = new Gson().fromJson(jsonOutput, PlaceDetails.class);
+                    EventResponse eventResponse = new Gson().fromJson(jsonOutput, EventResponse.class);
 
-                    if (placeDetails.getStatus().equalsIgnoreCase("OK"))
-                        onSuccess(placeDetails);
+                    if (eventResponse.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(eventResponse);
                     else
-                        onFailure(placeDetails.getStatus());
+                        onFailure(eventResponse.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -73,6 +81,6 @@ public abstract class PlaceDetailsFragment extends Fragment {
     }
 
     // Callbacks to calling Activity
-    abstract public void onSuccess(PlaceDetails placeDetails);
+    abstract public void onSuccess(EventResponse eventResponse);
     abstract public void onFailure(String status);
 }

@@ -6,7 +6,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.gasp.location.NearbySearchFragment;
+import com.cloudbees.gasp.fragment.NearbySearchFragment;
 import com.cloudbees.gasp.model.Place;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
