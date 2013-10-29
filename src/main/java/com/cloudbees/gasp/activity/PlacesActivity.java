@@ -5,11 +5,19 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 
+import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.fragment.NearbySearchFragment;
 import com.cloudbees.gasp.model.Place;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
+
+import java.util.ArrayList;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -30,26 +38,42 @@ import com.cloudbees.gasp.model.Query;
 public class PlacesActivity extends Activity {
     private static final String TAG = PlacesActivity.class.getName();
 
+    private ArrayAdapter<String> mAdapter;
+    private ListView mListView;
+    private final ArrayList<String> mList = new ArrayList<String>();
+    private final ArrayList<String> mReferenceList = new ArrayList<String>();
+
     private static final double lat = 37.3750274;
     private static final double lng = -122.1142916;
     private static final int radius = 500;
-    private String token = "";
+    private static String token = "";
 
     public void putOnMap(Places places) {
         for (Place place : places.getResults()) {
             Log.d(TAG, place.getName() + " " + place.getReference());
+            mAdapter.add(place.getName());
+            mReferenceList.add(place.getReference());
         }
     }
 
     public void checkToken(Places places) {
-        if (! places.getNext_page_token().isEmpty()) {
-            token = places.getNext_page_token();
-            Log.d(TAG, "Next page Token: " + places.getNext_page_token());
+        try {
+            if (places.getNext_page_token() == null) {
+                token = "";
+                Log.d(TAG, "No page token returned from Places API");
+            }
+            else {
+                token = places.getNext_page_token();
+                Log.d(TAG, "Next page token: " + token);
+                setButtonText(R.string.places_button_locations_next);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void getLocations() {
-        //LocationSearchFragment searchFragment = new LocationSearchFragment() {
         NearbySearchFragment searchFragment = new NearbySearchFragment() {
             public void onSuccess(Places places) {
                 putOnMap(places);
@@ -68,11 +92,48 @@ public class PlacesActivity extends Activity {
         searchFragment.nearbySearch(query);
     }
 
+    private void addButtonListener() {
+        Button placesButton = (Button)findViewById(R.id.places_button);
+        placesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocations();
+            }
+        });
+    }
+
+    private void addListViewAdapter() {
+        setContentView(R.layout.places_layout);
+        mListView = (ListView) findViewById(R.id.places_listView);
+        mAdapter = new ArrayAdapter<String>(this, R.layout.item_label_list, mList);
+        mListView.setAdapter(mAdapter);
+    }
+
+    private void addItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Clicked: item #" + id + ", "
+                            + mList.get((int) id) + " ["
+                            + mReferenceList.get((int)id) + "]");
+                setButtonText(R.string.places_button_details);
+            }
+        });
+    }
+
+    private void setButtonText(int resId) {
+        Button placesButton = (Button)findViewById(R.id.places_button);
+        placesButton.setText(resId);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
+            addListViewAdapter();
+            addButtonListener();
+            addItemClickListener();
             getLocations();
         }
         catch (Exception e) {

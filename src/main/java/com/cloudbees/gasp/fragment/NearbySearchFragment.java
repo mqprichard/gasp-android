@@ -31,9 +31,6 @@ import java.net.URL;
 public abstract class NearbySearchFragment extends Fragment {
     private static final String TAG = NearbySearchFragment.class.getName();
 
-    private final String keywords = "Restaurant|food|cafe";
-    private final String encoding = "utf8";
-
     private Query mQuery;
     private String mJsonOutput;
 
@@ -47,7 +44,7 @@ public abstract class NearbySearchFragment extends Fragment {
         Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
         Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
         Log.d(TAG, "Radius: " + query.getRadius());
-        Log.d(TAG, "Name: " + query.getName());
+        Log.d(TAG, "Token: " + query.getNext_page_token());
 
         new AsyncTask<Void, Void, String>() {
             @Override

@@ -44,5 +44,10 @@
     <string name="gasp_restaurants_data">Gasp! Restaurants</string>
     <string name="gasp_users_data">Gasp! Users</string>
     <string name="gasp_preferences">Gasp! Preferences</string>
+    <string name="places_button_details">Get Location Details</string>
+    <string name="places_button_add_event">Add Event</string>
+    <string name="places_button_delete_event">Delete Event</string>
+    <string name="places_button_locations">Get Locations</string>
+    <string name="places_button_locations_next">More Locations</string>
 
 </resources>
