@@ -59,7 +59,7 @@ public class PlacesActivity extends Activity {
     private static final int radius = 500;
     private static String token = "";
 
-    public void putOnMap(Places places) {
+    private void showLocations(Places places) {
         for (Place place : places.getResults()) {
             Log.d(TAG, place.getName() + " " + place.getReference());
             mAdapter.add(place.getName());
@@ -67,7 +67,7 @@ public class PlacesActivity extends Activity {
         }
     }
 
-    public void checkToken(Places places) {
+    private void checkToken(Places places) {
         try {
             if (places.getNext_page_token() == null) {
                 token = "";
@@ -86,15 +86,15 @@ public class PlacesActivity extends Activity {
 
     private void showDetails(PlaceDetails placeDetails) {
         try {
-            Log.d(TAG, "NAME: " + placeDetails.getResult().getName());
-            Log.d(TAG, " Website " + placeDetails.getResult().getWebsite());
-            Log.d(TAG, " Address: " + placeDetails.getResult().getFormatted_address());
-            Log.d(TAG, " Id: " + placeDetails.getResult().getId());
-            Log.d(TAG, " Lat: " + placeDetails.getResult().getGeometry().getLocation().getLat());
-            Log.d(TAG, " Lng: " + placeDetails.getResult().getGeometry().getLocation().getLng());
+            Log.d(TAG, "Name: " + placeDetails.getResult().getName());
+            Log.d(TAG, "Website " + placeDetails.getResult().getWebsite());
+            Log.d(TAG, "Address: " + placeDetails.getResult().getFormatted_address());
+            Log.d(TAG, "Id: " + placeDetails.getResult().getId());
+            Log.d(TAG, "Lat: " + placeDetails.getResult().getGeometry().getLocation().getLat());
+            Log.d(TAG, "Lng: " + placeDetails.getResult().getGeometry().getLocation().getLng());
             for (PlaceEvent event : placeDetails.getResult().getEvents()) {
-                Log.d(TAG, " Event Id: " + event.getEvent_id());
-                Log.d(TAG, " Event Summary: " + event.getSummary());
+                Log.d(TAG, "Event Id: " + event.getEvent_id());
+                Log.d(TAG, "Event Summary: " + event.getSummary());
             }
         }
         catch (Exception e) {
@@ -105,7 +105,7 @@ public class PlacesActivity extends Activity {
     private void addPlacesFragments() {
         mSearchFragment = new NearbySearchFragment() {
             public void onSuccess(Places places) {
-                putOnMap(places);
+                showLocations(places);
                 checkToken(places);
             }
             public void onFailure(String status) {
@@ -217,7 +217,6 @@ public class PlacesActivity extends Activity {
             addListViewAdapter();
             addButtonListener();
             addItemClickListener();
-            //getLocations();
         }
         catch (Exception e) {
             e.printStackTrace();
