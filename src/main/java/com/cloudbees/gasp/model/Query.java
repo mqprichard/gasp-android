@@ -34,6 +34,10 @@ public class Query {
         this.next_page_token = next_page_token;
     }
 
+    public Query(String reference) {
+        this.reference = reference;
+    }
+
     public double getLat() {
         return lat;
     }

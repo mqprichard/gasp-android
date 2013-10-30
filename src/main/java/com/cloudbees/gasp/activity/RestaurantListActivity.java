@@ -41,8 +41,6 @@ public class RestaurantListActivity extends ListActivity {
         List<Restaurant> restaurants = restaurantAdapter.getAll();
         Collections.reverse(restaurants);
 
-        // Use the SimpleCursorAdapter to show the
-        // elements in a ListView
         ArrayAdapter<Restaurant> adapter =
                 new ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_1, restaurants);
         setListAdapter(adapter);

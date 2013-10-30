@@ -41,8 +41,6 @@ public class UserListActivity extends ListActivity {
         List<User> users = userAdapter.getAll();
         Collections.reverse(users);
 
-        // Use the SimpleCursorAdapter to show the
-        // elements in a ListView
         ArrayAdapter<User> adapter =
                 new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1, users);
         setListAdapter(adapter);

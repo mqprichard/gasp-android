@@ -41,8 +41,6 @@ public class ReviewListActivity extends ListActivity {
         List<Review> reviews = reviewAdapter.getAll();
         Collections.reverse(reviews);
 
-        // Use the SimpleCursorAdapter to show the
-        // elements in a ListView
         ArrayAdapter<Review> adapter = new ArrayAdapter<Review>(this,
                 android.R.layout.simple_list_item_1, reviews);
         setListAdapter(adapter);

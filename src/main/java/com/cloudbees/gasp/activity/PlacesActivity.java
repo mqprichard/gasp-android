@@ -12,8 +12,14 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.fragment.AddEventFragment;
+import com.cloudbees.gasp.fragment.DeleteEventFragment;
 import com.cloudbees.gasp.fragment.NearbySearchFragment;
+import com.cloudbees.gasp.fragment.PlaceDetailsFragment;
+import com.cloudbees.gasp.model.EventResponse;
 import com.cloudbees.gasp.model.Place;
+import com.cloudbees.gasp.model.PlaceDetails;
+import com.cloudbees.gasp.model.PlaceEvent;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
 
@@ -42,6 +48,11 @@ public class PlacesActivity extends Activity {
     private ListView mListView;
     private final ArrayList<String> mList = new ArrayList<String>();
     private final ArrayList<String> mReferenceList = new ArrayList<String>();
+
+    private NearbySearchFragment mSearchFragment;
+    private PlaceDetailsFragment mDetailsFragment;
+    private AddEventFragment mAddEventFragment;
+    private DeleteEventFragment mDeleteEventFragment;
 
     private static final double lat = 37.3750274;
     private static final double lng = -122.1142916;
@@ -73,8 +84,26 @@ public class PlacesActivity extends Activity {
         }
     }
 
-    private void getLocations() {
-        NearbySearchFragment searchFragment = new NearbySearchFragment() {
+    private void showDetails(PlaceDetails placeDetails) {
+        try {
+            Log.d(TAG, "NAME: " + placeDetails.getResult().getName());
+            Log.d(TAG, " Website " + placeDetails.getResult().getWebsite());
+            Log.d(TAG, " Address: " + placeDetails.getResult().getFormatted_address());
+            Log.d(TAG, " Id: " + placeDetails.getResult().getId());
+            Log.d(TAG, " Lat: " + placeDetails.getResult().getGeometry().getLocation().getLat());
+            Log.d(TAG, " Lng: " + placeDetails.getResult().getGeometry().getLocation().getLng());
+            for (PlaceEvent event : placeDetails.getResult().getEvents()) {
+                Log.d(TAG, " Event Id: " + event.getEvent_id());
+                Log.d(TAG, " Event Summary: " + event.getSummary());
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addPlacesFragments() {
+        mSearchFragment = new NearbySearchFragment() {
             public void onSuccess(Places places) {
                 putOnMap(places);
                 checkToken(places);
@@ -83,13 +112,60 @@ public class PlacesActivity extends Activity {
                 Log.e(TAG, "Google Places API search failed: status = " + status );
             }
         };
+
+        mDetailsFragment = new PlaceDetailsFragment() {
+            @Override
+            public void onSuccess(PlaceDetails placeDetails) {
+                showDetails(placeDetails);
+            }
+
+            @Override
+            public void onFailure(String status) {
+                Log.e(TAG, "Google Places API search failed: status = " + status );
+            }
+        };
+
+        mAddEventFragment = new AddEventFragment() {
+            @Override
+            public void onSuccess(EventResponse eventResponse) {
+                Log.d(TAG, "Event Added: " + eventResponse.getEvent_id());
+            }
+
+            @Override
+            public void onFailure(String status) {
+                Log.e(TAG, "Google Places API search failed: status = " + status);
+            }
+        };
+
+        mDeleteEventFragment = new DeleteEventFragment() {
+            @Override
+            public void onSuccess(EventResponse eventResponse) {
+                Log.d(TAG, "Event Deleted");
+            }
+
+            @Override
+            public void onFailure(String status) {
+                Log.e(TAG, "Google Places API search failed: status = " + status );
+            }
+        };
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(searchFragment, "LocationSearchFragment");
+        ft.add(mSearchFragment, "LocationSearchFragment");
+        ft.add(mDetailsFragment, "PlaceDetailsFragment");
+        ft.add(mAddEventFragment, "AddEventFragment");
+        ft.add(mDeleteEventFragment, "DeleteEventFragment");
         ft.commit();
+    }
 
-        Query query = new Query (lat, lng, radius, token);
-        searchFragment.nearbySearch(query);
+    private void getLocations() {
+        try {
+            Query query = new Query (lat, lng, radius, token);
+            mSearchFragment.nearbySearch(query);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addButtonListener() {
@@ -103,10 +179,15 @@ public class PlacesActivity extends Activity {
     }
 
     private void addListViewAdapter() {
-        setContentView(R.layout.places_layout);
-        mListView = (ListView) findViewById(R.id.places_listView);
-        mAdapter = new ArrayAdapter<String>(this, R.layout.item_label_list, mList);
-        mListView.setAdapter(mAdapter);
+        try {
+            setContentView(R.layout.places_layout);
+            mListView = (ListView) findViewById(R.id.places_listView);
+            mAdapter = new ArrayAdapter<String>(this, R.layout.item_label_list, mList);
+            mListView.setAdapter(mAdapter);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addItemClickListener() {
@@ -116,7 +197,8 @@ public class PlacesActivity extends Activity {
                 Log.d(TAG, "Clicked: item #" + id + ", "
                             + mList.get((int) id) + " ["
                             + mReferenceList.get((int)id) + "]");
-                setButtonText(R.string.places_button_details);
+                Query query = new Query(mReferenceList.get((int)id));
+                mDetailsFragment.placeDetails(query);
             }
         });
     }
@@ -131,10 +213,11 @@ public class PlacesActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
+            addPlacesFragments();
             addListViewAdapter();
             addButtonListener();
             addItemClickListener();
-            getLocations();
+            //getLocations();
         }
         catch (Exception e) {
             e.printStackTrace();
