@@ -3,6 +3,7 @@ package com.cloudbees.gasp.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.cloudbees.gasp.fragment.PlaceDetailsFragment;
 import com.cloudbees.gasp.model.EventResponse;
 import com.cloudbees.gasp.model.Place;
 import com.cloudbees.gasp.model.PlaceDetails;
-import com.cloudbees.gasp.model.PlaceEvent;
 import com.cloudbees.gasp.model.Places;
 import com.cloudbees.gasp.model.Query;
 
@@ -86,20 +86,16 @@ public class PlacesActivity extends Activity {
 
     private void showDetails(PlaceDetails placeDetails) {
         try {
-            Log.d(TAG, "Name: " + placeDetails.getResult().getName());
-            Log.d(TAG, "Website " + placeDetails.getResult().getWebsite());
-            Log.d(TAG, "Address: " + placeDetails.getResult().getFormatted_address());
-            Log.d(TAG, "Id: " + placeDetails.getResult().getId());
-            Log.d(TAG, "Lat: " + placeDetails.getResult().getGeometry().getLocation().getLat());
-            Log.d(TAG, "Lng: " + placeDetails.getResult().getGeometry().getLocation().getLng());
-            for (PlaceEvent event : placeDetails.getResult().getEvents()) {
-                Log.d(TAG, "Event Id: " + event.getEvent_id());
-                Log.d(TAG, "Event Summary: " + event.getSummary());
-            }
+            Intent intent = new Intent();
+            intent.setClass(PlacesActivity.this, PlacesDetailActivity.class);
+            intent.putExtra("PlaceDetail", placeDetails.getResult());
+            startActivityForResult(intent, 0);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     private void addPlacesFragments() {

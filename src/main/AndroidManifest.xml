@@ -77,6 +77,7 @@
 
         <!-- Gasp! Google Places API activity -->
         <activity android:name="com.cloudbees.gasp.activity.PlacesActivity" />
+        <activity android:name="com.cloudbees.gasp.activity.PlacesDetailActivity" />
 
         <!-- Gasp! database activities -->
         <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity" />
