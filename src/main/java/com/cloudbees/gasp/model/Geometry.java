@@ -16,11 +16,13 @@ package com.cloudbees.gasp.model;
  * limitations under the License.
  */
 
+import java.io.Serializable;
+
 /**
  * User: Mark Prichard (mprichard@cloudbees.com))
  * Date: 8/27/13
  */
-public class Geometry {
+public class Geometry implements Serializable {
     private Location location;
 
     public Location getLocation() {

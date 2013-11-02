@@ -1,5 +1,7 @@
 package com.cloudbees.gasp.model;
 
+import java.io.Serializable;
+
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
  * <p/>
@@ -16,7 +18,7 @@ package com.cloudbees.gasp.model;
  * limitations under the License.
  */
 
-public class PlaceEvent {
+public class PlaceEvent implements Serializable {
     private String event_id;
     private String summary;
     private String url;

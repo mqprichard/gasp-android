@@ -16,13 +16,14 @@ package com.cloudbees.gasp.model;
  * limitations under the License.
  */
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * User: Mark Prichard (mprichard@cloudbees.com)
  * Date: 8/27/13
  */
-public class Location {
+public class Location implements Serializable {
     private BigDecimal lat;
     private BigDecimal lng;
 
