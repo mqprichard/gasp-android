@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.activity.TwitterStreamActivity;
 import com.cloudbees.gasp.service.RESTIntentService;
+import com.cloudbees.gasp.twitter.TwitterAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,12 +47,6 @@ import java.util.List;
 public class TwitterResponderFragment extends RESTResponderFragment {
     private static final String TAG = TwitterResponderFragment.class.getName();
 
-    private static final String twitterApiSearch = "https://api.twitter.com/1.1/search/tweets.json";
-
-    public static String getTwitterApiSearch() {
-        return twitterApiSearch;
-    }
-
     private List<String> mTweets;
     
     @Override
@@ -66,7 +61,7 @@ public class TwitterResponderFragment extends RESTResponderFragment {
         
         if (mTweets == null && activity != null) {
             Intent intent = new Intent(activity, RESTIntentService.class);
-            intent.setData(Uri.parse(twitterApiSearch));
+            intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
 
             Bundle params = new Bundle();
             params.putString("q", "cloudbees");

@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,10 +28,8 @@ import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.activity.TwitterStreamActivity;
 import com.cloudbees.gasp.model.TwitterTokenResponse;
 import com.cloudbees.gasp.service.RESTIntentService;
+import com.cloudbees.gasp.twitter.TwitterAuthentication;
 import com.google.gson.Gson;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 /**
  * Closely modeled on Neil Goodman's Android REST tutorials
@@ -43,32 +40,6 @@ import java.net.URLEncoder;
  */
 public class TwitterAuthenticationFragment extends RESTResponderFragment {
     private static final String TAG = TwitterAuthenticationFragment.class.getName();
-
-    private static final String twitterApiOAuthToken = "https://api.twitter.com/oauth2/token";
-
-    public String getTwitterApiOAuthToken() {
-        return twitterApiOAuthToken;
-    }
-
-    private String authEncodedBase64 = "";
-
-    private static final String consumerKey = "VtBCY5oJxMteTAd6o9IpA";
-    private static final String consumerSecret = "WN6Al8vAzIZDwfZmfZfGJrAFiMDjNHky9qfarMaPePY";
-    private static final String charSet = "UTF-8";
-
-    public String getEncodedBase64Credentials() {
-        try {
-            String urlEncoded = URLEncoder.encode(consumerKey, charSet)
-                    + ":"
-                    + URLEncoder.encode(consumerSecret, charSet);
-            byte[] urlEncodedBytes = urlEncoded.getBytes(charSet);
-            authEncodedBase64 = "Basic "
-                    + Base64.encodeToString(urlEncodedBytes, Base64.NO_WRAP);
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Check URL encoding", e);
-        }
-        return authEncodedBase64;
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -82,13 +53,13 @@ public class TwitterAuthenticationFragment extends RESTResponderFragment {
             MainActivity activity = (MainActivity) getActivity();
 
             Intent intent = new Intent(activity, RESTIntentService.class);
-            intent.setData(Uri.parse(twitterApiOAuthToken));
+            intent.setData(Uri.parse(TwitterAuthentication.getTwitterApiOAuthToken()));
 
             Bundle params = new Bundle();
             params.putString("grant_type", "client_credentials");
 
             Bundle headers = new Bundle();
-            headers.putString("Authorization", getEncodedBase64Credentials());
+            headers.putString("Authorization", TwitterAuthentication.getEncodedBase64Credentials());
 
             intent.putExtra(RESTIntentService.EXTRA_HTTP_VERB, RESTIntentService.POST);
             intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
