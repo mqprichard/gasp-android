@@ -3,6 +3,8 @@ package com.cloudbees.gasp.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +46,56 @@ public class PlacesDetailActivity extends Activity {
     private ArrayAdapter<String> mEventAdapter;
     private final ArrayList<String> mEventList = new ArrayList<String>();
 
+    private void addItemClickListener() {
+        mEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Selected: Event #" + id);
+            }
+        });
+    }
+
+    private void setViews() {
+        setContentView(R.layout.gasp_place_detail_layout);
+        mName = (TextView) findViewById(R.id.detail_name);
+        mAddress = (TextView) findViewById(R.id.detail_address);
+        mPhone = (TextView) findViewById(R.id.detail_phone);
+        mWebsite = (TextView) findViewById(R.id.detail_website);
+        mId = (TextView) findViewById(R.id.detail_id);
+        mLatitude = (TextView) findViewById(R.id.detail_latitude);
+        mLongitude = (TextView) findViewById(R.id.detail_longitude);
+        mEventsView = (ListView) findViewById(R.id.detail_events);
+    }
+
+    private void showLocationDetails(PlaceDetail place) {
+        mName.setText(place.getName());
+        mAddress.setText(place.getFormatted_address());
+        mPhone.setText(place.getFormatted_phone_number());
+        mWebsite.setText(place.getWebsite());
+        mId.setText(getString(R.string.places_google_id) + place.getId());
+        mLatitude.setText(getString(R.string.places_latitude)
+                + place.getGeometry().getLocation().getLat().toString());
+        mLongitude.setText(getString(R.string.places_longitude)
+                + place.getGeometry().getLocation().getLng().toString());
+    }
+
+    private void showEventDetails (PlaceDetail place) {
+        mEventAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mEventList);
+        mEventsView.setAdapter(mEventAdapter);
+
+        if (place.getEvents() != null) {
+            for (PlaceEvent event : place.getEvents()) {
+                Log.d(TAG, "Event Id: " + event.getEvent_id());
+                Log.d(TAG, "Event Summary: " + event.getSummary());
+                mEventAdapter.add(event.getEvent_id() + ": " + event.getSummary());
+            }
+        }
+
+        for (int i = 0 ; i< 30 ; i++ ) {
+            mEventAdapter.add("Event Id: 1234567890");
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,40 +109,10 @@ public class PlacesDetailActivity extends Activity {
             Log.d(TAG, "Lat: " + place.getGeometry().getLocation().getLat());
             Log.d(TAG, "Lng: " + place.getGeometry().getLocation().getLng());
 
-            setContentView(R.layout.gasp_place_detail_layout);
-            mName = (TextView) findViewById(R.id.detail_name);
-            mAddress = (TextView) findViewById(R.id.detail_address);
-            mPhone = (TextView) findViewById(R.id.detail_phone);
-            mWebsite = (TextView) findViewById(R.id.detail_website);
-            mId = (TextView) findViewById(R.id.detail_id);
-            mLatitude = (TextView) findViewById(R.id.detail_latitude);
-            mLongitude = (TextView) findViewById(R.id.detail_longitude);
-            mEventsView = (ListView) findViewById(R.id.detail_events);
-
-            mName.setText(place.getName());
-            mAddress.setText(place.getFormatted_address());
-            mPhone.setText(place.getFormatted_phone_number());
-            mWebsite.setText(place.getWebsite());
-            mId.setText(getString(R.string.places_google_id) + place.getId());
-            mLatitude.setText(getString(R.string.places_latitude)
-                    + place.getGeometry().getLocation().getLat().toString());
-            mLongitude.setText(getString(R.string.places_longitude)
-                    + place.getGeometry().getLocation().getLng().toString());
-
-            mEventAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mEventList);
-            mEventsView.setAdapter(mEventAdapter);
-
-            if (place.getEvents() != null) {
-                for (PlaceEvent event : place.getEvents()) {
-                    Log.d(TAG, "Event Id: " + event.getEvent_id());
-                    Log.d(TAG, "Event Summary: " + event.getSummary());
-                    mEventAdapter.add(event.getEvent_id() + ": " + event.getSummary());
-                }
-            }
-
-            for (int i = 0 ; i< 30 ; i++ ) {
-                mEventAdapter.add("Event Id: 1234567890");
-            }
+            setViews();
+            showLocationDetails(place);
+            showEventDetails(place);
+            addItemClickListener();
         }
         catch (Exception e) {
             e.printStackTrace();
