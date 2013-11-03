@@ -72,6 +72,8 @@ public class PlacesActivity extends Activity {
             if (places.getNext_page_token() == null) {
                 token = "";
                 Log.d(TAG, "No page token returned from Places API");
+                Button placesButton = (Button)findViewById(R.id.places_button);
+                placesButton.setEnabled(false);
             }
             else {
                 token = places.getNext_page_token();

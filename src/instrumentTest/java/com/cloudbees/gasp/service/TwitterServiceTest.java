@@ -11,6 +11,8 @@ import com.cloudbees.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.gasp.fragment.TwitterResponderFragment;
 import com.cloudbees.gasp.model.TwitterStatuses;
 import com.cloudbees.gasp.model.TwitterTokenResponse;
+import com.cloudbees.gasp.twitter.TwitterAPI;
+import com.cloudbees.gasp.twitter.TwitterAuthentication;
 import com.google.gson.Gson;
 
 import java.util.concurrent.CountDownLatch;
@@ -49,7 +51,7 @@ public class TwitterServiceTest extends ServiceTestCase<RESTIntentService> {
 
     public void testTwitterAPI() throws InterruptedException {
         Intent intent = new Intent(getContext(), RESTIntentService.class);
-        intent.setData(Uri.parse(twitterAuthenticationFragment.getTwitterApiOAuthToken()));
+        intent.setData(Uri.parse(TwitterAuthentication.getTwitterApiOAuthToken()));
 
         try {
             // This test equivalent to TwitterAuthenticationFragment service call
@@ -57,7 +59,7 @@ public class TwitterServiceTest extends ServiceTestCase<RESTIntentService> {
             params.putString("grant_type", "client_credentials");
 
             Bundle headers = new Bundle();
-            headers.putString("Authorization", twitterAuthenticationFragment.getEncodedBase64Credentials());
+            headers.putString("Authorization", TwitterAuthentication.getEncodedBase64Credentials());
 
             intent.putExtra(RESTIntentService.EXTRA_HTTP_VERB, RESTIntentService.POST);
             intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
@@ -86,14 +88,14 @@ public class TwitterServiceTest extends ServiceTestCase<RESTIntentService> {
             signal.await(20, TimeUnit.SECONDS);
 
             // This test equivalent to TwitterResponderFragment service call
-            intent.setData(Uri.parse(twitterResponderFragment.getTwitterApiSearch()));
+            intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
 
             params = new Bundle();
             params.putString("q", "cloudbees");
             params.putString("count", "10");
 
             headers = new Bundle();
-            headers.putString("Authorization", "Bearer " + twitterAuthenticationFragment.getEncodedBase64Credentials());
+            headers.putString("Authorization", "Bearer " + TwitterAuthentication.getEncodedBase64Credentials());
 
             intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
             intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
