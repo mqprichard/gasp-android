@@ -49,5 +49,8 @@
     <string name="places_button_delete_event">Delete Event</string>
     <string name="places_button_locations">Get Locations</string>
     <string name="places_button_locations_next">More Locations</string>
+    <string name="places_latitude">"Latitude: "</string>
+    <string name="places_longitude">"Longitude: "</string>
+    <string name="places_google_id">"Google Places Id: "</string>
 
 </resources>

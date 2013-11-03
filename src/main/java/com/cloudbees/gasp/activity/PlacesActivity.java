@@ -176,9 +176,9 @@ public class PlacesActivity extends Activity {
 
     private void addListViewAdapter() {
         try {
-            setContentView(R.layout.places_layout);
+            setContentView(R.layout.gasp_places_layout);
             mListView = (ListView) findViewById(R.id.places_listView);
-            mAdapter = new ArrayAdapter<String>(this, R.layout.item_label_list, mList);
+            mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mList);
             mListView.setAdapter(mAdapter);
         }
         catch (Exception e) {

@@ -326,7 +326,7 @@ public class MainActivity extends Activity {
 
         context = getApplicationContext();
 
-        setContentView(R.layout.gcm_demo);
+        setContentView(R.layout.gasp_console_layout);
         mDisplay = (TextView) findViewById(R.id.display);
 
         // Load shared preferences from res/xml/preferences.xml (first time only)

@@ -41,7 +41,6 @@ public class PlacesDetailActivity extends Activity {
     private TextView mLongitude;
     private ListView mEventsView;
 
-
     private ArrayAdapter<String> mEventAdapter;
     private final ArrayList<String> mEventList = new ArrayList<String>();
 
@@ -58,7 +57,7 @@ public class PlacesDetailActivity extends Activity {
             Log.d(TAG, "Lat: " + place.getGeometry().getLocation().getLat());
             Log.d(TAG, "Lng: " + place.getGeometry().getLocation().getLng());
 
-            setContentView(R.layout.places_detail_layout);
+            setContentView(R.layout.gasp_place_detail_layout);
             mName = (TextView) findViewById(R.id.detail_name);
             mAddress = (TextView) findViewById(R.id.detail_address);
             mPhone = (TextView) findViewById(R.id.detail_phone);
@@ -72,11 +71,13 @@ public class PlacesDetailActivity extends Activity {
             mAddress.setText(place.getFormatted_address());
             mPhone.setText(place.getFormatted_phone_number());
             mWebsite.setText(place.getWebsite());
-            mId.setText(place.getId());
-            mLatitude.setText("Latitude: " + place.getGeometry().getLocation().getLat().toString());
-            mLongitude.setText("Longitude: " + place.getGeometry().getLocation().getLng().toString());
+            mId.setText(getString(R.string.places_google_id) + place.getId());
+            mLatitude.setText(getString(R.string.places_latitude)
+                    + place.getGeometry().getLocation().getLat().toString());
+            mLongitude.setText(getString(R.string.places_longitude)
+                    + place.getGeometry().getLocation().getLng().toString());
 
-            mEventAdapter = new ArrayAdapter<String>(this, R.layout.item_label_list, mEventList);
+            mEventAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mEventList);
             mEventsView.setAdapter(mEventAdapter);
 
             if (place.getEvents() != null) {
@@ -85,6 +86,10 @@ public class PlacesDetailActivity extends Activity {
                     Log.d(TAG, "Event Summary: " + event.getSummary());
                     mEventAdapter.add(event.getEvent_id() + ": " + event.getSummary());
                 }
+            }
+
+            for (int i = 0 ; i< 30 ; i++ ) {
+                mEventAdapter.add("Event Id: 1234567890");
             }
         }
         catch (Exception e) {

@@ -52,9 +52,9 @@ public class TwitterStreamActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rest_service);
+        setContentView(R.layout.gasp_twitter_layout);
         
-        mAdapter = new ArrayAdapter<String>(this, R.layout.item_label_list);
+        mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout);
         
         FragmentManager     fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

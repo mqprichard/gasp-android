@@ -33,7 +33,7 @@ public class ReviewListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gasp_database_list);
+        setContentView(R.layout.gasp_data_layout);
 
         reviewAdapter = new ReviewAdapter(this);
         reviewAdapter.open();

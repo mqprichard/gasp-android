@@ -33,7 +33,7 @@ public class RestaurantListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gasp_database_list);
+        setContentView(R.layout.gasp_data_layout);
 
         restaurantAdapter = new RestaurantAdapter(this);
         restaurantAdapter.open();
