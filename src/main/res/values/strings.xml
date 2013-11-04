@@ -52,5 +52,9 @@
     <string name="places_latitude">"Latitude: "</string>
     <string name="places_longitude">"Longitude: "</string>
     <string name="places_google_id">"Google Places Id: "</string>
+    <string name="gasp_restaurants_url">http://gasp.partnerdemo.cloudbees.net/restaurants</string>
+    <string name="gasp_reviews_url">http://gasp.partnerdemo.cloudbees.net/reviews</string>
+    <string name="gasp_users_url">http://gasp.partnerdemo.cloudbees.net/users</string>
+    <string name="gasp_push_url">http://gasp-push-server.partnerdemo.cloudbees.net/gcm</string>
 
 </resources>

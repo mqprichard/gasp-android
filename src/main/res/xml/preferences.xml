@@ -6,20 +6,20 @@
         android:key="gasp_reviews_uri"
         android:title="Gasp! Reviews Settings"
         android:dialogTitle="Gasp! Reviews URL"
-        android:defaultValue="http://gasp.partnerdemo.cloudbees.net/reviews" />
+        android:defaultValue="@string/gasp_reviews_url" />
     <EditTextPreference
         android:key="gasp_restaurants_uri"
         android:title="Gasp! Restaurants Settings"
         android:dialogTitle="Gasp! Restaurants URL"
-        android:defaultValue="http://gasp.partnerdemo.cloudbees.net/restaurants" />
+        android:defaultValue="@string/gasp_restaurants_url" />
     <EditTextPreference
         android:key="gasp_users_uri"
         android:title="Gasp! Users Settings"
         android:dialogTitle="Gasp! Users URL"
-        android:defaultValue="http://gasp.partnerdemo.cloudbees.net/users" />
+        android:defaultValue="@string/gasp_users_url" />
     <EditTextPreference
         android:key="gasp_push_uri"
         android:title="Gasp! GCM Push Notification Settings"
         android:dialogTitle="Gasp! GCM Push Server URL"
-        android:defaultValue="http://gasp-push-server.partnerdemo.cloudbees.net/gcm" />
+        android:defaultValue="@string/gasp_push_url" />
 </PreferenceScreen>
