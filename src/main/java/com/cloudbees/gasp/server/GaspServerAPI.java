@@ -27,6 +27,13 @@ import java.net.URL;
 public class GaspServerAPI {
     private static final String TAG = GaspServerAPI.class.getName();
 
+    /**
+     * Adds a new Gasp entity via HTTP POST
+     *
+     * @param input JSON-formatted request body
+     * @param url Gasp server URL for HTTP POST
+     * @return URL of the newly-created resource
+     */
     public static String newGaspEntity (String input, URL url) {
         HttpURLConnection conn = null;
         String location = "";
@@ -67,6 +74,11 @@ public class GaspServerAPI {
         return location;
     }
 
+    /**
+     * Removes a Gasp entity via HTTP DELETE
+     *
+     * @param url Gasp server URL for HTTP DELETE
+     */
     public static void deleteGaspEntity (URL url) {
         HttpURLConnection conn = null;
         try {

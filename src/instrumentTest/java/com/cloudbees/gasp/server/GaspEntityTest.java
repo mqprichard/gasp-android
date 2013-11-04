@@ -37,6 +37,7 @@ public abstract class GaspEntityTest extends InstrumentationTestCase {
         signal = new CountDownLatch(1);
         signal2 = new CountDownLatch(1);
 
+        // Retrieve Gasp server URLs from application context
         Context gaspContext = getInstrumentation().getTargetContext();
         mGaspReviewsUrl = gaspContext.getString(R.string.gasp_reviews_url);
         mGaspRestaurantsUrl = gaspContext.getString(R.string.gasp_restaurants_url);

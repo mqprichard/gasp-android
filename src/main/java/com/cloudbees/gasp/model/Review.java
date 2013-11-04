@@ -21,6 +21,8 @@ import com.google.gson.annotations.Expose;
 public class Review {
     private int id;
     private String url;
+    // Only expose these methods for HTTP POST calls to Gasp server
+    // Requires GsonBuilder().excludeFieldsWithoutExposeAnnotation()
     @Expose
     private String restaurant;
     @Expose

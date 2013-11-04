@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.server.GaspServerAPI;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.net.URL;
 
@@ -28,6 +29,12 @@ import java.net.URL;
 public abstract class GaspReviewFragment extends Fragment {
     private static final String TAG = GaspReviewFragment.class.getName();
 
+    /**
+     * Adds a new review to Gasp database via HTTP Post
+     *
+     * @param review Review object to add to Gasp database
+     * @param url Gasp server URL for HTTP POST
+     */
     public void addReview(final Review review, final URL url) {
 
         new AsyncTask<Void, Void, String>() {
@@ -35,7 +42,8 @@ public abstract class GaspReviewFragment extends Fragment {
             protected String doInBackground(Void... params) {
                 String location = "";
                 try {
-                    String jsonInput = new Gson().toJson(review, Review.class);
+                    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+                    String jsonInput = gson.toJson(review, Review.class);
                     location = GaspServerAPI.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {

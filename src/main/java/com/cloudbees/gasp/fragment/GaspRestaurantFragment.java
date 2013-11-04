@@ -34,6 +34,12 @@ public abstract class GaspRestaurantFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * Adds a new restaurant to Gasp database via HTTP Post
+     *
+     * @param restaurant Restaurant object to add to Gasp database
+     * @param url Gasp server URL for HTTP POST
+     */
     public void addRestaurant(final Restaurant restaurant, final URL url) {
 
         new AsyncTask<Void, Void, String>() {

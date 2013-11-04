@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class GaspRestaurantTest extends GaspEntityTest {
+    //Store Gasp entity URL across add/delete test cases
     private static String mLocation;
 
     @Override
