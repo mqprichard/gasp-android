@@ -5,12 +5,9 @@ import android.os.AsyncTask;
 import android.test.InstrumentationTestCase;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.model.Restaurant;
-import com.google.gson.Gson;
 
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -28,9 +25,11 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  */
 
-public class AddRestaurantTest extends InstrumentationTestCase {
-    private CountDownLatch signal, signal2;
-    private String gaspRestaurants;
+public abstract class GaspEntityTest extends InstrumentationTestCase {
+    protected CountDownLatch signal, signal2;
+    protected String mGaspRestaurantsUrl;
+    protected String mGaspReviewsUrl;
+    protected String mGaspUsersUrl;
 
     @Override
     protected void setUp() throws Exception {
@@ -39,17 +38,18 @@ public class AddRestaurantTest extends InstrumentationTestCase {
         signal2 = new CountDownLatch(1);
 
         Context gaspContext = getInstrumentation().getTargetContext();
-        gaspRestaurants = gaspContext.getString(R.string.gasp_restaurants_url);
+        mGaspReviewsUrl = gaspContext.getString(R.string.gasp_reviews_url);
+        mGaspRestaurantsUrl = gaspContext.getString(R.string.gasp_restaurants_url);
+        mGaspUsersUrl = gaspContext.getString(R.string.gasp_users_url);
     }
 
-    public void addRestaurant(final Restaurant restaurant, final URL url) {
+    public void addGaspEntity(final String jsonInput, final URL url) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 String location = "";
                 try {
-                    String jsonInput = new Gson().toJson(restaurant, Restaurant.class);
                     location = GaspServerAPI.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {
@@ -63,9 +63,7 @@ public class AddRestaurantTest extends InstrumentationTestCase {
                 super.onPostExecute(location);
                 try {
                     if ((location != null) && (! location.isEmpty())) {
-                        assertNotNull(location);
-                        assertFalse(location.isEmpty());
-                        assert(location.startsWith(gaspRestaurants));
+                        onEntityAdded(location);
                     }
                     else {
                         fail();
@@ -78,39 +76,27 @@ public class AddRestaurantTest extends InstrumentationTestCase {
         }.execute();
     }
 
-    public void testAddRestaurant() {
-        try {
-            Restaurant restaurant = new Restaurant();
-            restaurant.setName("Test Restaurant");
-            restaurant.setAddress("Test Address");
-            restaurant.setWebsite("www.testrestaurant.com");
+    public void deleteGaspEntity(final URL url) {
 
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    GaspServerAPI.deleteGaspEntity(url);
+                }
+                catch (Exception e) {
+                    fail();
+                }
+                return null;
+            }
 
-            final URL gaspUrl = new URL(gaspRestaurants);
-            addRestaurant(restaurant, gaspUrl);
-
-            signal.await(20, TimeUnit.SECONDS);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void testBadRestaurant() {
-        try {
-            Restaurant restaurant = new Restaurant();
-            restaurant.setName("Test Restaurant");
-            restaurant.setAddress("Test Address");
-            restaurant.setWebsite("www.testrestaurant.com");
-
-            final URL gaspUrl = new URL("http://badgasp.partnerdemo.cloudbees.net/restaurants");
-            addRestaurant(restaurant, gaspUrl);
-
-            signal.await(20, TimeUnit.SECONDS);
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                signal2.countDown();
+            }
+        }.execute();
     }
 
+    protected abstract void onEntityAdded(String location);
 }

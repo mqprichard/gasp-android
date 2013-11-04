@@ -16,12 +16,18 @@
 
 package com.cloudbees.gasp.model;
 
+import com.google.gson.annotations.Expose;
+
 public class Review {
     private int id;
     private String url;
+    @Expose
     private String restaurant;
+    @Expose
     private String user;
+    @Expose
     private int star;
+    @Expose
     private String comment;
 
     private final int lenUsers = "/users/".length();
@@ -72,7 +78,7 @@ public class Review {
         return restaurant;
     }
 
-    private void setRestaurant(String restaurant) {
+    public void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
     }
 
@@ -80,7 +86,7 @@ public class Review {
         return user;
     }
 
-    private void setUser(String user) {
+    public void setUser(String user) {
         this.user = user;
     }
 

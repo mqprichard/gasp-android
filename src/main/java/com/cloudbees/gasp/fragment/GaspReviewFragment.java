@@ -2,9 +2,8 @@ package com.cloudbees.gasp.fragment;
 
 import android.app.Fragment;
 import android.os.AsyncTask;
-import android.os.Bundle;
 
-import com.cloudbees.gasp.model.Restaurant;
+import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.server.GaspServerAPI;
 import com.google.gson.Gson;
 
@@ -26,29 +25,23 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class AddRestaurantFragment extends Fragment {
-    private static final String TAG = AddRestaurantFragment.class.getName();
+public abstract class GaspReviewFragment extends Fragment {
+    private static final String TAG = GaspReviewFragment.class.getName();
 
-    private String mLocation = "";
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    public void addRestaurant(final Restaurant restaurant, final URL url) {
+    public void addReview(final Review review, final URL url) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+                String location = "";
                 try {
-                    String jsonInput = new Gson().toJson(restaurant, Restaurant.class);
-                    mLocation = GaspServerAPI.newGaspEntity(jsonInput, url);
+                    String jsonInput = new Gson().toJson(review, Review.class);
+                    location = GaspServerAPI.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-                return mLocation;
+                return location;
             }
 
             @Override

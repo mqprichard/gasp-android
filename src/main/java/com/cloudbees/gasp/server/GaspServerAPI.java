@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,7 +29,6 @@ public class GaspServerAPI {
 
     public static String newGaspEntity (String input, URL url) {
         HttpURLConnection conn = null;
-        StringBuilder jsonResults = new StringBuilder();
         String location = "";
 
         try {
@@ -53,14 +51,6 @@ public class GaspServerAPI {
                 location = conn.getHeaderField("Location");
                 Log.d(TAG, "Location: " + conn.getHeaderField("Location"));
             }
-
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                jsonResults.append(buff, 0, read);
-            }
         }
         catch (MalformedURLException e) {
             Log.e(TAG, "Malformed Gasp Server URL", e);
@@ -75,5 +65,31 @@ public class GaspServerAPI {
         }
 
         return location;
+    }
+
+    public static void deleteGaspEntity (URL url) {
+        HttpURLConnection conn = null;
+        try {
+            Log.d(TAG, "Request URL: " + url.toString());
+
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("DELETE");
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                Log.e(TAG, "Response code: " + responseCode);
+            }
+        }
+        catch (MalformedURLException e) {
+            Log.e(TAG, "Malformed Gasp Server URL", e);
+        } catch (IOException e) {
+            Log.e(TAG, "Error connecting to Gasp Server API", e);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: ", e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
     }
 }
