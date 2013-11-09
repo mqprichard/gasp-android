@@ -34,7 +34,7 @@ public class UserAdapter {
     private final GaspSQLiteHelper dbHelper;
 
     private final String[] allColumns = { GaspSQLiteHelper.USERS_COLUMN_ID,
-                                    GaspSQLiteHelper.USERS_COLUMN_NAME };
+                                          GaspSQLiteHelper.USERS_COLUMN_NAME };
 
     public UserAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);

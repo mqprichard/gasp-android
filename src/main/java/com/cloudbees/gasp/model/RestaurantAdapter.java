@@ -34,9 +34,9 @@ public class RestaurantAdapter {
     private final GaspSQLiteHelper dbHelper;
 
     private final String[] allColumns = { GaspSQLiteHelper.RESTAURANTS_COLUMN_ID,
-                                    GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME,
-                                    GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE,
-                                    GaspSQLiteHelper.RESTAURANTS_COLUMN_ADDRESS};
+                                          GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME,
+                                          GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE,
+                                          GaspSQLiteHelper.RESTAURANTS_COLUMN_PLACESID};
 
     public RestaurantAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
@@ -56,7 +56,7 @@ public class RestaurantAdapter {
             values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_ID, restaurant.getId());
             values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME, restaurant.getName());
             values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_WEBSITE, restaurant.getWebsite());
-            values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_ADDRESS, restaurant.getAddress());
+            values.put(GaspSQLiteHelper.RESTAURANTS_COLUMN_PLACESID, restaurant.getPlacesId());
             long insertId = database.insertOrThrow(GaspSQLiteHelper.RESTAURANTS_TABLE, null, values);
             if (insertId != -1) {
                 Log.d(TAG, "Inserted restaurant with id: " + insertId);
@@ -99,7 +99,7 @@ public class RestaurantAdapter {
         restaurant.setId(cursor.getInt(0));
         restaurant.setName(cursor.getString(1));
         restaurant.setWebsite(cursor.getString(2));
-        restaurant.setAddress(cursor.getString(3));
+        restaurant.setPlacesId(cursor.getString(3));
         return restaurant;
     }
 }

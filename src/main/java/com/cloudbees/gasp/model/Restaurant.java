@@ -20,7 +20,7 @@ public class Restaurant {
     private int id;
     private String name;
     private String website;
-    private String address;
+    private String placesId;
     private String url;
 
     public int getId() {
@@ -48,12 +48,12 @@ public class Restaurant {
         this.website = website;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPlacesId() {
+        return placesId;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPlacesId(String placesId) {
+        this.placesId = placesId;
     }
 
     public String getUrl() {

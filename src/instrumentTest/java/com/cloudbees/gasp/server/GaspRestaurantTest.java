@@ -44,7 +44,7 @@ public class GaspRestaurantTest extends GaspEntityTest {
         try {
             Restaurant restaurant = new Restaurant();
             restaurant.setName("Test Restaurant");
-            restaurant.setAddress("Test Address");
+            restaurant.setPlacesId("1234567890");
             restaurant.setWebsite("www.testrestaurant.com");
 
             final String jsonInput = new Gson().toJson(restaurant, Restaurant.class);

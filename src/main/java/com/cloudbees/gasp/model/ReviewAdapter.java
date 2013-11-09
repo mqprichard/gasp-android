@@ -34,10 +34,10 @@ public class ReviewAdapter {
     private final GaspSQLiteHelper dbHelper;
 
     private final String[] allColumns = { GaspSQLiteHelper.REVIEWS_COLUMN_ID,
-                                    GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID,
-                                    GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID,
-                                    GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT,
-                                    GaspSQLiteHelper.REVIEWS_COLUMN_STAR };
+                                          GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID,
+                                          GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID,
+                                          GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT,
+                                          GaspSQLiteHelper.REVIEWS_COLUMN_STAR };
 
     public ReviewAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);

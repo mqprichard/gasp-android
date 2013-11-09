@@ -26,7 +26,7 @@ public class ModelObjectTest extends TestCase {
     private static final String testComment = "Test Comment";
     private static final String testName = "Test Name";
     private static final String testWebsite = "http://www.restaurant.com/";
-    private static final String testAddress = "1 Main Street USA";
+    private static final String testPlacesId = "1234567890";
 
     protected void setUp() {}
     protected void tearDown() {}
@@ -57,13 +57,13 @@ public class ModelObjectTest extends TestCase {
         restaurant.setId(testId);
         restaurant.setName(testName);
         restaurant.setWebsite(testWebsite);
-        restaurant.setAddress(testAddress);
+        restaurant.setPlacesId(testPlacesId);
 
         assertEquals(restaurant.getId(), testId);
         assertEquals(restaurant.getName(), testName);
         assertEquals(restaurant.getWebsite(), testWebsite);
         assertEquals(restaurant.getUrl(), "/restaurants/" + testId);
-        assertEquals(restaurant.getAddress(), testAddress);
+        assertEquals(restaurant.getPlacesId(), testPlacesId);
         assertEquals(restaurant.toString(), "Restaurant #" + testId + ": "
                                             + testName + " (" + testWebsite + ")");
     }

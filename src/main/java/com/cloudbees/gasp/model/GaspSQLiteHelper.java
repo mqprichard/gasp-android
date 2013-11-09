@@ -36,7 +36,7 @@ class GaspSQLiteHelper extends SQLiteOpenHelper {
     public static final String RESTAURANTS_COLUMN_ID = "id";
     public static final String RESTAURANTS_COLUMN_NAME = "name";
     public static final String RESTAURANTS_COLUMN_WEBSITE = "website";
-    public static final String RESTAURANTS_COLUMN_ADDRESS = "address";
+    public static final String RESTAURANTS_COLUMN_PLACESID = "placesId";
 
     public static final String REVIEWS_TABLE = "reviews";
     public static final String RESTAURANTS_TABLE = "restaurants";
@@ -58,7 +58,7 @@ class GaspSQLiteHelper extends SQLiteOpenHelper {
             RESTAURANTS_TABLE + " (" +
             RESTAURANTS_COLUMN_ID + " integer primary key, " +
             RESTAURANTS_COLUMN_NAME + " string, " +
-            RESTAURANTS_COLUMN_ADDRESS + " string, " +
+            RESTAURANTS_COLUMN_PLACESID + " string, " +
             RESTAURANTS_COLUMN_WEBSITE + " string);";
 
     private static final String CREATE_USERS_TABLE = "create table " +
