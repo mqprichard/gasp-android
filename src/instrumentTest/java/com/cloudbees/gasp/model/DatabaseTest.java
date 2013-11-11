@@ -6,13 +6,13 @@ import java.util.List;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,8 @@ public class DatabaseTest extends AndroidTestCase {
     private static final String testName = "Test Name";
     private static final String testWebsite = "http://www.restaurant.com/";
     private static final String testPlacesId = "1234567890";
+    private static final String testPlacesId2 = "0123456789";
+    private static final String testPlacesId3 = "0000000000";
 
     protected void setUp() {
         ReviewAdapter reviewData = new ReviewAdapter(getContext());
@@ -39,9 +41,8 @@ public class DatabaseTest extends AndroidTestCase {
             for (Review review : reviewList) {
                 reviewData.deleteReview(review);
             }
-        }
-        catch(Exception e){}
-        finally {
+        } catch (Exception e) {
+        } finally {
             reviewData.close();
         }
 
@@ -52,9 +53,8 @@ public class DatabaseTest extends AndroidTestCase {
             for (Restaurant restaurant : restaurantList) {
                 restaurantAdapter.deleteRestaurant(restaurant);
             }
-        }
-        catch (Exception e) {}
-        finally {
+        } catch (Exception e) {
+        } finally {
             restaurantAdapter.close();
         }
 
@@ -65,14 +65,14 @@ public class DatabaseTest extends AndroidTestCase {
             for (User user : userList) {
                 userAdapter.deleteUser(user);
             }
-        }
-        catch (Exception e) {}
-        finally {
+        } catch (Exception e) {
+        } finally {
             userAdapter.close();
         }
     }
 
-    protected void tearDown() {}
+    protected void tearDown() {
+    }
 
     public void testReviewAdapter() {
         ReviewAdapter reviewData = new ReviewAdapter(getContext());
@@ -131,10 +131,16 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(restaurantList.get(0).getPlacesId(), testPlacesId);
 
         restaurant.setId(testId + 1);
+        restaurant.setPlacesId(testPlacesId2);
         restaurantData.insertRestaurant(restaurant);
         restaurantList = restaurantData.getAll();
         assertEquals(restaurantList.size(), 2);
         assertEquals(restaurantList.get(1).getId(), 2);
+
+        Restaurant testResult = restaurantData.findRestaurantByPlacesId(testPlacesId2);
+        assert (testResult.getPlacesId().equals(testPlacesId2));
+
+        assert (restaurantData.findRestaurantByPlacesId(testPlacesId3) == null);
 
         restaurantData.deleteRestaurant(restaurant);
         restaurantList = restaurantData.getAll();

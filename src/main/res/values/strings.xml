@@ -49,6 +49,9 @@
     <string name="places_button_delete_event">Delete Event</string>
     <string name="places_button_locations">Get Locations</string>
     <string name="places_button_locations_next">More Locations</string>
+    <string name="review_button_add">Add a Review</string>
+    <string name="restaurant_button_add">Add Restaurant to Gasp!</string>
+    <string name="restaurant_button_list_reviews">See Gasp! Reviews</string>
     <string name="places_latitude">"Latitude: "</string>
     <string name="places_longitude">"Longitude: "</string>
     <string name="places_google_id">"Google Places Id: "</string>

@@ -82,7 +82,7 @@ public class RestaurantAdapter {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.RESTAURANTS_TABLE,
-                        allColumns, null, null, null, null, null);
+                allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -100,6 +100,27 @@ public class RestaurantAdapter {
         restaurant.setName(cursor.getString(1));
         restaurant.setWebsite(cursor.getString(2));
         restaurant.setPlacesId(cursor.getString(3));
+        return restaurant;
+    }
+
+    public Restaurant findRestaurantByPlacesId(String placesId) {
+        Cursor cursor = null;
+        Restaurant restaurant = null;
+
+        try {
+            cursor = database.query(GaspSQLiteHelper.RESTAURANTS_TABLE, allColumns,
+                    GaspSQLiteHelper.RESTAURANTS_COLUMN_PLACESID + " = ?",
+                    new String[]{placesId}, null, null, null);
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                restaurant = cursorToRestaurant(cursor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+
         return restaurant;
     }
 }

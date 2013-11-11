@@ -1,19 +1,26 @@
 package com.cloudbees.gasp.activity;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.fragment.GaspDatabaseFragment;
 import com.cloudbees.gasp.model.PlaceDetail;
 import com.cloudbees.gasp.model.PlaceEvent;
+import com.cloudbees.gasp.model.Restaurant;
+import com.cloudbees.gasp.model.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -43,6 +50,11 @@ public class PlacesDetailActivity extends Activity {
     private TextView mLongitude;
     private ListView mEventsView;
 
+    private String mPlacesId;
+    private List<Review> mReviews;
+    private boolean mGaspRestaurant = false;
+    private GaspDatabaseFragment mGaspDatabaseFragment;
+
     private ArrayAdapter<String> mEventAdapter;
     private final ArrayList<String> mEventList = new ArrayList<String>();
 
@@ -51,6 +63,39 @@ public class PlacesDetailActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "Selected: Event #" + id);
+            }
+        });
+    }
+
+    private void setButtons() {
+        Button reviewButton = (Button) findViewById(R.id.detail_review_button);
+        Button restaurantButton = (Button) findViewById(R.id.detail_restaurant_button);
+
+        if (mGaspRestaurant) {
+            restaurantButton.setEnabled(false);
+            reviewButton.setEnabled(true);
+        } else {
+            restaurantButton.setEnabled(true);
+            reviewButton.setEnabled(false);
+        }
+    }
+
+    private void addReviewButtonListener() {
+        Button reviewButton = (Button) findViewById(R.id.detail_review_button);
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Add Review");
+            }
+        });
+    }
+
+    private void addRestaurantButtonListener() {
+        Button restaurantButton = (Button) findViewById(R.id.detail_restaurant_button);
+        restaurantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Add Restaurant");
             }
         });
     }
@@ -65,6 +110,14 @@ public class PlacesDetailActivity extends Activity {
         mLatitude = (TextView) findViewById(R.id.detail_latitude);
         mLongitude = (TextView) findViewById(R.id.detail_longitude);
         mEventsView = (ListView) findViewById(R.id.detail_events);
+    }
+
+    private void addFragments() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        mGaspDatabaseFragment = new GaspDatabaseFragment();
+        ft.add(mGaspDatabaseFragment, "Gasp Database Fragment");
+        ft.commit();
     }
 
     private void showLocationDetails(PlaceDetail place) {
@@ -90,9 +143,19 @@ public class PlacesDetailActivity extends Activity {
                 mEventAdapter.add(event.getEvent_id() + ": " + event.getSummary());
             }
         }
+    }
 
-        for (int i = 0 ; i< 30 ; i++ ) {
-            mEventAdapter.add("Event Id: 1234567890");
+    private void getGaspData() {
+        Restaurant restaurant = mGaspDatabaseFragment.getRestaurantByPlacesId(mPlacesId);
+        if (restaurant != null) {
+            Log.d(TAG, "Gasp Restaurant Id: " + restaurant.getId());
+            mGaspRestaurant = true;
+            mReviews = mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId());
+            for (Review review : mReviews) {
+                Log.d(TAG, review.toString());
+            }
+        } else {
+            Log.d(TAG, "Restaurant not found in Gasp database");
         }
     }
 
@@ -102,6 +165,8 @@ public class PlacesDetailActivity extends Activity {
 
         try {
             PlaceDetail place = (PlaceDetail) getIntent().getSerializableExtra("PlaceDetail");
+            mPlacesId = place.getId();
+
             Log.d(TAG, "Name: " + place.getName());
             Log.d(TAG, "Website " + place.getWebsite());
             Log.d(TAG, "Address: " + place.getFormatted_address());
@@ -110,12 +175,23 @@ public class PlacesDetailActivity extends Activity {
             Log.d(TAG, "Lng: " + place.getGeometry().getLocation().getLng());
 
             setViews();
+            addFragments();
             showLocationDetails(place);
             showEventDetails(place);
             addItemClickListener();
+            addReviewButtonListener();
+            addRestaurantButtonListener();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        getGaspData();
+        setButtons();
     }
 }

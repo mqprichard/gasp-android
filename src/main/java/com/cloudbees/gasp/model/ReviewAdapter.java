@@ -33,11 +33,11 @@ public class ReviewAdapter {
     private SQLiteDatabase database;
     private final GaspSQLiteHelper dbHelper;
 
-    private final String[] allColumns = { GaspSQLiteHelper.REVIEWS_COLUMN_ID,
-                                          GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID,
-                                          GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID,
-                                          GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT,
-                                          GaspSQLiteHelper.REVIEWS_COLUMN_STAR };
+    private final String[] allColumns = {GaspSQLiteHelper.REVIEWS_COLUMN_ID,
+            GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID,
+            GaspSQLiteHelper.REVIEWS_COLUMN_USER_ID,
+            GaspSQLiteHelper.REVIEWS_COLUMN_COMMENT,
+            GaspSQLiteHelper.REVIEWS_COLUMN_STAR};
 
     public ReviewAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
@@ -65,9 +65,9 @@ public class ReviewAdapter {
             } else {
                 Log.e(TAG, "Error inserting review with id: " + review.getId());
             }
-        } catch (SQLiteConstraintException e){
+        } catch (SQLiteConstraintException e) {
             throw e;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -80,19 +80,36 @@ public class ReviewAdapter {
     }
 
     public List<Review> getAll() {
-        List<Review> Reviews = new ArrayList<Review>();
+        List<Review> reviews = new ArrayList<Review>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE,
-                        allColumns, null, null, null, null, null);
+                allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Review review = cursorToReview(cursor);
-            Reviews.add(review);
+            reviews.add(review);
             cursor.moveToNext();
         }
         cursor.close();
-        return Reviews;
+        return reviews;
+    }
+
+    public List<Review> getAllByRestaurant(int id) {
+        List<Review> reviews = new ArrayList<Review>();
+
+        Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE, allColumns,
+                GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Review review = cursorToReview(cursor);
+            reviews.add(review);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return reviews;
     }
 
     private Review cursorToReview(Cursor cursor) {

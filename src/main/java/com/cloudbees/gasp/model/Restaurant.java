@@ -65,8 +65,8 @@ public class Restaurant {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Restaurant #" + this.getId() + ": "
-                + this.getName() + " (" + this.getWebsite() + ")";
+                + this.getName() + " (" + this.getPlacesId() + ")";
     }
 }
