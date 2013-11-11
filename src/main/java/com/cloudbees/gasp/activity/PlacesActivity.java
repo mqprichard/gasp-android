@@ -224,6 +224,7 @@ public class PlacesActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        token = "";
     }
 
     @Override

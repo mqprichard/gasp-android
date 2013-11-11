@@ -53,20 +53,34 @@ public class PlacesDetailActivity extends Activity {
     private TextView mId;
     private TextView mLatitude;
     private TextView mLongitude;
-    private ListView mEventsView;
 
+    // Google Places API events for this location
+    private ListView mEventsView;
+    private ArrayAdapter<String> mEventAdapter;
+    private final ArrayList<String> mEventList = new ArrayList<String>();
+
+    // Gasp reviews for this location
+    private ListView mReviewsView;
+    private ArrayAdapter<String> mReviewAdapter;
+    private final ArrayList<String> mReviewList = new ArrayList<String>();
+
+    // Google Places API and Gasp Server Ids for this location
     private String mPlacesId;
+    private int mRestaurantId;
+
+    // Google Places API details
     private PlaceDetail mPlaceDetail;
-    private List<Review> mReviews;
+
+    //private List<Review> mReviews;
+
+    // Is restaurant in Gasp server database?
     private boolean mGaspRestaurant = false;
+
+    // Frgaments for calling Gasp server API
     private GaspDatabaseFragment mGaspDatabaseFragment;
     private GaspRestaurantFragment mGaspRestaurantFragment;
     private GaspReviewFragment mGaspReviewFragment;
-    private static String SERVER_URL;
-    private Restaurant mRestaurant;
 
-    private ArrayAdapter<String> mEventAdapter;
-    private final ArrayList<String> mEventList = new ArrayList<String>();
 
     private void addItemClickListener() {
         mEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,31 +104,49 @@ public class PlacesDetailActivity extends Activity {
         }
     }
 
+    private void addGaspReview() {
+        try {
+            SharedPreferences gaspSharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            URL gaspUrl = new URL(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
+
+            Review review = new Review();
+            review.setStar(5);
+            review.setComment("Very good");
+            review.setRestaurant_id(mRestaurantId);
+            review.setUser_id(1);
+
+            mGaspReviewFragment.addReview(review, gaspUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void addReviewButtonListener() {
         Button reviewButton = (Button) findViewById(R.id.detail_review_button);
         reviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    SharedPreferences gaspSharedPreferences =
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    URL gaspUrl = new URL(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
-
-                    Review review = new Review();
-                    review.setStar(5);
-                    review.setComment("Very good");
-                    review.setRestaurant_id(mRestaurant.getId());
-                    review.setUser_id(1);
-
-                    mGaspReviewFragment.addReview(review, gaspUrl);
-
-                    mGaspRestaurant = true;
-                    setButtons();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                addGaspReview();
             }
         });
+    }
+
+    private void addGaspRestaurant() {
+        try {
+            SharedPreferences gaspSharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            URL gaspUrl = new URL(gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
+
+            Restaurant restaurant = new Restaurant();
+            restaurant.setName(mPlaceDetail.getName());
+            restaurant.setPlacesId(mPlaceDetail.getId());
+            restaurant.setWebsite(mPlaceDetail.getWebsite());
+
+            mGaspRestaurantFragment.addRestaurant(restaurant, gaspUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addRestaurantButtonListener() {
@@ -122,23 +154,7 @@ public class PlacesDetailActivity extends Activity {
         restaurantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    SharedPreferences gaspSharedPreferences =
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    URL gaspUrl = new URL(gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
-
-                    Restaurant restaurant = new Restaurant();
-                    restaurant.setName(mPlaceDetail.getName());
-                    restaurant.setPlacesId(mPlaceDetail.getId());
-                    restaurant.setWebsite(mPlaceDetail.getWebsite());
-
-                    mGaspRestaurantFragment.addRestaurant(restaurant, gaspUrl);
-
-                    mGaspRestaurant = true;
-                    setButtons();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                addGaspRestaurant();
             }
         });
     }
@@ -153,16 +169,22 @@ public class PlacesDetailActivity extends Activity {
         mLatitude = (TextView) findViewById(R.id.detail_latitude);
         mLongitude = (TextView) findViewById(R.id.detail_longitude);
         mEventsView = (ListView) findViewById(R.id.detail_events);
+        mReviewsView = (ListView) findViewById(R.id.detail_reviews);
     }
 
-    private void addFragments() {
+    private void addGaspFragments() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+
         mGaspDatabaseFragment = new GaspDatabaseFragment();
+
         mGaspRestaurantFragment = new GaspRestaurantFragment() {
             @Override
             public void onSuccess(String location) {
-                Log.d(TAG, "Gasp! restaurant added");
+                Log.d(TAG, "Gasp! restaurant added: " + location);
+                mRestaurantId = Integer.valueOf(location.substring(location.lastIndexOf("/") + 1));
+                mGaspRestaurant = true;
+                setButtons();
             }
 
             @Override
@@ -170,10 +192,11 @@ public class PlacesDetailActivity extends Activity {
                 Log.e(TAG, "Error adding Gasp! review");
             }
         };
+
         mGaspReviewFragment = new GaspReviewFragment() {
             @Override
             public void onSuccess(String location) {
-                Log.d(TAG, "Gasp! review added");
+                Log.d(TAG, "Gasp! review added: " + location);
             }
 
             @Override
@@ -181,9 +204,11 @@ public class PlacesDetailActivity extends Activity {
                 Log.e(TAG, "Eror adding Gasp! review");
             }
         };
+
         ft.add(mGaspDatabaseFragment, "Gasp Database Fragment");
         ft.add(mGaspRestaurantFragment, "Gasp Restaurant Fragment");
         ft.add(mGaspReviewFragment, "Gasp Review Fragment");
+
         ft.commit();
     }
 
@@ -212,16 +237,22 @@ public class PlacesDetailActivity extends Activity {
         }
     }
 
+    private void showReviewDetails(List<Review> reviews) {
+        mReviewAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mReviewList);
+        mReviewsView.setAdapter(mReviewAdapter);
+        for (Review review : reviews) {
+            mReviewAdapter.add(review.toString());
+        }
+    }
+
     private void getGaspData() {
         Restaurant restaurant = mGaspDatabaseFragment.getRestaurantByPlacesId(mPlacesId);
         if (restaurant != null) {
             Log.d(TAG, "Gasp Restaurant Id: " + restaurant.getId());
             mGaspRestaurant = true;
-            mRestaurant = restaurant;
-            mReviews = mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId());
-            for (Review review : mReviews) {
-                Log.d(TAG, review.toString());
-            }
+            mRestaurantId = restaurant.getId();
+            //mReviews = mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId());
+            showReviewDetails(mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId()));
         } else {
             Log.d(TAG, "Restaurant not found in Gasp database");
         }
@@ -243,7 +274,7 @@ public class PlacesDetailActivity extends Activity {
             Log.d(TAG, "Lng: " + mPlaceDetail.getGeometry().getLocation().getLng());
 
             setViews();
-            addFragments();
+            addGaspFragments();
             showLocationDetails(mPlaceDetail);
             showEventDetails(mPlaceDetail);
             addItemClickListener();

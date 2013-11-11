@@ -26,12 +26,14 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.UserUpdateService;
-import com.cloudbees.gasp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.util.Calendar;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -62,22 +64,27 @@ public class GCMIntentService extends IntentService {
 
                     int index = Integer.valueOf(extras.getString("id"));
                     String table = extras.getString("table");
+                    String notificationMessage = "";
 
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
                                 .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                            notificationMessage = "There's a new Gasp! review - check it out!";
                         }
                         else if (table.matches("restaurants")) {
                             startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
                                 .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                            notificationMessage = "There's a new restaurant on Gasp!";
+
                         }
                         else if (table.matches("users")) {
                             startService(new Intent(getApplicationContext(), UserUpdateService.class)
                                 .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                            notificationMessage = "There's a new reviewer on Gasp!";
                         }
                         // Send notification message for message bar display etc
-                        sendNotification("New " + table + ": " + index);
+                        sendNotification(notificationMessage);
                     }
                     else {
                         Log.e(TAG, "Error: table not specified");
@@ -96,6 +103,8 @@ public class GCMIntentService extends IntentService {
      * @param msg Notification message
      */
     private void sendNotification(String msg) {
+        long timeNow = Calendar.getInstance().getTimeInMillis();
+
         NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -106,12 +115,12 @@ public class GCMIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_gcm)
-                        .setContentTitle("New Gasp! Update")
+                        .setContentTitle("Gasp! Update")
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify((int) timeNow, mBuilder.build());
     }
 
 
