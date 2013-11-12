@@ -67,17 +67,20 @@ public class TwitterServiceTest extends ServiceTestCase<RESTIntentService> {
             intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, new ResultReceiver(new Handler()) {
                 @Override
                 protected void onReceiveResult(int resultCode, Bundle resultData) {
-                    if (resultData != null && resultData.containsKey(RESTIntentService.REST_RESULT)) {
-                        assert (true);
-                        assertFalse(resultData.getString(RESTIntentService.REST_RESULT).isEmpty());
-                        // Test TwitterTokenType model class
-                        TwitterTokenResponse twitterToken =
-                                new Gson().fromJson(resultData.getString(RESTIntentService.REST_RESULT),
-                                        TwitterTokenResponse.class);
-                        assertTrue(twitterToken.getToken_type().matches("bearer"));
-                        assertFalse(twitterToken.getAccess_token().isEmpty());
-                    } else {
-                        assert (false);
+                    try {
+                        if (resultData != null && resultData.containsKey(RESTIntentService.REST_RESULT)) {
+                            assertFalse(resultData.getString(RESTIntentService.REST_RESULT).isEmpty());
+                            // Test TwitterTokenType model class
+                            TwitterTokenResponse twitterToken =
+                                    new Gson().fromJson(resultData.getString(RESTIntentService.REST_RESULT),
+                                            TwitterTokenResponse.class);
+                            assertTrue(twitterToken.getToken_type().matches("bearer"));
+                            assertFalse(twitterToken.getAccess_token().isEmpty());
+                        } else {
+                            fail();
+                        }
+                    } catch (NullPointerException npe) {
+                        fail();
                     }
                 }
             });
@@ -102,17 +105,20 @@ public class TwitterServiceTest extends ServiceTestCase<RESTIntentService> {
             intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, new ResultReceiver(new Handler()) {
                 @Override
                 protected void onReceiveResult(int resultCode, Bundle resultData) {
-                    if (resultData != null && resultData.containsKey(RESTIntentService.REST_RESULT)) {
-                        assert (true);
-                        assertFalse(resultData.getString(RESTIntentService.REST_RESULT).isEmpty());
-                        // Test TwitterStatuses model classes
-                        TwitterStatuses twitterStatuses =
-                                new Gson().fromJson(resultData.getString(RESTIntentService.REST_RESULT),
-                                        TwitterStatuses.class);
-                        assertNotNull(twitterStatuses);
-                        assertTrue(twitterStatuses.getStatuses().length == 10);
-                    } else {
-                        assert (false);
+                    try {
+                        if (resultData != null && resultData.containsKey(RESTIntentService.REST_RESULT)) {
+                            assertFalse(resultData.getString(RESTIntentService.REST_RESULT).isEmpty());
+                            // Test TwitterStatuses model classes
+                            TwitterStatuses twitterStatuses =
+                                    new Gson().fromJson(resultData.getString(RESTIntentService.REST_RESULT),
+                                            TwitterStatuses.class);
+                            assertNotNull(twitterStatuses);
+                            assertTrue(twitterStatuses.getStatuses().length == 10);
+                        } else {
+                            fail();
+                        }
+                    } catch (NullPointerException npe) {
+                        fail();
                     }
                 }
             });
