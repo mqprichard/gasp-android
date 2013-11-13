@@ -72,15 +72,16 @@ public class PlacesActivity extends Activity {
 
     private void checkToken(Places places) {
         try {
+            Button placesButton = (Button) findViewById(R.id.places_button);
             if (places.getNext_page_token() == null) {
                 token = "";
                 Log.d(TAG, "No page token returned from Places API");
-                Button placesButton = (Button) findViewById(R.id.places_button);
                 placesButton.setEnabled(false);
             } else {
                 token = places.getNext_page_token();
                 Log.d(TAG, "Next page token: " + token);
                 setButtonText(R.string.places_button_locations_next);
+                placesButton.setEnabled(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,8 +97,6 @@ public class PlacesActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void addPlacesFragments() {
@@ -214,6 +213,7 @@ public class PlacesActivity extends Activity {
             addListViewAdapter();
             addButtonListener();
             addItemClickListener();
+            getLocations();
         } catch (Exception e) {
             e.printStackTrace();
         }

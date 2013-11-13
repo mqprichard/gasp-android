@@ -19,7 +19,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/places_button_locations"
+        android:text="@string/places_button_locations_next"
+        android:enabled="false"
         android:id="@+id/places_button"/>
 
 </LinearLayout>
