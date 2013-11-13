@@ -6,6 +6,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -235,5 +238,38 @@ public class PlacesActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu_short, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //final String regId;
+
+        switch (item.getItemId()) {
+            case R.id.gasp_settings:
+                Intent intent = new Intent();
+                intent.setClass(this, SetPreferencesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.gasp_menu_twitter:
+                intent = new Intent();
+                intent.setClass(this, TwitterStreamActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.options_exit:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

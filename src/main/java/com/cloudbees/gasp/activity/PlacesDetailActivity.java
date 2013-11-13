@@ -3,10 +3,14 @@ package com.cloudbees.gasp.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -292,5 +296,44 @@ public class PlacesDetailActivity extends Activity {
 
         getGaspData();
         setButtons();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu_short, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //final String regId;
+
+        switch (item.getItemId()) {
+            case R.id.gasp_settings:
+                Intent intent = new Intent();
+                intent.setClass(this, SetPreferencesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.gasp_menu_twitter:
+                intent = new Intent();
+                intent.setClass(this, TwitterStreamActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.gasp_menu_places:
+                intent = new Intent();
+                intent.setClass(this, PlacesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.options_exit:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

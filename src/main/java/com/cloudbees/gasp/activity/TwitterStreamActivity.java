@@ -20,7 +20,11 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.R;
@@ -82,4 +86,36 @@ public class TwitterStreamActivity extends Activity {
         return mAdapter;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu_short, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //final String regId;
+
+        switch (item.getItemId()) {
+            case R.id.gasp_menu_twitter:
+                Intent intent = new Intent();
+                intent.setClass(this, TwitterStreamActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.gasp_menu_places:
+                intent = new Intent();
+                intent.setClass(this, PlacesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            case R.id.options_exit:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
