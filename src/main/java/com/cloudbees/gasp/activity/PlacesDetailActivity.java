@@ -228,7 +228,7 @@ public class PlacesDetailActivity extends Activity {
                 + place.getGeometry().getLocation().getLng().toString());
     }
 
-    private void showEventDetails (PlaceDetail place) {
+    private void showEventDetails(PlaceDetail place) {
         mEventAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mEventList);
         mEventsView.setAdapter(mEventAdapter);
 
@@ -284,8 +284,7 @@ public class PlacesDetailActivity extends Activity {
             addItemClickListener();
             addReviewButtonListener();
             addRestaurantButtonListener();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -307,7 +306,6 @@ public class PlacesDetailActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //final String regId;
 
         switch (item.getItemId()) {
             case R.id.gasp_settings:

@@ -75,16 +75,14 @@ public class PlacesActivity extends Activity {
             if (places.getNext_page_token() == null) {
                 token = "";
                 Log.d(TAG, "No page token returned from Places API");
-                Button placesButton = (Button)findViewById(R.id.places_button);
+                Button placesButton = (Button) findViewById(R.id.places_button);
                 placesButton.setEnabled(false);
-            }
-            else {
+            } else {
                 token = places.getNext_page_token();
                 Log.d(TAG, "Next page token: " + token);
                 setButtonText(R.string.places_button_locations_next);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -95,8 +93,7 @@ public class PlacesActivity extends Activity {
             intent.setClass(PlacesActivity.this, PlacesDetailActivity.class);
             intent.putExtra("PlaceDetail", placeDetails.getResult());
             startActivityForResult(intent, 0);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -109,8 +106,9 @@ public class PlacesActivity extends Activity {
                 showLocations(places);
                 checkToken(places);
             }
+
             public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status );
+                Log.e(TAG, "Google Places API search failed: status = " + status);
             }
         };
 
@@ -122,7 +120,7 @@ public class PlacesActivity extends Activity {
 
             @Override
             public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status );
+                Log.e(TAG, "Google Places API search failed: status = " + status);
             }
         };
 
@@ -146,7 +144,7 @@ public class PlacesActivity extends Activity {
 
             @Override
             public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status );
+                Log.e(TAG, "Google Places API search failed: status = " + status);
             }
         };
 
@@ -161,16 +159,15 @@ public class PlacesActivity extends Activity {
 
     private void getLocations() {
         try {
-            Query query = new Query (lat, lng, radius, token);
+            Query query = new Query(lat, lng, radius, token);
             mSearchFragment.nearbySearch(query);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void addButtonListener() {
-        Button placesButton = (Button)findViewById(R.id.places_button);
+        Button placesButton = (Button) findViewById(R.id.places_button);
         placesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,8 +182,7 @@ public class PlacesActivity extends Activity {
             mListView = (ListView) findViewById(R.id.places_listView);
             mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mList);
             mListView.setAdapter(mAdapter);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -196,16 +192,16 @@ public class PlacesActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "Clicked: item #" + id + ", "
-                            + mList.get((int) id) + " ["
-                            + mReferenceList.get((int)id) + "]");
-                Query query = new Query(mReferenceList.get((int)id));
+                        + mList.get((int) id) + " ["
+                        + mReferenceList.get((int) id) + "]");
+                Query query = new Query(mReferenceList.get((int) id));
                 mDetailsFragment.placeDetails(query);
             }
         });
     }
 
     private void setButtonText(int resId) {
-        Button placesButton = (Button)findViewById(R.id.places_button);
+        Button placesButton = (Button) findViewById(R.id.places_button);
         placesButton.setText(resId);
     }
 
@@ -218,8 +214,7 @@ public class PlacesActivity extends Activity {
             addListViewAdapter();
             addButtonListener();
             addItemClickListener();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -249,7 +244,6 @@ public class PlacesActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //final String regId;
 
         switch (item.getItemId()) {
             case R.id.gasp_settings:

@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
 
     // Base URL of the Gasp! GCM Push Server
     private static String SERVER_URL;
+
     public static String getSERVER_URL() {
         return SERVER_URL;
     }
@@ -96,7 +97,7 @@ public class MainActivity extends Activity {
      * {@code SharedPreferences}.
      *
      * @param context application's context.
-     * @param regId registration ID
+     * @param regId   registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
         final SharedPreferences prefs = getGcmPreferences(context);
@@ -113,7 +114,7 @@ public class MainActivity extends Activity {
      * If result is empty, the app needs to register.
      *
      * @return registration ID, or empty string if there is no existing
-     *         registration ID.
+     * registration ID.
      */
     private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGcmPreferences(context);
@@ -176,7 +177,7 @@ public class MainActivity extends Activity {
 
     /**
      * Registers the application with GCM/Gasp Push Notification Server.
-     * <p>
+     * <p/>
      * Stores the registration ID and the app versionCode in the application's
      * shared preferences. Use when first registering with GCM/Gasp Push Server.
      */
@@ -195,7 +196,8 @@ public class MainActivity extends Activity {
 
                     // Register with Gasp GCM Push Notification Server
                     boolean registered = GCMRegistration.register(context, regId);
-                    if (registered) Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
+                    if (registered)
+                        Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
                     else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
 
                     // Persist the regID - no need to register again.
@@ -222,8 +224,8 @@ public class MainActivity extends Activity {
      * Assumes Registration ID is already set, does not register Device with GCM
      */
     private void doUnregisterGasp() {
-        if (! (regId = getRegistrationId(context)).isEmpty()) {
-            try{
+        if (!(regId = getRegistrationId(context)).isEmpty()) {
+            try {
                 new AsyncTask<Void, Void, String>() {
                     @Override
                     protected String doInBackground(Void... params) {
@@ -241,12 +243,10 @@ public class MainActivity extends Activity {
                         mDisplay.append(msg + "\n");
                     }
                 }.execute(null, null, null);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             Log.e(TAG, "Registration Id not found");
         }
     }
@@ -257,7 +257,7 @@ public class MainActivity extends Activity {
      */
     private void doRegisterGasp() {
         try {
-            if (! (regId = getRegistrationId(context)).isEmpty()) {
+            if (!(regId = getRegistrationId(context)).isEmpty()) {
                 new AsyncTask<Void, Void, String>() {
                     @Override
                     protected String doInBackground(Void... params) {
@@ -276,12 +276,10 @@ public class MainActivity extends Activity {
                     }
                 }.execute(null, null, null);
 
-            }
-            else {
+            } else {
                 Log.e(TAG, "Registration Id not found");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -310,6 +308,7 @@ public class MainActivity extends Activity {
         public static final String PARAM_ID = "id";
         public static final String ACTION_RESP =
                 "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
+
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra(PARAM_OUT_MSG);
@@ -393,9 +392,8 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //final String regId;
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             // (Re-)register with Gasp GCM  Server
             case R.id.options_register:
                 doRegisterGasp();

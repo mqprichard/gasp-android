@@ -71,7 +71,6 @@ public class ReviewListActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //final String regId;
 
         switch (item.getItemId()) {
             case R.id.gasp_settings:

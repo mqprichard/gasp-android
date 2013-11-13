@@ -52,23 +52,23 @@ public class TwitterStreamActivity extends Activity {
     }
 
     private ArrayAdapter<String> mAdapter;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gasp_twitter_layout);
-        
+
         mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout);
-        
-        FragmentManager     fm = getFragmentManager();
+
+        FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        
+
         ListFragment list = new ListFragment();
         ft.add(R.id.fragment_content, list);
-        
+
         // Let's set our list adapter to a simple ArrayAdapter.
         list.setListAdapter(mAdapter);
-        
+
         // RESTResponderFragments call setRetainedInstance(true) in their onCreate() method. So that means
         // we need to check if our FragmentManager is already storing an instance of the responder.
         TwitterResponderFragment responder =
@@ -95,7 +95,6 @@ public class TwitterStreamActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //final String regId;
 
         switch (item.getItemId()) {
             case R.id.gasp_menu_twitter:
