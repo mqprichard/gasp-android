@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gasp_review_stars">
+        <item>1 Star</item>
+        <item>2 Stars</item>
+        <item>3 Stars</item>
+        <item>4 Stars</item>
+        <item>5 Stars</item>
+    </string-array>
+</resources>
