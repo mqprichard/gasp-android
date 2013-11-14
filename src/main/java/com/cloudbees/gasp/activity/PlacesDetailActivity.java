@@ -157,6 +157,7 @@ public class PlacesDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 addGaspRestaurant();
+                finish();
             }
         });
     }
