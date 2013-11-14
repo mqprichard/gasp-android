@@ -129,6 +129,7 @@ public class PlacesDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 addGaspReview();
+                finish();
             }
         });
     }
@@ -178,7 +179,6 @@ public class PlacesDetailActivity extends Activity {
         FragmentTransaction ft = fm.beginTransaction();
 
         mGaspDatabaseFragment = new GaspDatabaseFragment();
-
         mGaspRestaurantFragment = new GaspRestaurantFragment() {
             @Override
             public void onSuccess(String location) {
@@ -193,7 +193,6 @@ public class PlacesDetailActivity extends Activity {
                 Log.e(TAG, "Error adding Gasp! review");
             }
         };
-
         mGaspReviewFragment = new GaspReviewFragment() {
             @Override
             public void onSuccess(String location) {
