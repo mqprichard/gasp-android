@@ -140,6 +140,7 @@ public class ReviewActivity extends Activity {
             public void onClick(View v) {
                 try {
                     addGaspReview(getStars(), getComment(), mGaspRestaurantId);
+                    finish();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
