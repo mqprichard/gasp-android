@@ -65,24 +65,51 @@
         <!-- Gasp! preferences activity -->
         <activity
             android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
-            android:label="@string/gasp_preferences" />
+            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity"
+            android:label="@string/gasp_preferences">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.MainActivity" />
+        </activity>
 
         <!-- Gasp! Twitter stream activity -->
         <activity
-            android:name=".activity.TwitterStreamActivity"
-            android:label="@string/gasp_twitter" />
+            android:name="com.cloudbees.gasp.activity.TwitterStreamActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity"
+            android:label="@string/gasp_twitter">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.MainActivity" />
+        </activity>
 
         <!-- Gasp! REST data services -->
-        <service android:name=".service.RESTIntentService" />
+        <service android:name="com.cloudbees.gasp.service.RESTIntentService" />
 
         <!-- Gasp! add review activity -->
         <activity
             android:name=".activity.ReviewActivity"
-            android:label="@string/gasp_add_review" />
+            android:parentActivityName="com.cloudbees.gasp.activity.PlacesActivity"
+            android:label="@string/gasp_add_review">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.PlacesActivity" />
+        </activity>
 
         <!-- Gasp! Google Places API activity -->
-        <activity android:name="com.cloudbees.gasp.activity.PlacesActivity" />
-        <activity android:name="com.cloudbees.gasp.activity.PlacesDetailActivity" />
+        <activity
+            android:name="com.cloudbees.gasp.activity.PlacesActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.cloudbees.gasp.activity.PlacesDetailActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.PlacesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.PlacesActivity" />
+        </activity>
 
         <!-- Gasp! database activities -->
         <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity" />

@@ -22,6 +22,7 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,7 +57,9 @@ public class TwitterStreamActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.gasp_twitter_layout);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout);
 
@@ -97,14 +100,13 @@ public class TwitterStreamActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.gasp_menu_twitter:
-                Intent intent = new Intent();
-                intent.setClass(this, TwitterStreamActivity.class);
-                startActivityForResult(intent, 0);
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
 
             case R.id.gasp_menu_places:
-                intent = new Intent();
+                Intent intent = new Intent();
                 intent.setClass(this, PlacesActivity.class);
                 startActivityForResult(intent, 0);
                 return true;

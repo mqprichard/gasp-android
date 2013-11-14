@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -261,6 +262,8 @@ public class PlacesDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         try {
             mPlaceDetail = (PlaceDetail) getIntent().getSerializableExtra(PLACES_DETAIL_SERIALIZED);
             mPlacesReference = getIntent().getStringExtra(PLACES_DETAIL_REFERENCE);
@@ -296,6 +299,11 @@ public class PlacesDetailActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+
             case R.id.gasp_settings:
                 Intent intent = new Intent();
                 intent.setClass(this, SetPreferencesActivity.class);
