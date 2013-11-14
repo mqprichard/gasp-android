@@ -37,7 +37,7 @@ public class GooglePlacesClient {
     public static final String TYPE_EVENT_ADD = "/event/add";
     public static final String TYPE_EVENT_DELETE = "/event/delete";
     public static final String OUT_JSON = "/json";
-    public static final String API_KEY = "AIzaSyD8RPFcX_YY3-M21yGGaww2_NBPLHsjU5o";
+
 
     private static final String keywords = "Restaurant|food|cafe";
     private static final String encoding = "utf8";
@@ -49,7 +49,7 @@ public class GooglePlacesClient {
                     + GooglePlacesClient.TYPE_NEARBY
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
-                    + "&key=" + GooglePlacesClient.API_KEY
+                    + "&key=" + GooglePlacesKey.API_KEY
                     + "&location=" + String.valueOf(query.getLat()) + "," + String.valueOf(query.getLng())
                     + "&radius=" + String.valueOf(query.getRadius())
                     + "&types=" + keywords;
@@ -69,7 +69,7 @@ public class GooglePlacesClient {
                     + GooglePlacesClient.TYPE_DETAILS
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
-                    + "&key=" + GooglePlacesClient.API_KEY
+                    + "&key=" + GooglePlacesKey.API_KEY
                     + "&reference=" + URLEncoder.encode(reference, encoding);
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +84,7 @@ public class GooglePlacesClient {
                     + GooglePlacesClient.TYPE_EVENT_ADD
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
-                    + "&key=" + GooglePlacesClient.API_KEY;
+                    + "&key=" + GooglePlacesKey.API_KEY;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,7 +98,7 @@ public class GooglePlacesClient {
                     + GooglePlacesClient.TYPE_EVENT_DELETE
                     + GooglePlacesClient.OUT_JSON
                     + "?sensor=false"
-                    + "&key=" + GooglePlacesClient.API_KEY;
+                    + "&key=" + GooglePlacesKey.API_KEY;
         } catch (Exception e) {
             e.printStackTrace();
         }

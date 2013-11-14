@@ -37,6 +37,7 @@ import android.widget.TextView;
 
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.fragment.TwitterAuthenticationFragment;
+import com.cloudbees.gasp.gcm.GCMProjectKey;
 import com.cloudbees.gasp.gcm.GCMRegistration;
 import com.cloudbees.gasp.service.RestaurantSyncService;
 import com.cloudbees.gasp.service.ReviewSyncService;
@@ -56,9 +57,6 @@ public class MainActivity extends Activity {
     public static String getSERVER_URL() {
         return SERVER_URL;
     }
-
-    // Google API project id registered to use GCM.
-    private static final String SENDER_ID = "960428562804";
 
     // Constants used for GCM Registration
     private static final String PROPERTY_REG_ID = "registration_id";
@@ -191,7 +189,7 @@ public class MainActivity extends Activity {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
-                    regId = gcm.register(SENDER_ID);
+                    regId = gcm.register(GCMProjectKey.SENDER_ID);
                     msg = "Device registered: " + regId;
 
                     // Register with Gasp GCM Push Notification Server

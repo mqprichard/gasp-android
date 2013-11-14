@@ -41,7 +41,7 @@ import java.util.Calendar;
 public class GCMIntentService extends IntentService {
     private static final String TAG = "GCMIntentService";
 
-    public static final int NOTIFICATION_ID = 1;
+    //public static final int NOTIFICATION_ID = 1;
 
     public GCMIntentService() {
         super(TAG);
@@ -69,24 +69,21 @@ public class GCMIntentService extends IntentService {
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
-                                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
                             notificationMessage = "There's a new Gasp! review - check it out!";
-                        }
-                        else if (table.matches("restaurants")) {
+                        } else if (table.matches("restaurants")) {
                             startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
-                                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
                             notificationMessage = "There's a new restaurant on Gasp!";
 
-                        }
-                        else if (table.matches("users")) {
+                        } else if (table.matches("users")) {
                             startService(new Intent(getApplicationContext(), UserUpdateService.class)
-                                .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
                             notificationMessage = "There's a new reviewer on Gasp!";
                         }
                         // Send notification message for message bar display etc
                         sendNotification(notificationMessage);
-                    }
-                    else {
+                    } else {
                         Log.e(TAG, "Error: table not specified");
                     }
                     // Release the wake lock provided by the WakefulBroadcastReceiver.
@@ -100,6 +97,7 @@ public class GCMIntentService extends IntentService {
 
     /**
      * Send a notification message that a new update has been received
+     *
      * @param msg Notification message
      */
     private void sendNotification(String msg) {
