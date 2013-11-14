@@ -52,7 +52,7 @@
         android:allowBackup="true">
         <activity
             android:name="com.cloudbees.gasp.activity.MainActivity"
-            android:label="@string/app_name"
+            android:label="@string/gasp_console"
             android:screenOrientation="portrait"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleTop">
@@ -65,20 +65,23 @@
         <!-- Gasp! preferences activity -->
         <activity
             android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
-            android:label="@string/gasp_preferences"></activity>
+            android:label="@string/gasp_preferences" />
 
         <!-- Gasp! Twitter stream activity -->
         <activity
             android:name=".activity.TwitterStreamActivity"
-            android:label="@string/gasp_twitter"></activity>
+            android:label="@string/gasp_twitter" />
 
         <!-- Gasp! REST data services -->
         <service android:name=".service.RESTIntentService" />
 
-        <!-- Gasp! Google Places API activity -->
+        <!-- Gasp! add review activity -->
         <activity
-            android:name="com.cloudbees.gasp.activity.PlacesActivity"
-            android:launchMode="singleTop" />
+            android:name=".activity.ReviewActivity"
+            android:label="@string/gasp_add_review" />
+
+        <!-- Gasp! Google Places API activity -->
+        <activity android:name="com.cloudbees.gasp.activity.PlacesActivity" />
         <activity android:name="com.cloudbees.gasp.activity.PlacesDetailActivity" />
 
         <!-- Gasp! database activities -->

@@ -51,6 +51,7 @@ public class PlacesActivity extends Activity {
     private ListView mListView;
     private final ArrayList<String> mList = new ArrayList<String>();
     private final ArrayList<String> mReferenceList = new ArrayList<String>();
+    private String mReference;
 
     private NearbySearchFragment mSearchFragment;
     private PlaceDetailsFragment mDetailsFragment;
@@ -92,7 +93,8 @@ public class PlacesActivity extends Activity {
         try {
             Intent intent = new Intent();
             intent.setClass(PlacesActivity.this, PlacesDetailActivity.class);
-            intent.putExtra("PlaceDetail", placeDetails.getResult());
+            intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_SERIALIZED, placeDetails.getResult());
+            intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_REFERENCE, mReference);
             startActivityForResult(intent, 0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,6 +195,7 @@ public class PlacesActivity extends Activity {
                 Log.d(TAG, "Clicked: item #" + id + ", "
                         + mList.get((int) id) + " ["
                         + mReferenceList.get((int) id) + "]");
+                mReference = mReferenceList.get((int) id);
                 Query query = new Query(mReferenceList.get((int) id));
                 mDetailsFragment.placeDetails(query);
             }

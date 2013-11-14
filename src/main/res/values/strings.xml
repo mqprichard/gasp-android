@@ -41,9 +41,11 @@
     <string name="gasp_twitter_auth_error">Unable to get Twitter authorization token</string>
     <string name="gasp_settings">Gasp! Settings</string>
     <string name="gasp_reviews_data">Gasp! Reviews</string>
+    <string name="gasp_review_comment_hint">Please enter your review</string>
     <string name="gasp_restaurants_data">Gasp! Restaurants</string>
     <string name="gasp_users_data">Gasp! Users</string>
     <string name="gasp_preferences">Gasp! Preferences</string>
+    <string name="gasp_add_review">Add a Review</string>
     <string name="places_button_details">Get Location Details</string>
     <string name="places_button_add_event">Add Event</string>
     <string name="places_button_delete_event">Delete Event</string>

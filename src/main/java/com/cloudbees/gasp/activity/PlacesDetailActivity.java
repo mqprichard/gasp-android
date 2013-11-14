@@ -50,6 +50,10 @@ import java.util.List;
 public class PlacesDetailActivity extends Activity {
     private final static String TAG = PlacesDetailActivity.class.getName();
 
+    public static final String PLACES_DETAIL_SERIALIZED = "PlacesDetail";
+    public static final String PLACES_DETAIL_REFERENCE = "Reference";
+
+    // Layout views
     private TextView mName;
     private TextView mWebsite;
     private TextView mAddress;
@@ -68,19 +72,16 @@ public class PlacesDetailActivity extends Activity {
     private ArrayAdapter<String> mReviewAdapter;
     private final ArrayList<String> mReviewList = new ArrayList<String>();
 
-    // Google Places API and Gasp Server Ids for this location
-    private String mPlacesId;
-    private int mRestaurantId;
+    private int mGaspRestaurantId;      // The Gasp restaurant id
+    private String mPlacesReference;    // The Google Places reference
 
     // Google Places API details
     private PlaceDetail mPlaceDetail;
 
-    //private List<Review> mReviews;
-
     // Is restaurant in Gasp server database?
     private boolean mGaspRestaurant = false;
 
-    // Frgaments for calling Gasp server API
+    // Headless fragments for calling Gasp server API
     private GaspDatabaseFragment mGaspDatabaseFragment;
     private GaspRestaurantFragment mGaspRestaurantFragment;
     private GaspReviewFragment mGaspReviewFragment;
@@ -110,17 +111,12 @@ public class PlacesDetailActivity extends Activity {
 
     private void addGaspReview() {
         try {
-            SharedPreferences gaspSharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            URL gaspUrl = new URL(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
-
-            Review review = new Review();
-            review.setStar(5);
-            review.setComment("Very good");
-            review.setRestaurant_id(mRestaurantId);
-            review.setUser_id(1);
-
-            mGaspReviewFragment.addReview(review, gaspUrl);
+            Intent intent = new Intent();
+            intent.setClass(this, ReviewActivity.class);
+            intent.putExtra(ReviewActivity.REVIEW_RESTAURANT_NAME, mPlaceDetail.getName());
+            intent.putExtra(ReviewActivity.REVIEW_RESTAURANT_ID, mGaspRestaurantId);
+            intent.putExtra(ReviewActivity.REVIEW_REFERENCE, mPlacesReference);
+            startActivityForResult(intent, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -186,7 +182,7 @@ public class PlacesDetailActivity extends Activity {
             @Override
             public void onSuccess(String location) {
                 Log.d(TAG, "Gasp! restaurant added: " + location);
-                mRestaurantId = Integer.valueOf(location.substring(location.lastIndexOf("/") + 1));
+                mGaspRestaurantId = Integer.valueOf(location.substring(location.lastIndexOf("/") + 1));
                 mGaspRestaurant = true;
                 setButtons();
             }
@@ -205,7 +201,7 @@ public class PlacesDetailActivity extends Activity {
 
             @Override
             public void onFailure() {
-                Log.e(TAG, "Eror adding Gasp! review");
+                Log.e(TAG, "Error adding Gasp! review");
             }
         };
 
@@ -236,7 +232,7 @@ public class PlacesDetailActivity extends Activity {
             for (PlaceEvent event : place.getEvents()) {
                 Log.d(TAG, "Event Id: " + event.getEvent_id());
                 Log.d(TAG, "Event Summary: " + event.getSummary());
-                mEventAdapter.add(event.getEvent_id() + ": " + event.getSummary());
+                mEventAdapter.add(event.getSummary() + ": " + event.getUrl());
             }
         }
     }
@@ -250,12 +246,11 @@ public class PlacesDetailActivity extends Activity {
     }
 
     private void getGaspData() {
-        Restaurant restaurant = mGaspDatabaseFragment.getRestaurantByPlacesId(mPlacesId);
+        Restaurant restaurant = mGaspDatabaseFragment.getRestaurantByPlacesId(mPlaceDetail.getId());
         if (restaurant != null) {
             Log.d(TAG, "Gasp Restaurant Id: " + restaurant.getId());
             mGaspRestaurant = true;
-            mRestaurantId = restaurant.getId();
-            //mReviews = mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId());
+            mGaspRestaurantId = restaurant.getId();
             showReviewDetails(mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId()));
         } else {
             Log.d(TAG, "Restaurant not found in Gasp database");
@@ -267,15 +262,8 @@ public class PlacesDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
-            mPlaceDetail = (PlaceDetail) getIntent().getSerializableExtra("PlaceDetail");
-            mPlacesId = mPlaceDetail.getId();
-
-            Log.d(TAG, "Name: " + mPlaceDetail.getName());
-            Log.d(TAG, "Website " + mPlaceDetail.getWebsite());
-            Log.d(TAG, "Address: " + mPlaceDetail.getFormatted_address());
-            Log.d(TAG, "Id: " + mPlaceDetail.getId());
-            Log.d(TAG, "Lat: " + mPlaceDetail.getGeometry().getLocation().getLat());
-            Log.d(TAG, "Lng: " + mPlaceDetail.getGeometry().getLocation().getLng());
+            mPlaceDetail = (PlaceDetail) getIntent().getSerializableExtra(PLACES_DETAIL_SERIALIZED);
+            mPlacesReference = getIntent().getStringExtra(PLACES_DETAIL_REFERENCE);
 
             setViews();
             addGaspFragments();

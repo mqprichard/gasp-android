@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="gasp_reviews_prompt">How do you rate this restaurant?</string>
     <string-array name="gasp_review_stars">
         <item>1 Star</item>
         <item>2 Stars</item>
