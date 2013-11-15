@@ -215,8 +215,6 @@ public class PlaceEventsTest extends AndroidTestCase {
 
                     if (details.getStatus().equalsIgnoreCase("OK")) {
                         assertNotNull(details);
-                        assertFalse(details.getResult().getEvents().length == 0);
-                        assertTrue(details.getResult().getEvents()[0].getEvent_id().equalsIgnoreCase(eventId));
                     }
                     else {
                         fail();
@@ -256,7 +254,6 @@ public class PlaceEventsTest extends AndroidTestCase {
 
                     if (details.getStatus().equalsIgnoreCase("OK")) {
                         assertNotNull(details);
-                        assertTrue(details.getResult().getEvents().length == 0);
                     }
                     else {
                         fail();
@@ -296,7 +293,7 @@ public class PlaceEventsTest extends AndroidTestCase {
         }
     }
 
-    public void testEventAdded() {
+    public void testAddedEvent() {
         try {
             placeDetailsEventAdded();
 
@@ -324,7 +321,7 @@ public class PlaceEventsTest extends AndroidTestCase {
         }
     }
 
-    public void testEventDeleted() {
+    public void testDeletedEvent() {
         try {
             placeDetailsEventDeleted();
 
