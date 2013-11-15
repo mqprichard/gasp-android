@@ -263,12 +263,6 @@ public class PlacesActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return true;
 
-            case R.id.gasp_menu_twitter:
-                intent = new Intent();
-                intent.setClass(this, TwitterStreamActivity.class);
-                startActivityForResult(intent, 0);
-                return true;
-
             case R.id.options_exit:
                 finish();
                 return true;
