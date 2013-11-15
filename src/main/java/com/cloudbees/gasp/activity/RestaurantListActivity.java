@@ -23,11 +23,11 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.model.Restaurant;
 import com.cloudbees.gasp.adapter.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantArrayAdapter;
+import com.cloudbees.gasp.model.Restaurant;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,9 +47,12 @@ public class RestaurantListActivity extends ListActivity {
         List<Restaurant> restaurants = restaurantAdapter.getAll();
         Collections.reverse(restaurants);
 
-        ArrayAdapter<Restaurant> adapter =
-                new ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_1, restaurants);
-        setListAdapter(adapter);
+        //ArrayAdapter<Restaurant> adapter =
+        //       new ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_1, restaurants);
+        //setListAdapter(adapter);
+        RestaurantArrayAdapter restaurantArrayAdapter =
+                new RestaurantArrayAdapter(this, R.layout.gasp_restaurant_list, restaurants);
+        setListAdapter(restaurantArrayAdapter);
     }
 
     @Override
