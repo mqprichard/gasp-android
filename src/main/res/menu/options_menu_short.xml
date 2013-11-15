@@ -26,14 +26,4 @@
         android:id="@+id/gasp_settings"
         android:title="@string/gasp_settings"
         android:showAsAction="never"></item>
-    <item
-        android:id="@+id/gasp_menu_twitter"
-        android:title="@string/gasp_twitter"
-        android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_twitter_bird"></item>
-    <item
-        android:id="@+id/gasp_menu_places"
-        android:title="@string/gasp_places"
-        android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_location_place"></item>
 </menu>

@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="top"
-        android:id="@+id/places_listView"/>
+        android:id="@+id/places_list" />
 
     <Button
         android:layout_width="match_parent"

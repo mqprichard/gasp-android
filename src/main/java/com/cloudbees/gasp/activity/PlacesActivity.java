@@ -180,9 +180,10 @@ public class PlacesActivity extends Activity {
 
     private void addListViewAdapter() {
         try {
+            // Use simple TextView layout for ArrayAdapter constructor and map to ListView
             setContentView(R.layout.gasp_places_layout);
-            mListView = (ListView) findViewById(R.id.places_listView);
-            mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mList);
+            mListView = (ListView) findViewById(R.id.places_list);
+            mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_generic_textview, mList);
             mListView.setAdapter(mAdapter);
         } catch (Exception e) {
             e.printStackTrace();

@@ -60,15 +60,18 @@ public class TwitterStreamActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Use simple FrameLayout for ListFragment, with a TextView for the ArrayAdapter
+        // Use simple FrameLayout for ListFragment
         setContentView(R.layout.gasp_frame_layout);
-        mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout);
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-
         ListFragment list = new ListFragment();
         ft.add(R.id.fragment_content, list);
+
+        // Use a simple TextView layout for ArrayAdapter constructor
+        mAdapter = new ArrayAdapter<String>(this, R.layout.gasp_generic_textview);
+
+        // Map ArrayAdapter to ListFragment
         list.setListAdapter(mAdapter);
 
         // RESTResponderFragments call setRetainedInstance(true) in onCreate()

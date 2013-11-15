@@ -226,7 +226,8 @@ public class PlacesDetailActivity extends Activity {
     }
 
     private void showEventDetails(PlaceDetail place) {
-        mEventAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mEventList);
+        // Use a simple TextView layout for ArrayAdapter constructor
+        mEventAdapter = new ArrayAdapter<String>(this, R.layout.gasp_generic_textview, mEventList);
         mEventsView.setAdapter(mEventAdapter);
 
         if (place.getEvents() != null) {
@@ -239,7 +240,8 @@ public class PlacesDetailActivity extends Activity {
     }
 
     private void showReviewDetails(List<Review> reviews) {
-        mReviewAdapter = new ArrayAdapter<String>(this, R.layout.gasp_list_layout, mReviewList);
+        // Use a simple TextView layout for ArrayAdapter constructor
+        mReviewAdapter = new ArrayAdapter<String>(this, R.layout.gasp_generic_textview, mReviewList);
         mReviewsView.setAdapter(mReviewAdapter);
         for (Review review : reviews) {
             mReviewAdapter.add(review.toString());
