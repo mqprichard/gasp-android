@@ -216,7 +216,7 @@ public class PlaceEventsTest extends AndroidTestCase {
                     if (details.getStatus().equalsIgnoreCase("OK")) {
                         assertNotNull(details);
                         assertFalse(details.getResult().getEvents().length == 0);
-                        assertTrue(details.getResult().getEvents()[0].getEvent_id() == eventId);
+                        assertTrue(details.getResult().getEvents()[0].getEvent_id().equalsIgnoreCase(eventId));
                     }
                     else {
                         fail();

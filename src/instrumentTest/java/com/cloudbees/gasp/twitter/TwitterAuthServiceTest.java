@@ -57,7 +57,7 @@ public class TwitterAuthServiceTest extends ServiceTestCase<RESTIntentService> {
         if (code == 200 && result != null) {
             TwitterTokenResponse twitterToken = new Gson().fromJson(result, TwitterTokenResponse.class);
             assertNotNull(twitterToken);
-            assert(twitterToken.getToken_type() == "bearer");
+            assert (twitterToken.getToken_type().equalsIgnoreCase("bearer"));
         }
         else {
             fail();
