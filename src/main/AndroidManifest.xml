@@ -112,9 +112,27 @@
         </activity>
 
         <!-- Gasp! database activities -->
-        <activity android:name="com.cloudbees.gasp.activity.ReviewListActivity" />
-        <activity android:name="com.cloudbees.gasp.activity.RestaurantListActivity" />
-        <activity android:name="com.cloudbees.gasp.activity.UserListActivity" />
+        <activity
+            android:name="com.cloudbees.gasp.activity.ReviewListActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.cloudbees.gasp.activity.RestaurantListActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.cloudbees.gasp.activity.UserListActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.gasp.activity.MainActivity" />
+        </activity>
 
         <!-- Gasp! data synchronization services -->
         <service android:name="com.cloudbees.gasp.service.ReviewSyncService" />
