@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cloudbees.gasp.model;
+package com.cloudbees.gasp.adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.cloudbees.gasp.model.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;

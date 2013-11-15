@@ -5,7 +5,7 @@ import android.test.ServiceTestCase;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantAdapter;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -13,13 +13,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,9 +46,8 @@ public class RestaurantUpdateServiceTest extends ServiceTestCase<RestaurantUpdat
             for (Restaurant restaurant : restaurantList) {
                 restaurantData.deleteRestaurant(restaurant);
             }
-        }
-        catch(Exception e){}
-        finally {
+        } catch (Exception e) {
+        } finally {
             restaurantData.close();
         }
     }
@@ -57,7 +56,7 @@ public class RestaurantUpdateServiceTest extends ServiceTestCase<RestaurantUpdat
         cleanDatabase();
     }
 
-    public void testRestaurantUpdateIntent () throws InterruptedException {
+    public void testRestaurantUpdateIntent() throws InterruptedException {
         startService(new Intent(getContext(), RestaurantUpdateService.class)
                 .putExtra(MainActivity.ResponseReceiver.PARAM_ID, 1));
 
@@ -70,8 +69,7 @@ public class RestaurantUpdateServiceTest extends ServiceTestCase<RestaurantUpdat
 
             List<Restaurant> restaurants = restaurantAdapter.getAll();
             assertTrue(restaurants.size() > 0);
-        }
-        finally {
+        } finally {
             restaurantAdapter.close();
         }
     }

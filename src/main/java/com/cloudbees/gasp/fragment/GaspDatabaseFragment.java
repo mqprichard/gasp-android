@@ -4,9 +4,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantAdapter;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewAdapter;
+import com.cloudbees.gasp.adapter.ReviewAdapter;
 
 import java.util.List;
 

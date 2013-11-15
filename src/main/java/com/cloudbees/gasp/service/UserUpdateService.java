@@ -26,7 +26,7 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.model.UserAdapter;
+import com.cloudbees.gasp.adapter.UserAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,8 +59,7 @@ public class UserUpdateService extends IntentService implements IRESTListener {
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");
-        }
-        else {
+        } else {
             getGaspUsersUriSharedPreferences();
 
             AsyncRESTClient asyncRestCall = new AsyncRESTClient(mGaspUsersUri, this);
@@ -69,13 +68,14 @@ public class UserUpdateService extends IntentService implements IRESTListener {
     }
 
     @Override
-    public void onCompleted(String result){
+    public void onCompleted(String result) {
         Log.i(TAG, "Response:" + result + '\n');
 
-        if (result!=null) {
+        if (result != null) {
             try {
                 Gson gson = new Gson();
-                Type type = new TypeToken<User>() {}.getType();
+                Type type = new TypeToken<User>() {
+                }.getType();
                 User mUser = gson.fromJson(result, type);
 
                 UserAdapter usersDB = new UserAdapter(getApplicationContext());

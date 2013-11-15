@@ -27,7 +27,7 @@ import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantAdapter;
 
 import java.util.Collections;
 import java.util.List;

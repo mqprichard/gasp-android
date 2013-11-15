@@ -27,7 +27,7 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewAdapter;
+import com.cloudbees.gasp.adapter.ReviewAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -66,13 +66,14 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
     }
 
     @Override
-    public void onCompleted(String results){
+    public void onCompleted(String results) {
         Log.i(TAG, "Response from " + mGaspReviewsUri.toString() + " :" + results + '\n');
 
-        if (results!=null) {
+        if (results != null) {
             try {
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<Review>>() {}.getType();
+                Type type = new TypeToken<List<Review>>() {
+                }.getType();
                 List<Review> reviews = gson.fromJson(results, type);
 
                 ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
@@ -100,8 +101,7 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                 broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
                 broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
                 sendBroadcast(broadcastIntent);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

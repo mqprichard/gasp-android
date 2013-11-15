@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cloudbees.gasp.model;
+package com.cloudbees.gasp.adapter;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -80,7 +80,7 @@ class GaspSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                        + newVersion + ", which will destroy all old data");
+                + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + RESTAURANTS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + REVIEWS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + USERS_TABLE);

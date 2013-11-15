@@ -26,7 +26,7 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,8 +59,7 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");
-        }
-        else {
+        } else {
             getGaspRestaurantsUriSharedPreferences();
 
             AsyncRESTClient asyncRestCall = new AsyncRESTClient(mGaspRestaurantsUri, this);
@@ -69,13 +68,14 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
     }
 
     @Override
-    public void onCompleted(String result){
+    public void onCompleted(String result) {
         Log.i(TAG, "Response:" + result + '\n');
 
-        if (result!=null) {
+        if (result != null) {
             try {
                 Gson gson = new Gson();
-                Type type = new TypeToken<Restaurant>() {}.getType();
+                Type type = new TypeToken<Restaurant>() {
+                }.getType();
                 Restaurant mRestaurant = gson.fromJson(result, type);
 
                 RestaurantAdapter restaurantsDB = new RestaurantAdapter(getApplicationContext());

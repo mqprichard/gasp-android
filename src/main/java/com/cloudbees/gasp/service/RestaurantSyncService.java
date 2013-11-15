@@ -27,7 +27,7 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.model.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -66,13 +66,14 @@ public class RestaurantSyncService extends IntentService implements IRESTListene
     }
 
     @Override
-    public void onCompleted(String results){
+    public void onCompleted(String results) {
         Log.i(TAG, "Response from " + mGaspRestaurantsUri.toString() + " :" + results + '\n');
 
-        if (results!=null) {
+        if (results != null) {
             try {
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<Restaurant>>() {}.getType();
+                Type type = new TypeToken<List<Restaurant>>() {
+                }.getType();
                 List<Restaurant> restaurants = gson.fromJson(results, type);
 
                 RestaurantAdapter restaurantsDB = new RestaurantAdapter(getApplicationContext());

@@ -27,7 +27,7 @@ import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.model.UserAdapter;
+import com.cloudbees.gasp.adapter.UserAdapter;
 
 import java.util.Collections;
 import java.util.List;

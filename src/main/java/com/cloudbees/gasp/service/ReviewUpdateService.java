@@ -26,7 +26,7 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewAdapter;
+import com.cloudbees.gasp.adapter.ReviewAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,8 +59,7 @@ public class ReviewUpdateService extends IntentService implements IRESTListener 
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");
-        }
-        else {
+        } else {
             getGaspReviewsUriSharedPreferences();
 
             AsyncRESTClient asyncRestCall = new AsyncRESTClient(mGaspReviewsUri, this);
@@ -69,13 +68,14 @@ public class ReviewUpdateService extends IntentService implements IRESTListener 
     }
 
     @Override
-    public void onCompleted(String result){
+    public void onCompleted(String result) {
         Log.i(TAG, "Response:" + result + '\n');
 
-        if (result!=null) {
+        if (result != null) {
             try {
                 Gson gson = new Gson();
-                Type type = new TypeToken<Review>() {}.getType();
+                Type type = new TypeToken<Review>() {
+                }.getType();
                 Review mReview = gson.fromJson(result, type);
 
                 ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());

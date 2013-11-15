@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.test.ServiceTestCase;
 
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.model.ReviewAdapter;
+import com.cloudbees.gasp.adapter.ReviewAdapter;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -12,13 +12,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,9 +44,8 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
             for (Review review : reviewList) {
                 reviewData.deleteReview(review);
             }
-        }
-        catch(Exception e){}
-        finally {
+        } catch (Exception e) {
+        } finally {
             reviewData.close();
         }
     }
@@ -56,7 +55,7 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
         signal = new CountDownLatch(1);
     }
 
-    public void testReviewSyncIntent () throws InterruptedException {
+    public void testReviewSyncIntent() throws InterruptedException {
         startService(new Intent(getContext(), ReviewSyncService.class));
 
         // Allow 20 secs for the async REST call to complete
@@ -68,8 +67,7 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
 
             List<Review> reviews = reviewAdapter.getAll();
             assertTrue(reviews.size() > 0);
-        }
-        finally {
+        } finally {
             reviewAdapter.close();
         }
     }

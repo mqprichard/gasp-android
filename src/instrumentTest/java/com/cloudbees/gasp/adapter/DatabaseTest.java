@@ -1,6 +1,13 @@
-package com.cloudbees.gasp.model;
+package com.cloudbees.gasp.adapter;
 
 import android.test.AndroidTestCase;
+
+import com.cloudbees.gasp.adapter.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.ReviewAdapter;
+import com.cloudbees.gasp.adapter.UserAdapter;
+import com.cloudbees.gasp.model.Restaurant;
+import com.cloudbees.gasp.model.Review;
+import com.cloudbees.gasp.model.User;
 
 import java.util.List;
 

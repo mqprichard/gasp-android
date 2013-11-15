@@ -27,7 +27,7 @@ import android.util.Log;
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.model.UserAdapter;
+import com.cloudbees.gasp.adapter.UserAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -66,13 +66,14 @@ public class UserSyncService extends IntentService implements IRESTListener {
     }
 
     @Override
-    public void onCompleted(String results){
+    public void onCompleted(String results) {
         Log.i(TAG, "Response from " + mGaspUsersUri.toString() + " :" + results + '\n');
 
-        if (results!=null) {
+        if (results != null) {
             try {
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<User>>() {}.getType();
+                Type type = new TypeToken<List<User>>() {
+                }.getType();
                 List<User> users = gson.fromJson(results, type);
 
                 UserAdapter userDB = new UserAdapter(getApplicationContext());

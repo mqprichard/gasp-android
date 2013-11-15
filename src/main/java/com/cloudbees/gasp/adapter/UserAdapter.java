@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cloudbees.gasp.model;
+package com.cloudbees.gasp.adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.cloudbees.gasp.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +35,8 @@ public class UserAdapter {
     private SQLiteDatabase database;
     private final GaspSQLiteHelper dbHelper;
 
-    private final String[] allColumns = { GaspSQLiteHelper.USERS_COLUMN_ID,
-                                          GaspSQLiteHelper.USERS_COLUMN_NAME };
+    private final String[] allColumns = {GaspSQLiteHelper.USERS_COLUMN_ID,
+            GaspSQLiteHelper.USERS_COLUMN_NAME};
 
     public UserAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
@@ -70,7 +72,7 @@ public class UserAdapter {
         long id = user.getId();
         Log.d(TAG, "Deleting user with id: " + id);
         database.delete(GaspSQLiteHelper.USERS_TABLE,
-                        GaspSQLiteHelper.USERS_COLUMN_ID
+                GaspSQLiteHelper.USERS_COLUMN_ID
                         + " = " + id, null);
     }
 
@@ -78,7 +80,7 @@ public class UserAdapter {
         List<User> users = new ArrayList<User>();
 
         Cursor cursor = database.query(GaspSQLiteHelper.USERS_TABLE,
-                        allColumns, null, null, null, null, null);
+                allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
