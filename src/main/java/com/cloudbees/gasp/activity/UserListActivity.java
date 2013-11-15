@@ -23,11 +23,11 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.model.User;
 import com.cloudbees.gasp.adapter.UserAdapter;
+import com.cloudbees.gasp.adapter.UserArrayAdapter;
+import com.cloudbees.gasp.model.User;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,9 +47,9 @@ public class UserListActivity extends ListActivity {
         List<User> users = userAdapter.getAll();
         Collections.reverse(users);
 
-        ArrayAdapter<User> adapter =
-                new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1, users);
-        setListAdapter(adapter);
+        UserArrayAdapter userArrayAdapter =
+                new UserArrayAdapter(this, R.layout.gasp_user_list, users);
+        setListAdapter(userArrayAdapter);
     }
 
     @Override

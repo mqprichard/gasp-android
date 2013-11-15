@@ -47,9 +47,6 @@ public class RestaurantListActivity extends ListActivity {
         List<Restaurant> restaurants = restaurantAdapter.getAll();
         Collections.reverse(restaurants);
 
-        //ArrayAdapter<Restaurant> adapter =
-        //       new ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_1, restaurants);
-        //setListAdapter(adapter);
         RestaurantArrayAdapter restaurantArrayAdapter =
                 new RestaurantArrayAdapter(this, R.layout.gasp_restaurant_list, restaurants);
         setListAdapter(restaurantArrayAdapter);

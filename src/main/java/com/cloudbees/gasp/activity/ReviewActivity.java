@@ -172,7 +172,7 @@ public class ReviewActivity extends Activity {
             mGaspRestaurantId = intent.getIntExtra(REVIEW_RESTAURANT_ID, 0);
             mPlacesReference = intent.getStringExtra(REVIEW_REFERENCE);
 
-            setContentView(R.layout.gasp_reviews_layout);
+            setContentView(R.layout.gasp_add_review_layout);
             setViews();
             addGaspFragments();
             addButtonListener();
