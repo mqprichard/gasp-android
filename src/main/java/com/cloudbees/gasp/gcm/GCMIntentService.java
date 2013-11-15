@@ -33,15 +33,13 @@ import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.UserUpdateService;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.util.Calendar;
-
 /**
  * IntentService responsible for handling GCM messages.
  */
 public class GCMIntentService extends IntentService {
     private static final String TAG = "GCMIntentService";
 
-    //public static final int NOTIFICATION_ID = 1;
+    public static final int NOTIFICATION_ID = 1;
 
     public GCMIntentService() {
         super(TAG);
@@ -64,22 +62,18 @@ public class GCMIntentService extends IntentService {
 
                     int index = Integer.valueOf(extras.getString("id"));
                     String table = extras.getString("table");
-                    String notificationMessage = "";
+                    String notificationMessage = "There's something new from Gasp!";
 
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
                                     .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
-                            notificationMessage = "There's a new Gasp! review - check it out!";
                         } else if (table.matches("restaurants")) {
                             startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
                                     .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
-                            notificationMessage = "There's a new restaurant on Gasp!";
-
                         } else if (table.matches("users")) {
                             startService(new Intent(getApplicationContext(), UserUpdateService.class)
                                     .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
-                            notificationMessage = "There's a new reviewer on Gasp!";
                         }
                         // Send notification message for message bar display etc
                         sendNotification(notificationMessage);
@@ -101,8 +95,6 @@ public class GCMIntentService extends IntentService {
      * @param msg Notification message
      */
     private void sendNotification(String msg) {
-        long timeNow = Calendar.getInstance().getTimeInMillis();
-
         NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -118,7 +110,7 @@ public class GCMIntentService extends IntentService {
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify((int) timeNow, mBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
 

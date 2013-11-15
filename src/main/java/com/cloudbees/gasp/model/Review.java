@@ -41,7 +41,7 @@ public class Review {
 
     public void setId(int id) {
         this.id = id;
-        this.setUrl("/users/" + id);
+        this.setUrl("/reviews/" + id);
     }
 
     public int getRestaurant_id() {

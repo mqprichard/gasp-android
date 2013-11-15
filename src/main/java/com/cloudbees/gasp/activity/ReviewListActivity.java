@@ -23,11 +23,11 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.adapter.ReviewAdapter;
+import com.cloudbees.gasp.adapter.ReviewArrayAdapter;
+import com.cloudbees.gasp.model.Review;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,9 +47,11 @@ public class ReviewListActivity extends ListActivity {
         List<Review> reviews = reviewAdapter.getAll();
         Collections.reverse(reviews);
 
-        ArrayAdapter<Review> adapter =
-                new ArrayAdapter<Review>(this, android.R.layout.simple_list_item_1, reviews);
-        setListAdapter(adapter);
+        //ArrayAdapter<Review> adapter =
+        //        new ArrayAdapter<Review>(this, android.R.layout.simple_list_item_1, reviews);
+        //setListAdapter(adapter);
+        ReviewArrayAdapter reviewArrayAdapter = new ReviewArrayAdapter(this, R.layout.gasp_review_list, reviews);
+        setListAdapter(reviewArrayAdapter);
     }
 
     @Override

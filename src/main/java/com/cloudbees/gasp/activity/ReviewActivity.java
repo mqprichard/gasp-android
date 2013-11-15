@@ -149,8 +149,7 @@ public class ReviewActivity extends Activity {
     }
 
     private int getStars() {
-        // The first character of the selection gives the number of stars
-        return Integer.valueOf(String.valueOf(mStars.getSelectedItem()).charAt(0));
+        return mStars.getSelectedItemPosition() + 1;
     }
 
     private String getComment() {
