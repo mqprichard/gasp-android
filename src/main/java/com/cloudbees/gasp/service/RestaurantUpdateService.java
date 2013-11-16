@@ -40,13 +40,10 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
     private void getGaspRestaurantsUriSharedPreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String gaspReviewsUri = gaspSharedPreferences.getString("gasp_restaurants_uri", "");
+        String gaspRestaurantsUri = gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_preferences), "")
+                + getString(R.string.gasp_restaurants_location);
 
-        this.mGaspRestaurantsUri = Uri.parse(gaspReviewsUri);
-    }
-
-    public Uri getGaspRestaurantsUri() {
-        return mGaspRestaurantsUri;
+        this.mGaspRestaurantsUri = Uri.parse(gaspRestaurantsUri);
     }
 
     public RestaurantUpdateService() {

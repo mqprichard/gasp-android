@@ -52,10 +52,10 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
 
     // Base URL of the Gasp! GCM Push Server
-    private static String SERVER_URL;
+    private static String mGaspPushServerUrl;
 
-    public static String getSERVER_URL() {
-        return SERVER_URL;
+    public static String getGaspPushServerUrl() {
+        return mGaspPushServerUrl;
     }
 
     // Constants used for GCM Registration
@@ -195,8 +195,8 @@ public class MainActivity extends Activity {
                     // Register with Gasp GCM Push Notification Server
                     boolean registered = GCMRegistration.register(context, regId);
                     if (registered)
-                        Log.d(TAG, "Registered with server (" + SERVER_URL + "): " + regId);
-                    else Log.e(TAG, "Could not register with server (" + SERVER_URL + ")");
+                        Log.d(TAG, "Registered with server (" + mGaspPushServerUrl + "): " + regId);
+                    else Log.e(TAG, "Could not register with server (" + mGaspPushServerUrl + ")");
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(context, regId);
@@ -301,8 +301,8 @@ public class MainActivity extends Activity {
 
     // BroadcastReceiver for Gasp sync/update messages
     public class ResponseReceiver extends BroadcastReceiver {
-        public static final String PARAM_IN_MSG = "syncSend";
-        public static final String PARAM_OUT_MSG = "syncRecv";
+        public static final String PARAM_IN_MSG = "gaspInMsg";
+        public static final String PARAM_OUT_MSG = "gaspOutMsg";
         public static final String PARAM_ID = "id";
         public static final String ACTION_RESP =
                 "com.cloudbees.gasp.gcm.intent.action.MESSAGE_PROCESSED";
@@ -330,11 +330,14 @@ public class MainActivity extends Activity {
         // Subsequent activations will use the saved shared preferences from the device
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.i(TAG, "Using Gasp Server Reviews URI: " + gaspSharedPreferences.getString("gasp_reviews_uri", ""));
-        Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
-        Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
-        Log.i(TAG, "Using Gasp GCM Push Server URI: " + gaspSharedPreferences.getString("gasp_push_uri", ""));
-        SERVER_URL = gaspSharedPreferences.getString("gasp_push_uri", "");
+        Log.i(TAG, "Using Gasp Server URI: "
+                + gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_base), ""));
+        //Log.i(TAG, "Using Gasp Server Reviews URI: " + gaspSharedPreferences.getString("gasp_reviews_uri", ""));
+        //Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
+        //Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
+        //Log.i(TAG, "Using Gasp GCM Push Server URI: " + gaspSharedPreferences.getString("gasp_push_uri", ""));
+        mGaspPushServerUrl = gaspSharedPreferences.getString(getString(R.string.gasp_push_uri_preferences), "");
+        Log.i(TAG, "Using Gasp Push Server URI: " + mGaspPushServerUrl);
 
         // Add support for third-party libraries
         //addThirdPartyLibs();

@@ -3,23 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="UnusedResources">
     <EditTextPreference
-        android:key="gasp_reviews_uri"
-        android:title="Gasp! Reviews Settings"
-        android:dialogTitle="Gasp! Reviews URL"
-        android:defaultValue="@string/gasp_reviews_url" />
+        android:key="@string/gasp_server_uri_preferences"
+        android:title="@string/gasp_server_uri_title"
+        android:dialogTitle="@string/gasp_server_uri_dialog"
+        android:defaultValue="@string/gasp_server_uri_base" />
     <EditTextPreference
-        android:key="gasp_restaurants_uri"
-        android:title="Gasp! Restaurants Settings"
-        android:dialogTitle="Gasp! Restaurants URL"
-        android:defaultValue="@string/gasp_restaurants_url" />
-    <EditTextPreference
-        android:key="gasp_users_uri"
-        android:title="Gasp! Users Settings"
-        android:dialogTitle="Gasp! Users URL"
-        android:defaultValue="@string/gasp_users_url" />
-    <EditTextPreference
-        android:key="gasp_push_uri"
-        android:title="Gasp! GCM Push Notification Settings"
-        android:dialogTitle="Gasp! GCM Push Server URL"
-        android:defaultValue="@string/gasp_push_url" />
+        android:key="@string/gasp_push_uri_preferences"
+        android:title="@string/gasp_push_uri_title"
+        android:dialogTitle="@string/gasp_push_uri_dialog"
+        android:defaultValue="@string/gasp_push_uri" />
 </PreferenceScreen>

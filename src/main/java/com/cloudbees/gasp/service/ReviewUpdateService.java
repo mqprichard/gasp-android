@@ -40,13 +40,10 @@ public class ReviewUpdateService extends IntentService implements IRESTListener 
     private void getGaspReviewsUriSharedPreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String gaspReviewsUri = gaspSharedPreferences.getString("gasp_reviews_uri", "");
+        String gaspReviewsUri = gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_preferences), "")
+                + getString(R.string.gasp_reviews_location);
 
         this.mGaspReviewsUri = Uri.parse(gaspReviewsUri);
-    }
-
-    public Uri getGaspReviewsUri() {
-        return mGaspReviewsUri;
     }
 
     public ReviewUpdateService() {

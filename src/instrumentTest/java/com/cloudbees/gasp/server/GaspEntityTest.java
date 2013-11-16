@@ -39,9 +39,12 @@ public abstract class GaspEntityTest extends InstrumentationTestCase {
 
         // Retrieve Gasp server URLs from application context
         Context gaspContext = getInstrumentation().getTargetContext();
-        mGaspReviewsUrl = gaspContext.getString(R.string.gasp_reviews_url);
-        mGaspRestaurantsUrl = gaspContext.getString(R.string.gasp_restaurants_url);
-        mGaspUsersUrl = gaspContext.getString(R.string.gasp_users_url);
+        mGaspReviewsUrl = gaspContext.getString(R.string.gasp_server_uri_base)
+                + gaspContext.getString(R.string.gasp_reviews_location);
+        mGaspRestaurantsUrl = gaspContext.getString(R.string.gasp_server_uri_base)
+                + gaspContext.getString(R.string.gasp_restaurants_location);
+        mGaspUsersUrl = gaspContext.getString(R.string.gasp_server_uri_base)
+                + gaspContext.getString(R.string.gasp_users_location);
     }
 
     public void addGaspEntity(final String jsonInput, final URL url) {

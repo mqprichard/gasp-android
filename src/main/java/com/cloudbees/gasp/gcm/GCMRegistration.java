@@ -47,11 +47,11 @@ public final class GCMRegistration {
     private static final Random random = new Random();
 
     // Base URL of the Gasp! GCM Push Server
-    private static final String SERVER_URL = MainActivity.getSERVER_URL();
+    private static final String SERVER_URL = MainActivity.getGaspPushServerUrl();
 
     /**
      * Notifies UI to display a message.
-     * <p>
+     * <p/>
      * This method is defined in the common helper because it's used both by
      * the UI and the background service.
      *
@@ -155,8 +155,7 @@ public final class GCMRegistration {
      * Issue a POST request to the server.
      *
      * @param endpoint POST address.
-     * @param params request parameters.
-     *
+     * @param params   request parameters.
      * @throws IOException propagated from POST.
      */
     private static void post(String endpoint, Map<String, String> params)
@@ -196,12 +195,12 @@ public final class GCMRegistration {
             // handle the response
             int status = conn.getResponseCode();
             if (status != 200) {
-              throw new IOException("Post failed with error code " + status);
+                throw new IOException("Post failed with error code " + status);
             }
         } finally {
             if (conn != null) {
                 conn.disconnect();
             }
         }
-      }
+    }
 }

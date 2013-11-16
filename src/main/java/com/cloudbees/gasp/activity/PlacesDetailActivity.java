@@ -138,7 +138,8 @@ public class PlacesDetailActivity extends Activity {
         try {
             SharedPreferences gaspSharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            URL gaspUrl = new URL(gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
+            URL gaspUrl = new URL(gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_preferences), "")
+                    + getString(R.string.gasp_restaurants_location));
 
             Restaurant restaurant = new Restaurant();
             restaurant.setName(mPlaceDetail.getName());

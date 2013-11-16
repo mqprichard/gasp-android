@@ -57,11 +57,17 @@
     <string name="places_latitude">"Latitude: "</string>
     <string name="places_longitude">"Longitude: "</string>
     <string name="places_google_id">"Google Places Id: "</string>
-    <string name="gasp_restaurants_url">http://gasp2.partnerdemo.cloudbees.net/restaurants</string>
-    <string name="gasp_reviews_url">http://gasp2.partnerdemo.cloudbees.net/reviews</string>
-    <string name="gasp_users_url">http://gasp2.partnerdemo.cloudbees.net/users</string>
-    <string name="gasp_push_url">http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm</string>
+    <string name="gasp_push_uri">http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm</string>
+    <string name="gasp_push_uri_preferences">gasp_push_uri</string>
+    <string name="gasp_push_uri_title">Gasp! GCM Push Notification Settings</string>
+    <string name="gasp_push_uri_dialog">Gasp! GCM Push Server URI</string>
     <string name="gasp_details_title_reviews">Gasp! Reviews</string>
     <string name="gasp_details_title_events">Gasp! Events</string>
-
+    <string name="gasp_server_uri_preferences">gasp_server_uri</string>
+    <string name="gasp_server_uri_base">http://gasp2.partnerdemo.cloudbees.net/</string>
+    <string name="gasp_server_uri_title">Gasp! Server Settings</string>
+    <string name="gasp_server_uri_dialog">Gasp! Server URI</string>
+    <string name="gasp_reviews_location">reviews</string>
+    <string name="gasp_restaurants_location">restaurants</string>
+    <string name="gasp_users_location">users</string>
 </resources>

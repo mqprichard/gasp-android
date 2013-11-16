@@ -43,9 +43,10 @@ public class UserSyncService extends IntentService implements IRESTListener {
     private void getGaspUsersUriSharedPreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String gaspReviewsUri = gaspSharedPreferences.getString("gasp_users_uri", "");
+        String gaspUsersUri = gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_preferences), "")
+                + getString(R.string.gasp_users_location);
 
-        this.mGaspUsersUri = Uri.parse(gaspReviewsUri);
+        this.mGaspUsersUri = Uri.parse(gaspUsersUri);
     }
 
     private Uri getGaspUsersUri() {

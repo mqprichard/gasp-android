@@ -165,7 +165,8 @@ public class ReviewActivity extends Activity {
         try {
             SharedPreferences gaspSharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            mGaspUrl = new URL(gaspSharedPreferences.getString("gasp_reviews_uri", ""));
+            mGaspUrl = new URL(gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_preferences), "")
+                    + getString(R.string.gasp_reviews_location));
 
             Intent intent = getIntent();
             mRestaurantName = intent.getStringExtra(REVIEW_RESTAURANT_NAME);
