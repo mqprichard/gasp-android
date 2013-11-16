@@ -29,6 +29,10 @@ import com.cloudbees.gasp.model.Review;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter class mapping the Gasp database to com.cloudbees.gasp.model.Review
+ * Implements insert, cursor and list methods: main interface to Review data
+ */
 public class ReviewAdapter {
     private static final String TAG = ReviewAdapter.class.getName();
 

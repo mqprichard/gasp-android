@@ -29,18 +29,36 @@ import java.util.List;
  * limitations under the License.
  */
 
+/**
+ * ArrayAdapter subclass for use with ListActivity (UserListActivity)
+ * See gasp_user_list.xml for layout views
+ */
 public class UserArrayAdapter extends ArrayAdapter<User> {
     private final static String TAG = UserArrayAdapter.class.getName();
 
     private List<User> mUsers;
     private int mResource;
 
+    /**
+     * Default constructor
+     *
+     * @param context  The Activity context
+     * @param resource The layout resource
+     * @param users    The List collection
+     */
     public UserArrayAdapter(Context context, int resource, List<User> users) {
         super(context, resource, users);
         this.mUsers = users;
         this.mResource = resource;
     }
 
+    /**
+     * Called by ListActivity
+     * @param position      Position of this entry in the array
+     * @param convertView   Layout view
+     * @param parent        Not used
+     * @return View object for this entry
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 

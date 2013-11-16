@@ -29,6 +29,10 @@ import com.cloudbees.gasp.model.Restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter class mapping the Gasp database to com.cloudbees.gasp.model.Restaurant
+ * Implements insert, cursor and list methods: main interface to Restaurant data
+ */
 public class RestaurantAdapter {
     private static final String TAG = RestaurantAdapter.class.getName();
 

@@ -29,18 +29,36 @@ import java.util.List;
  * limitations under the License.
  */
 
+/**
+ * ArrayAdapter subclass for use with ListActivity (ReviewListActivity)
+ * See gasp_review_list.xml for layout views
+ */
 public class ReviewArrayAdapter extends ArrayAdapter<Review> {
     private final static String TAG = ReviewArrayAdapter.class.getName();
 
     private List<Review> mReviews;
     private int mResource;
 
+    /**
+     * Default constructor
+     *
+     * @param context  The Activity context
+     * @param resource The layout resource
+     * @param reviews  The List collection
+     */
     public ReviewArrayAdapter(Context context, int resource, List<Review> reviews) {
         super(context, resource, reviews);
         this.mReviews = reviews;
         this.mResource = resource;
     }
 
+    /**
+     * Called by ListActivity
+     * @param position      Position of this entry in the array
+     * @param convertView   Layout view
+     * @param parent        Not used
+     * @return View object for this entry
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 

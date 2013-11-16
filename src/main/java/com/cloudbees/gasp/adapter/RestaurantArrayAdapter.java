@@ -29,18 +29,37 @@ import java.util.List;
  * limitations under the License.
  */
 
+/**
+ * ArrayAdapter subclass for use with ListActivity (RestaurantListActivity)
+ * See gasp_restaurant_list.xml for layout views
+ */
 public class RestaurantArrayAdapter extends ArrayAdapter<Restaurant> {
     private final static String TAG = RestaurantArrayAdapter.class.getName();
 
     private List<Restaurant> mRestaurants;
     private int mResource;
 
+    /**
+     * Default constructor
+     *
+     * @param context     The Activity context
+     * @param resource    The layout resource
+     * @param restaurants The List collection
+     */
     public RestaurantArrayAdapter(Context context, int resource, List<Restaurant> restaurants) {
         super(context, resource, restaurants);
         this.mRestaurants = restaurants;
         this.mResource = resource;
     }
 
+    /**
+     * Called by ListActivity
+     *
+     * @param position    Position of this entry in the array
+     * @param convertView Layout view
+     * @param parent      Not used
+     * @return View object for this entry
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 

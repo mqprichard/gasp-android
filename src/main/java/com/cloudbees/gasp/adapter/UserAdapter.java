@@ -29,6 +29,10 @@ import com.cloudbees.gasp.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter class mapping the Gasp database to com.cloudbees.gasp.model.User
+ * Implements insert, cursor and list methods: main interface to User data
+ */
 public class UserAdapter {
     private static final String TAG = UserAdapter.class.getName();
 
