@@ -2,9 +2,6 @@ package com.cloudbees.gasp.adapter;
 
 import android.test.AndroidTestCase;
 
-import com.cloudbees.gasp.adapter.RestaurantAdapter;
-import com.cloudbees.gasp.adapter.ReviewAdapter;
-import com.cloudbees.gasp.adapter.UserAdapter;
 import com.cloudbees.gasp.model.Restaurant;
 import com.cloudbees.gasp.model.Review;
 import com.cloudbees.gasp.model.User;
@@ -85,6 +82,10 @@ public class DatabaseTest extends AndroidTestCase {
         ReviewAdapter reviewData = new ReviewAdapter(getContext());
         List<Review> reviewList;
 
+        reviewData.open();
+        assertEquals(0, reviewData.getLastId());
+        reviewData.close();
+
         Review review = new Review();
 
         review.setId(testId);
@@ -109,16 +110,25 @@ public class DatabaseTest extends AndroidTestCase {
         reviewList = reviewData.getAll();
         assertEquals(reviewList.size(), 2);
         assertEquals(reviewList.get(1).getId(), testId + 1);
+        assertEquals(2, reviewData.getLastId());
 
         reviewData.deleteReview(review);
         reviewList = reviewData.getAll();
         assertEquals(reviewList.size(), 1);
+        reviewData.close();
+
+        reviewData.open();
+        assertEquals(1, reviewData.getLastId());
         reviewData.close();
     }
 
     public void testRestaurantAdapter() {
         RestaurantAdapter restaurantData = new RestaurantAdapter(getContext());
         List<Restaurant> restaurantList;
+
+        restaurantData.open();
+        assertEquals(0, restaurantData.getLastId());
+        restaurantData.close();
 
         Restaurant restaurant = new Restaurant();
 
@@ -146,6 +156,7 @@ public class DatabaseTest extends AndroidTestCase {
 
         Restaurant testResult = restaurantData.findRestaurantByPlacesId(testPlacesId2);
         assert (testResult.getPlacesId().equals(testPlacesId2));
+        assertEquals(2, restaurantData.getLastId());
 
         assert (restaurantData.findRestaurantByPlacesId(testPlacesId3) == null);
 
@@ -154,11 +165,19 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(restaurantList.size(), 1);
 
         restaurantData.close();
+
+        restaurantData.open();
+        restaurantData.getLastId();
+        restaurantData.close();
     }
 
     public void testUserAdapter() {
         UserAdapter userData = new UserAdapter(getContext());
         List<User> userList;
+
+        userData.open();
+        assertEquals(0, userData.getLastId());
+        userData.close();
 
         User user = new User();
 
@@ -178,11 +197,16 @@ public class DatabaseTest extends AndroidTestCase {
         userList = userData.getAll();
         assertEquals(userList.size(), 2);
         assertEquals(userList.get(1).getId(), 2);
+        assertEquals(2, userData.getLastId());
 
         userData.deleteUser(user);
         userList = userData.getAll();
         assertEquals(userList.size(), 1);
 
+        userData.close();
+
+        userData.open();
+        userData.getLastId();
         userData.close();
     }
 }

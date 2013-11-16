@@ -118,6 +118,25 @@ public class ReviewAdapter {
         return reviews;
     }
 
+    public long getLastId() {
+        final String query = "SELECT " + GaspSQLiteHelper.REVIEWS_COLUMN_ID
+                + " from " + GaspSQLiteHelper.REVIEWS_TABLE
+                + " order by " + GaspSQLiteHelper.REVIEWS_COLUMN_ID
+                + " DESC limit 1";
+        long lastId = 0;
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                lastId = cursor.getLong(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lastId;
+    }
+
     private Review cursorToReview(Cursor cursor) {
         Review Review = new Review();
         Review.setId(cursor.getInt(0));

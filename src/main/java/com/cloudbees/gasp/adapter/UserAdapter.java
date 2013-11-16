@@ -96,6 +96,25 @@ public class UserAdapter {
         return users;
     }
 
+    public long getLastId() {
+        final String query = "SELECT " + GaspSQLiteHelper.USERS_COLUMN_ID
+                + " from " + GaspSQLiteHelper.USERS_TABLE
+                + " order by " + GaspSQLiteHelper.USERS_COLUMN_ID
+                + " DESC limit 1";
+        long lastId = 0;
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                lastId = cursor.getLong(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lastId;
+    }
+
     private User cursorToUser(Cursor cursor) {
         User user = new User();
         user.setId(cursor.getInt(0));

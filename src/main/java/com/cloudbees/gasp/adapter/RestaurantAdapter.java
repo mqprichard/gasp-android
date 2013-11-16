@@ -109,6 +109,25 @@ public class RestaurantAdapter {
         return restaurant;
     }
 
+    public long getLastId() {
+        final String query = "SELECT " + GaspSQLiteHelper.RESTAURANTS_COLUMN_ID
+                + " from " + GaspSQLiteHelper.RESTAURANTS_TABLE
+                + " order by " + GaspSQLiteHelper.RESTAURANTS_COLUMN_ID
+                + " DESC limit 1";
+        long lastId = 0;
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                lastId = cursor.getLong(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lastId;
+    }
+
     public Restaurant findRestaurantByPlacesId(String placesId) {
         Cursor cursor = null;
         Restaurant restaurant = null;
