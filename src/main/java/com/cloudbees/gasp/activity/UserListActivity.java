@@ -25,7 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.adapter.UserAdapter;
+import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.adapter.UserArrayAdapter;
 import com.cloudbees.gasp.model.User;
 
@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserListActivity extends ListActivity {
-    private UserAdapter userAdapter;
+    private UserDataAdapter userAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class UserListActivity extends ListActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        userAdapter = new UserAdapter(this);
+        userAdapter = new UserDataAdapter(this);
         userAdapter.open();
 
         List<User> users = userAdapter.getAll();

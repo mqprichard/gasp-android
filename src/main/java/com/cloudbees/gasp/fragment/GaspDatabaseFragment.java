@@ -3,10 +3,10 @@ package com.cloudbees.gasp.fragment;
 import android.app.Fragment;
 import android.os.Bundle;
 
+import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
+import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.adapter.RestaurantAdapter;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.adapter.ReviewAdapter;
 
 import java.util.List;
 
@@ -29,14 +29,14 @@ import java.util.List;
 public class GaspDatabaseFragment extends Fragment {
     private static final String TAG = GaspDatabaseFragment.class.getName();
 
-    private RestaurantAdapter mRestaurantAdapter;
-    private ReviewAdapter mReviewAdapter;
+    private RestaurantDataAdapter mRestaurantAdapter;
+    private ReviewDataAdapter mReviewAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mRestaurantAdapter = new RestaurantAdapter(getActivity());
-        mReviewAdapter = new ReviewAdapter(getActivity());
+        mRestaurantAdapter = new RestaurantDataAdapter(getActivity());
+        mReviewAdapter = new ReviewDataAdapter(getActivity());
     }
 
     public Restaurant getRestaurantByPlacesId(String placesId) {

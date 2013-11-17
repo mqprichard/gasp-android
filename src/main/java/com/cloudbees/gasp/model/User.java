@@ -16,7 +16,7 @@
 
 package com.cloudbees.gasp.model;
 
-public class User {
+public class User extends GaspDataObject {
     private int id;
     private String name;
     private String url;

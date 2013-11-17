@@ -25,7 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.adapter.RestaurantAdapter;
+import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.adapter.RestaurantArrayAdapter;
 import com.cloudbees.gasp.model.Restaurant;
 
@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class RestaurantListActivity extends ListActivity {
-    private RestaurantAdapter restaurantAdapter;
+    private RestaurantDataAdapter restaurantAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class RestaurantListActivity extends ListActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        restaurantAdapter = new RestaurantAdapter(this);
+        restaurantAdapter = new RestaurantDataAdapter(this);
         restaurantAdapter.open();
 
         List<Restaurant> restaurants = restaurantAdapter.getAll();

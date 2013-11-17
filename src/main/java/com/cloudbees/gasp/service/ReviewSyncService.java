@@ -26,8 +26,8 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.adapter.ReviewAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -77,7 +77,7 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                 }.getType();
                 List<Review> reviews = gson.fromJson(results, type);
 
-                ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
+                ReviewDataAdapter reviewsDB = new ReviewDataAdapter(getApplicationContext());
                 reviewsDB.open();
                 ListIterator<Review> iterator = reviews.listIterator();
                 int index = 0;
@@ -85,7 +85,7 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                 while (iterator.hasNext()) {
                     try {
                         Review review = iterator.next();
-                        reviewsDB.insertReview(review);
+                        reviewsDB.insert(review);
                         index = review.getId();
                     } catch (SQLiteConstraintException e) {
                         // Attempting to overwrite existing records will throw an exception

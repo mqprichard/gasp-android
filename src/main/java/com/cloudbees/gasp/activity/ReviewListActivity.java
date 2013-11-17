@@ -25,7 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.adapter.ReviewAdapter;
+import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.adapter.ReviewArrayAdapter;
 import com.cloudbees.gasp.model.Review;
 
@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ReviewListActivity extends ListActivity {
-    private ReviewAdapter reviewAdapter;
+    private ReviewDataAdapter reviewAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class ReviewListActivity extends ListActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        reviewAdapter = new ReviewAdapter(this);
+        reviewAdapter = new ReviewDataAdapter(this);
         reviewAdapter.open();
 
         List<Review> reviews = reviewAdapter.getAll();

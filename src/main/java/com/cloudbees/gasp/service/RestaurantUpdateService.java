@@ -25,8 +25,8 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.adapter.RestaurantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -75,9 +75,9 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
                 }.getType();
                 Restaurant mRestaurant = gson.fromJson(result, type);
 
-                RestaurantAdapter restaurantsDB = new RestaurantAdapter(getApplicationContext());
+                RestaurantDataAdapter restaurantsDB = new RestaurantDataAdapter(getApplicationContext());
                 restaurantsDB.open();
-                restaurantsDB.insertRestaurant(mRestaurant);
+                restaurantsDB.insert(mRestaurant);
                 restaurantsDB.close();
 
                 String resultTxt = "Loaded restaurant: " + mRestaurant.getId();

@@ -3,8 +3,8 @@ package com.cloudbees.gasp.service;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
+import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.adapter.UserAdapter;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
     private static final String TAG = UserSyncServiceTest.class.getName();
 
-    private UserAdapter userAdapter;
+    private UserDataAdapter userAdapter;
     private CountDownLatch signal;
 
     public UserSyncServiceTest() {
@@ -37,12 +37,12 @@ public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
     }
 
     private void cleanDatabase() {
-        UserAdapter userAdapter = new UserAdapter(getContext());
+        UserDataAdapter userAdapter = new UserDataAdapter(getContext());
         userAdapter.open();
         try {
             List<User> userList = userAdapter.getAll();
             for (User user : userList) {
-                userAdapter.deleteUser(user);
+                userAdapter.delete(user);
             }
         } catch (Exception e) {
         } finally {
@@ -62,7 +62,7 @@ public class UserSyncServiceTest extends ServiceTestCase<UserSyncService> {
         signal.await(20, TimeUnit.SECONDS);
 
         try {
-            userAdapter = new UserAdapter(getContext());
+            userAdapter = new UserDataAdapter(getContext());
             userAdapter.open();
 
             List<User> users = userAdapter.getAll();

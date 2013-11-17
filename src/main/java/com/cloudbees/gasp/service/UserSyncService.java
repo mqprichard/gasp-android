@@ -26,8 +26,8 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.adapter.UserAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -77,14 +77,14 @@ public class UserSyncService extends IntentService implements IRESTListener {
                 }.getType();
                 List<User> users = gson.fromJson(results, type);
 
-                UserAdapter userDB = new UserAdapter(getApplicationContext());
+                UserDataAdapter userDB = new UserDataAdapter(getApplicationContext());
                 userDB.open();
                 ListIterator<User> iterator = users.listIterator();
                 int index = 0;
                 while (iterator.hasNext()) {
                     try {
                         User user = iterator.next();
-                        userDB.insertUser(user);
+                        userDB.insert(user);
                         index = user.getId();
                     } catch (SQLiteConstraintException e) {
                         // Attempting to overwrite existing records will throw an exception

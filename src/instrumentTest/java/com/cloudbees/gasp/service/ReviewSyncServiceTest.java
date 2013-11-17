@@ -3,8 +3,8 @@ package com.cloudbees.gasp.service;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
+import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.adapter.ReviewAdapter;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
     private static final String TAG = ReviewSyncServiceTest.class.getName();
 
-    private ReviewAdapter reviewAdapter;
+    private ReviewDataAdapter reviewAdapter;
     private CountDownLatch signal;
 
     public ReviewSyncServiceTest() {
@@ -37,12 +37,12 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
     }
 
     private void cleanDatabase() {
-        ReviewAdapter reviewData = new ReviewAdapter(getContext());
+        ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
         reviewData.open();
         try {
             List<Review> reviewList = reviewData.getAll();
             for (Review review : reviewList) {
-                reviewData.deleteReview(review);
+                reviewData.delete(review);
             }
         } catch (Exception e) {
         } finally {
@@ -62,7 +62,7 @@ public class ReviewSyncServiceTest extends ServiceTestCase<ReviewSyncService> {
         signal.await(20, TimeUnit.SECONDS);
 
         try {
-            reviewAdapter = new ReviewAdapter(getContext());
+            reviewAdapter = new ReviewDataAdapter(getContext());
             reviewAdapter.open();
 
             List<Review> reviews = reviewAdapter.getAll();

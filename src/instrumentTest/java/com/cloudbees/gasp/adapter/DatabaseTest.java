@@ -24,6 +24,9 @@ import java.util.List;
  * limitations under the License.
  */
 
+/**
+ * Tests GaspDataAdapter insert/delete methods
+ */
 public class DatabaseTest extends AndroidTestCase {
 
     private static final int testId = 1;
@@ -38,36 +41,36 @@ public class DatabaseTest extends AndroidTestCase {
     private static final String testPlacesId3 = "0000000000";
 
     protected void setUp() {
-        ReviewAdapter reviewData = new ReviewAdapter(getContext());
+        ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
         reviewData.open();
         try {
             List<Review> reviewList = reviewData.getAll();
             for (Review review : reviewList) {
-                reviewData.deleteReview(review);
+                reviewData.delete(review);
             }
         } catch (Exception e) {
         } finally {
             reviewData.close();
         }
 
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getContext());
+        RestaurantDataAdapter restaurantAdapter = new RestaurantDataAdapter(getContext());
         restaurantAdapter.open();
         try {
             List<Restaurant> restaurantList = restaurantAdapter.getAll();
             for (Restaurant restaurant : restaurantList) {
-                restaurantAdapter.deleteRestaurant(restaurant);
+                restaurantAdapter.delete(restaurant);
             }
         } catch (Exception e) {
         } finally {
             restaurantAdapter.close();
         }
 
-        UserAdapter userAdapter = new UserAdapter(getContext());
+        UserDataAdapter userAdapter = new UserDataAdapter(getContext());
         userAdapter.open();
         try {
             List<User> userList = userAdapter.getAll();
             for (User user : userList) {
-                userAdapter.deleteUser(user);
+                userAdapter.delete(user);
             }
         } catch (Exception e) {
         } finally {
@@ -79,7 +82,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testReviewAdapter() {
-        ReviewAdapter reviewData = new ReviewAdapter(getContext());
+        ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
         List<Review> reviewList;
 
         reviewData.open();
@@ -95,7 +98,7 @@ public class DatabaseTest extends AndroidTestCase {
         review.setStar(testStar);
 
         reviewData.open();
-        reviewData.insertReview(review);
+        reviewData.insert(review);
         reviewList = reviewData.getAll();
         assertEquals(reviewList.size(), 1);
 
@@ -106,13 +109,13 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(reviewList.get(0).getStar(), testStar);
 
         review.setId(testId + 1);
-        reviewData.insertReview(review);
+        reviewData.insert(review);
         reviewList = reviewData.getAll();
         assertEquals(reviewList.size(), 2);
         assertEquals(reviewList.get(1).getId(), testId + 1);
         assertEquals(2, reviewData.getLastId());
 
-        reviewData.deleteReview(review);
+        reviewData.delete(review);
         reviewList = reviewData.getAll();
         assertEquals(reviewList.size(), 1);
         reviewData.close();
@@ -123,7 +126,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testRestaurantAdapter() {
-        RestaurantAdapter restaurantData = new RestaurantAdapter(getContext());
+        RestaurantDataAdapter restaurantData = new RestaurantDataAdapter(getContext());
         List<Restaurant> restaurantList;
 
         restaurantData.open();
@@ -138,7 +141,7 @@ public class DatabaseTest extends AndroidTestCase {
         restaurant.setPlacesId(testPlacesId);
 
         restaurantData.open();
-        restaurantData.insertRestaurant(restaurant);
+        restaurantData.insert(restaurant);
         restaurantList = restaurantData.getAll();
         assertEquals(restaurantList.size(), 1);
 
@@ -149,7 +152,7 @@ public class DatabaseTest extends AndroidTestCase {
 
         restaurant.setId(testId + 1);
         restaurant.setPlacesId(testPlacesId2);
-        restaurantData.insertRestaurant(restaurant);
+        restaurantData.insert(restaurant);
         restaurantList = restaurantData.getAll();
         assertEquals(restaurantList.size(), 2);
         assertEquals(restaurantList.get(1).getId(), 2);
@@ -160,7 +163,7 @@ public class DatabaseTest extends AndroidTestCase {
 
         assert (restaurantData.findRestaurantByPlacesId(testPlacesId3) == null);
 
-        restaurantData.deleteRestaurant(restaurant);
+        restaurantData.delete(restaurant);
         restaurantList = restaurantData.getAll();
         assertEquals(restaurantList.size(), 1);
 
@@ -172,7 +175,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testUserAdapter() {
-        UserAdapter userData = new UserAdapter(getContext());
+        UserDataAdapter userData = new UserDataAdapter(getContext());
         List<User> userList;
 
         userData.open();
@@ -185,7 +188,7 @@ public class DatabaseTest extends AndroidTestCase {
         user.setName(testName);
 
         userData.open();
-        userData.insertUser(user);
+        userData.insert(user);
         userList = userData.getAll();
         assertEquals(userList.size(), 1);
 
@@ -193,13 +196,13 @@ public class DatabaseTest extends AndroidTestCase {
         assertEquals(userList.get(0).getName(), testName);
 
         user.setId(testId + 1);
-        userData.insertUser(user);
+        userData.insert(user);
         userList = userData.getAll();
         assertEquals(userList.size(), 2);
         assertEquals(userList.get(1).getId(), 2);
         assertEquals(2, userData.getLastId());
 
-        userData.deleteUser(user);
+        userData.delete(user);
         userList = userData.getAll();
         assertEquals(userList.size(), 1);
 

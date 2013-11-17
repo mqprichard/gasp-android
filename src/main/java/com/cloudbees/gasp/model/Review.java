@@ -18,7 +18,7 @@ package com.cloudbees.gasp.model;
 
 import com.google.gson.annotations.Expose;
 
-public class Review {
+public class Review extends GaspDataObject {
     private int id;
     private String url;
     // Only expose these methods for HTTP POST calls to Gasp server

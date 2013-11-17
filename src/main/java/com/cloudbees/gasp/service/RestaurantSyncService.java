@@ -26,8 +26,8 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.adapter.RestaurantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -77,14 +77,14 @@ public class RestaurantSyncService extends IntentService implements IRESTListene
                 }.getType();
                 List<Restaurant> restaurants = gson.fromJson(results, type);
 
-                RestaurantAdapter restaurantsDB = new RestaurantAdapter(getApplicationContext());
+                RestaurantDataAdapter restaurantsDB = new RestaurantDataAdapter(getApplicationContext());
                 restaurantsDB.open();
                 ListIterator<Restaurant> iterator = restaurants.listIterator();
                 int index = 0;
                 while (iterator.hasNext()) {
                     try {
                         Restaurant restaurant = iterator.next();
-                        restaurantsDB.insertRestaurant(restaurant);
+                        restaurantsDB.insert(restaurant);
                         index = restaurant.getId();
                     } catch (SQLiteConstraintException e) {
                         // Attempting to overwrite existing records will throw an exception

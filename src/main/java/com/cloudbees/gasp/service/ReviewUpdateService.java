@@ -25,8 +25,8 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.model.Review;
-import com.cloudbees.gasp.adapter.ReviewAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -75,9 +75,9 @@ public class ReviewUpdateService extends IntentService implements IRESTListener 
                 }.getType();
                 Review mReview = gson.fromJson(result, type);
 
-                ReviewAdapter reviewsDB = new ReviewAdapter(getApplicationContext());
+                ReviewDataAdapter reviewsDB = new ReviewDataAdapter(getApplicationContext());
                 reviewsDB.open();
-                reviewsDB.insertReview(mReview);
+                reviewsDB.insert(mReview);
                 reviewsDB.close();
 
                 String resultTxt = "Loaded review: " + mReview.getId();

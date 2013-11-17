@@ -25,8 +25,8 @@ import android.util.Log;
 
 import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.model.User;
-import com.cloudbees.gasp.adapter.UserAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -79,9 +79,9 @@ public class UserUpdateService extends IntentService implements IRESTListener {
                 }.getType();
                 User mUser = gson.fromJson(result, type);
 
-                UserAdapter usersDB = new UserAdapter(getApplicationContext());
+                UserDataAdapter usersDB = new UserDataAdapter(getApplicationContext());
                 usersDB.open();
-                usersDB.insertUser(mUser);
+                usersDB.insert(mUser);
                 usersDB.close();
 
                 String resultTxt = "Loaded user: " + mUser.getId();

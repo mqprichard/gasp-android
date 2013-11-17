@@ -16,7 +16,7 @@
 
 package com.cloudbees.gasp.model;
 
-public class Restaurant {
+public class Restaurant extends GaspDataObject {
     private int id;
     private String name;
     private String website;

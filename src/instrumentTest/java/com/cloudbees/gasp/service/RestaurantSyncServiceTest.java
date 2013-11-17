@@ -3,8 +3,8 @@ package com.cloudbees.gasp.service;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
+import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
-import com.cloudbees.gasp.adapter.RestaurantAdapter;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncService> {
     private static final String TAG = RestaurantSyncServiceTest.class.getName();
 
-    private RestaurantAdapter restaurantAdapter;
+    private RestaurantDataAdapter restaurantAdapter;
     private CountDownLatch signal;
 
     public RestaurantSyncServiceTest() {
@@ -37,12 +37,12 @@ public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncSer
     }
 
     private void cleanDatabase() {
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getContext());
+        RestaurantDataAdapter restaurantAdapter = new RestaurantDataAdapter(getContext());
         restaurantAdapter.open();
         try {
             List<Restaurant> restaurantList = restaurantAdapter.getAll();
             for (Restaurant restaurant : restaurantList) {
-                restaurantAdapter.deleteRestaurant(restaurant);
+                restaurantAdapter.delete(restaurant);
             }
         } catch (Exception e) {
         } finally {
@@ -62,7 +62,7 @@ public class RestaurantSyncServiceTest extends ServiceTestCase<RestaurantSyncSer
         signal.await(20, TimeUnit.SECONDS);
 
         try {
-            restaurantAdapter = new RestaurantAdapter(getContext());
+            restaurantAdapter = new RestaurantDataAdapter(getContext());
             restaurantAdapter.open();
 
             List<Restaurant> restaurantList = restaurantAdapter.getAll();
