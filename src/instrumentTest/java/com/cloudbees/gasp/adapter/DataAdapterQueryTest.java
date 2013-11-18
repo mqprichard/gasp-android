@@ -42,15 +42,19 @@ public class DataAdapterQueryTest extends AndroidTestCase {
                 reviewData.delete(review);
             }
         } catch (Exception e) {
+            fail();
         } finally {
             reviewData.close();
         }
 
         reviewData.open();
-        for (int i = 0; i <= MAX_ELEMENTS; i++) {
+        for (int i = 0; i < MAX_ELEMENTS; i++) {
             Review review = new Review();
             review.setId(testId + i);
-            review.setComment(testComment + i);
+            review.setRestaurant_id(testId + (i % 3));
+            review.setUser_id(testId);
+            review.setComment("test");
+            review.setStar(1);
             reviewData.insert(review);
         }
     }
@@ -60,10 +64,15 @@ public class DataAdapterQueryTest extends AndroidTestCase {
         reviewData.open();
         try {
             List<Review> reviewList = reviewData.getAll();
-            assertEquals(reviewList.get(0).getId(), testId);
+
+            // Check all rows returned
             assertEquals(reviewList.size(), MAX_ELEMENTS);
-            assertEquals(reviewList.get(MAX_ELEMENTS).getId(), MAX_ELEMENTS);
+
+            // Check ordering
+            assertEquals(reviewList.get(0).getId(), testId);
+            assertEquals(reviewList.get(MAX_ELEMENTS - 1).getId(), MAX_ELEMENTS);
         } catch (Exception e) {
+            fail();
         } finally {
             reviewData.close();
         }
@@ -74,32 +83,63 @@ public class DataAdapterQueryTest extends AndroidTestCase {
         reviewData.open();
         try {
             List<Review> reviewList = reviewData.getAllDesc();
-            assertEquals(reviewList.get(0).getId(), testId + MAX_ELEMENTS);
+
+            // Check all rows returned
             assertEquals(reviewList.size(), MAX_ELEMENTS);
-            assertEquals(reviewList.get(MAX_ELEMENTS).getId(), 0);
+
+            // Check ordering
+            assertEquals(reviewList.get(0).getId(), MAX_ELEMENTS);
+            assertEquals(reviewList.get(MAX_ELEMENTS - 1).getId(), testId);
         } catch (Exception e) {
+            fail();
         } finally {
             reviewData.close();
         }
     }
 
     public void testGetLastNDesc() {
-        final int n = 5;
-        final int nn = 50;
+        final int n = 5;        // n < MAX_ELEMENTS
+        final int nn = 50;      // nn > MAX_ELEMENTS
 
         ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
         reviewData.open();
         try {
             List<Review> reviewList = reviewData.getLastNDesc(n);
-            assertEquals(reviewList.get(0).getId(), MAX_ELEMENTS);
+
+            // Check # of rows returned
             assertEquals(reviewList.size(), n);
-            assertEquals(reviewList.get(MAX_ELEMENTS).getId(), MAX_ELEMENTS - n);
+
+            // Check ordering
+            assertEquals(reviewList.get(0).getId(), MAX_ELEMENTS);
+            assertEquals(reviewList.get(n - 1).getId(), testId + (MAX_ELEMENTS - n));
 
             reviewList = reviewData.getLastNDesc(nn);
+
+            //Check # of rows returned
+            assertEquals(reviewList.size(), MAX_ELEMENTS);
+
+            // Check ordering
             assertEquals(reviewList.get(0).getId(), MAX_ELEMENTS);
-            assertEquals(reviewList.size(), n);
-            assertEquals(reviewList.get(MAX_ELEMENTS).getId(), 0);
+            assertEquals(reviewList.get(MAX_ELEMENTS - 1).getId(), testId);
         } catch (Exception e) {
+            fail();
+        } finally {
+            reviewData.close();
+        }
+    }
+
+    public void testGetReviewsByRestaurant() {
+        ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
+        reviewData.open();
+
+        try {
+            List<Review> reviewList = reviewData.getAllByRestaurant(testId);
+            assert (reviewList.size() > 0);
+            for (int i = 0; i < reviewList.size(); i++) {
+                assertEquals(reviewList.get(i).getRestaurant_id(), testId);
+            }
+        } catch (Exception e) {
+            fail();
         } finally {
             reviewData.close();
         }

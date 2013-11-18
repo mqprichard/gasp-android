@@ -85,16 +85,31 @@ public class ReviewDataAdapter extends GaspDataAdapter<Review> {
     /**
      * Find all reviews matching a given restaurant id
      *
-     * @param id Restaurant id
+     * @param id    Restaurant id
      * @return ArrayList of reviews
      */
     public List<Review> getAllByRestaurant(int id) {
         List<Review> reviews = new ArrayList<Review>();
 
-        Cursor cursor = database.query(GaspSQLiteHelper.REVIEWS_TABLE, allColumns,
+        Cursor cursor = database.query(getTableName(), getAllColumns(),
                 GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null);
         return listFromCursor(cursor);
     }
 
+    /**
+     * Find last N reviews matching a given restaurant id (in DESC order)
+     *
+     * @param id Restaurant id
+     * @param n  Number of reviews to return
+     * @return ArrayList of reviews
+     */
+    public List<Review> getLastNByRestaurant(int id, int n) {
+        List<Review> reviews = new ArrayList<Review>();
+
+        Cursor cursor = database.query(getTableName(), getAllColumns(),
+                GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, getIdColumnName() + " DESC", String.valueOf(n));
+        return listFromCursor(cursor);
+    }
 }
