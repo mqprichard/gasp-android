@@ -128,16 +128,47 @@ public class DataAdapterQueryTest extends AndroidTestCase {
         }
     }
 
-    public void testGetReviewsByRestaurant() {
+    public void testReviewsByRestaurant() {
         ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
         reviewData.open();
 
         try {
             List<Review> reviewList = reviewData.getAllByRestaurant(testId);
+
+            // Check selection by Restaurant
             assert (reviewList.size() > 0);
             for (int i = 0; i < reviewList.size(); i++) {
                 assertEquals(reviewList.get(i).getRestaurant_id(), testId);
             }
+
+            // Check ordering
+            assert (reviewList.get(0).getId() < reviewList.get(1).getId());
+        } catch (Exception e) {
+            fail();
+        } finally {
+            reviewData.close();
+        }
+    }
+
+    public void testReviewsLastNByRestaurant() {
+        final int n = 2;
+
+        ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
+        reviewData.open();
+
+        try {
+            List<Review> reviewList = reviewData.getLastNByRestaurant(testId, n);
+
+            // Check # of rows returned
+            assertEquals(reviewList.size(), n);
+
+            // Check selection by Restaurant
+            for (int i = 0; i < reviewList.size(); i++) {
+                assertEquals(reviewList.get(i).getRestaurant_id(), testId);
+            }
+
+            // Check DESC ordering
+            assert (reviewList.get(0).getId() > reviewList.get(1).getId());
         } catch (Exception e) {
             fail();
         } finally {

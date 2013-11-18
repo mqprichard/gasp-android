@@ -109,7 +109,8 @@ public class ReviewDataAdapter extends GaspDataAdapter<Review> {
 
         Cursor cursor = database.query(getTableName(), getAllColumns(),
                 GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID + " = ?",
-                new String[]{String.valueOf(id)}, null, getIdColumnName() + " DESC", String.valueOf(n));
+                new String[]{String.valueOf(id)}, null, null,
+                getIdColumnName() + " DESC", String.valueOf(n));
         return listFromCursor(cursor);
     }
 }
