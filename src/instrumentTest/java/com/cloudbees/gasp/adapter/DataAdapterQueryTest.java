@@ -2,6 +2,7 @@ package com.cloudbees.gasp.adapter;
 
 import android.test.AndroidTestCase;
 
+import com.cloudbees.gasp.model.Restaurant;
 import com.cloudbees.gasp.model.Review;
 
 import java.util.List;
@@ -28,12 +29,13 @@ import java.util.List;
 public class DataAdapterQueryTest extends AndroidTestCase {
     private static final int MAX_ELEMENTS = 10;
     private static final int testId = 1;
-    private static final String testComment = "test";
+    private static final String testPlacesId = "0123456789";
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
+        // Clear Review data
         ReviewDataAdapter reviewData = new ReviewDataAdapter(getContext());
         reviewData.open();
         try {
@@ -47,6 +49,7 @@ public class DataAdapterQueryTest extends AndroidTestCase {
             reviewData.close();
         }
 
+        // Insert test Review data
         reviewData.open();
         for (int i = 0; i < MAX_ELEMENTS; i++) {
             Review review = new Review();
@@ -57,6 +60,32 @@ public class DataAdapterQueryTest extends AndroidTestCase {
             review.setStar(1);
             reviewData.insert(review);
         }
+
+        // Clear Restaurant data
+        RestaurantDataAdapter restaurantData = new RestaurantDataAdapter(getContext());
+        restaurantData.open();
+        try {
+            List<Restaurant> restaurantList = restaurantData.getAll();
+            for (Restaurant restaurant : restaurantList) {
+                restaurantData.delete(restaurant);
+            }
+        } catch (Exception e) {
+            fail();
+        } finally {
+            restaurantData.close();
+        }
+
+        // Insert test Restaurant data
+        restaurantData.open();
+        for (int i = 0; i < MAX_ELEMENTS; i++) {
+            Restaurant restaurant = new Restaurant();
+            restaurant.setId(testId + i);
+            restaurant.setName("test");
+            restaurant.setPlacesId(testPlacesId + i);
+            restaurant.setWebsite("http://www.gasp.com/");
+            restaurantData.insert(restaurant);
+        }
+
     }
 
     public void testGetAll() {
@@ -174,6 +203,26 @@ public class DataAdapterQueryTest extends AndroidTestCase {
         } finally {
             reviewData.close();
         }
+    }
+
+    public void testRestaurantByPlacesId() {
+        RestaurantDataAdapter restaurantData = new RestaurantDataAdapter(getContext());
+        restaurantData.open();
+
+        try {
+            Restaurant restaurant =
+                    restaurantData.findRestaurantByPlacesId(testPlacesId + (MAX_ELEMENTS - 1));
+            assert (restaurant.getPlacesId().equals(String.valueOf(testPlacesId + (MAX_ELEMENTS - 1))));
+
+            // Check for null on no-match
+            restaurant = restaurantData.findRestaurantByPlacesId(testPlacesId + (MAX_ELEMENTS + 1));
+            assert (restaurant == null);
+        } catch (Exception e) {
+            fail();
+        } finally {
+            restaurantData.close();
+        }
+
     }
 
     @Override
