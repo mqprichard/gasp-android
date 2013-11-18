@@ -25,11 +25,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.adapter.UserArrayAdapter;
+import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.model.User;
 
-import java.util.Collections;
 import java.util.List;
 
 public class UserListActivity extends ListActivity {
@@ -44,8 +43,8 @@ public class UserListActivity extends ListActivity {
         userAdapter = new UserDataAdapter(this);
         userAdapter.open();
 
-        List<User> users = userAdapter.getAll();
-        Collections.reverse(users);
+        // Get all users in descending order
+        List<User> users = userAdapter.getAllDesc();
 
         UserArrayAdapter userArrayAdapter =
                 new UserArrayAdapter(this, R.layout.gasp_user_list, users);

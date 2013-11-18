@@ -25,11 +25,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.adapter.ReviewArrayAdapter;
+import com.cloudbees.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.gasp.model.Review;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ReviewListActivity extends ListActivity {
@@ -44,8 +43,8 @@ public class ReviewListActivity extends ListActivity {
         reviewAdapter = new ReviewDataAdapter(this);
         reviewAdapter.open();
 
-        List<Review> reviews = reviewAdapter.getAll();
-        Collections.reverse(reviews);
+        // Get all reviews in descending order
+        List<Review> reviews = reviewAdapter.getAllDesc();
 
         ReviewArrayAdapter reviewArrayAdapter = new ReviewArrayAdapter(this, R.layout.gasp_review_list, reviews);
         setListAdapter(reviewArrayAdapter);

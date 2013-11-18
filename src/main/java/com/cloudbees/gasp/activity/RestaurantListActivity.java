@@ -25,11 +25,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.adapter.RestaurantArrayAdapter;
+import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
 
-import java.util.Collections;
 import java.util.List;
 
 public class RestaurantListActivity extends ListActivity {
@@ -44,8 +43,8 @@ public class RestaurantListActivity extends ListActivity {
         restaurantAdapter = new RestaurantDataAdapter(this);
         restaurantAdapter.open();
 
-        List<Restaurant> restaurants = restaurantAdapter.getAll();
-        Collections.reverse(restaurants);
+        // Get all restaurants in descending order
+        List<Restaurant> restaurants = restaurantAdapter.getAllDesc();
 
         RestaurantArrayAdapter restaurantArrayAdapter =
                 new RestaurantArrayAdapter(this, R.layout.gasp_restaurant_list, restaurants);
