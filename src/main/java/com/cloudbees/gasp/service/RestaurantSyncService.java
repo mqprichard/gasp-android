@@ -24,8 +24,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
 import com.google.gson.Gson;

@@ -64,4 +64,17 @@ public class GaspDatabaseFragment extends Fragment {
         }
         return reviews;
     }
+
+    public List<Review> getLastNReviewsByRestaurant(int id, int n) {
+        List<Review> reviews = null;
+        try {
+            mReviewAdapter.open();
+            reviews = mReviewAdapter.getLastNByRestaurant(id, n);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mReviewAdapter.close();
+        }
+        return reviews;
+    }
 }

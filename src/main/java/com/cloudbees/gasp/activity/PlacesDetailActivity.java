@@ -255,7 +255,7 @@ public class PlacesDetailActivity extends Activity {
             Log.d(TAG, "Gasp Restaurant Id: " + restaurant.getId());
             mGaspRestaurant = true;
             mGaspRestaurantId = restaurant.getId();
-            showReviewDetails(mGaspDatabaseFragment.getReviewsByRestaurant(restaurant.getId()));
+            showReviewDetails(mGaspDatabaseFragment.getLastNReviewsByRestaurant(restaurant.getId(), 10));
         } else {
             Log.d(TAG, "Restaurant not found in Gasp database");
         }

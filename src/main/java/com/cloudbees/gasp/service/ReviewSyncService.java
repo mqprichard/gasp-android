@@ -57,6 +57,22 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
         super("ReviewSyncService");
     }
 
+    private long checkLastId() {
+        long lastId = 0;
+
+        ReviewDataAdapter reviewData = new ReviewDataAdapter(this);
+        reviewData.open();
+        try {
+            lastId = reviewData.getLastId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            reviewData.close();
+        }
+
+        return lastId;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         getGaspReviewsUriSharedPreferences();
@@ -76,6 +92,8 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                 Type type = new TypeToken<List<Review>>() {
                 }.getType();
                 List<Review> reviews = gson.fromJson(results, type);
+
+                Log.d(TAG, "Found " + checkLastId() + " records");
 
                 ReviewDataAdapter reviewsDB = new ReviewDataAdapter(getApplicationContext());
                 reviewsDB.open();
