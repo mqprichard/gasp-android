@@ -17,17 +17,39 @@
 package com.cloudbees.gasp.fragment;
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 
 import com.cloudbees.gasp.R;
 
 public class PreferencesFragment extends PreferenceFragment {
+    private static final String TAG = PreferencesFragment.class.getName();
 
-	 @Override
-	 public void onCreate(Bundle savedInstanceState) {
-	  super.onCreate(savedInstanceState);
-	  
-	  // Load the preferences from res/xml/preferences.xml
-	  addPreferencesFromResource(R.xml.preferences);
-	 }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Load the preferences from res/xml/preferences.xml
+        addPreferencesFromResource(R.xml.preferences);
+
+        Preference radiusPreference =
+                getPreferenceScreen().findPreference(getString(R.string.places_search_radius_preferences));
+        Preference gaspServerPreference =
+                getPreferenceScreen().findPreference(getString(R.string.gasp_server_uri_preferences));
+        Preference gaspPushPreference =
+                getPreferenceScreen().findPreference(getString(R.string.gasp_push_uri_preferences));
+
+        radiusPreference.setOnPreferenceChangeListener(changeListener);
+        gaspServerPreference.setOnPreferenceChangeListener(changeListener);
+        gaspPushPreference.setOnPreferenceChangeListener(changeListener);
+    }
+
+    Preference.OnPreferenceChangeListener changeListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Log.d(TAG, "Preference changed: " + preference.getKey());
+            return true;
+        }
+    };
 }

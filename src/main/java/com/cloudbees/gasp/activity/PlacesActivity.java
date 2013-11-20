@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -63,7 +65,7 @@ public class PlacesActivity extends Activity {
 
     private static double lat = 37.3750274;
     private static double lng = -122.1142916;
-    private static final int radius = 500;
+    private static int radius = 500;
     private static String token = "";
 
     public static void setLocation(double latitude, double longitude) {
@@ -168,6 +170,8 @@ public class PlacesActivity extends Activity {
 
     private void getLocations() {
         try {
+            SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            radius = Integer.valueOf(gaspSharedPreferences.getString(getString(R.string.places_search_radius_preferences), ""));
             Query query = new Query(lat, lng, radius, token);
             mSearchFragment.nearbySearch(query);
         } catch (Exception e) {

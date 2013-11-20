@@ -375,10 +375,7 @@ public class MainActivity extends Activity {
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.i(TAG, "Using Gasp Server URI: "
                 + gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_base), ""));
-        //Log.i(TAG, "Using Gasp Server Reviews URI: " + gaspSharedPreferences.getString("gasp_reviews_uri", ""));
-        //Log.i(TAG, "Using Gasp Server Restaurants URI: " + gaspSharedPreferences.getString("gasp_restaurants_uri", ""));
-        //Log.i(TAG, "Using Gasp Server Users URI: " + gaspSharedPreferences.getString("gasp_users_uri", ""));
-        //Log.i(TAG, "Using Gasp GCM Push Server URI: " + gaspSharedPreferences.getString("gasp_push_uri", ""));
+
         mGaspPushServerUrl = gaspSharedPreferences.getString(getString(R.string.gasp_push_uri_preferences), "");
         Log.i(TAG, "Using Gasp Push Server URI: " + mGaspPushServerUrl);
 

@@ -57,6 +57,10 @@
     <string name="places_latitude">"Latitude: "</string>
     <string name="places_longitude">"Longitude: "</string>
     <string name="places_google_id">"Google Places Id: "</string>
+    <string name="places_search_radius_preferences">places_search_radius</string>
+    <string name="places_search_radius_title">Google Places API Search Radius</string>
+    <string name="places_search_radius_dialog">Select search radius (in meters)</string>
+    <string name="places_search_radius_default">500 meters</string>
     <string name="gasp_push_uri">http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm</string>
     <string name="gasp_push_uri_preferences">gasp_push_uri</string>
     <string name="gasp_push_uri_title">Gasp! GCM Push Notification Settings</string>

@@ -12,4 +12,11 @@
         android:title="@string/gasp_push_uri_title"
         android:dialogTitle="@string/gasp_push_uri_dialog"
         android:defaultValue="@string/gasp_push_uri" />
+    <ListPreference
+        android:key="@string/places_search_radius_preferences"
+        android:title="@string/places_search_radius_title"
+        android:dialogTitle="@string/places_search_radius_dialog"
+        android:entries="@array/radius_entries"
+        android:entryValues="@array/radius_entry_values"
+        android:defaultValue="500" />
 </PreferenceScreen>

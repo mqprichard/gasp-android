@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="radius_entries">
+        <item>500 meters</item>
+        <item>1000 meters</item>
+        <item>1500 meters</item>
+        <item>2000 meters</item>
+        <item>5000 meters</item>
+    </string-array>
+    <string-array name="radius_entry_values">
+        <item>500</item>
+        <item>1000</item>
+        <item>1500</item>
+        <item>2000</item>
+        <item>5000</item>
+    </string-array>
+</resources>
