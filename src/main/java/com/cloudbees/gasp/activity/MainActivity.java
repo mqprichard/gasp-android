@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,6 +37,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.fragment.LocationFragment;
 import com.cloudbees.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.gasp.gcm.GCMProjectKey;
 import com.cloudbees.gasp.gcm.GCMRegistration;
@@ -88,6 +90,30 @@ public class MainActivity extends Activity {
             return false;
         }
         return true;
+    }
+
+    private void enableLocationChecking() {
+        try {
+            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+
+                // Check current location
+                Location location = LocationFragment.getLocation(this);
+                if (location != null) {
+                    mDisplay.append("Location: " + String.format("%.6f", location.getLatitude())
+                            + ", " + String.format("%.6f", location.getLongitude())
+                            + " (via " + location.getProvider() + ")" + '\n');
+                }
+
+                // Add LocationFragment to enable location updates
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                LocationFragment locationFragment = new LocationFragment();
+                ft.add(locationFragment, "LocationFragment");
+                ft.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -299,7 +325,15 @@ public class MainActivity extends Activity {
         ft.commit();
     }
 
-    // BroadcastReceiver for Gasp sync/update messages
+    public static void displayMessage(Context context, String message) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, message);
+        context.sendBroadcast(broadcastIntent);
+    }
+
+    // BroadcastReceiver for Gasp sync/update/location messages
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String PARAM_IN_MSG = "gaspInMsg";
         public static final String PARAM_OUT_MSG = "gaspOutMsg";
@@ -318,13 +352,16 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        addThirdPartyLibs();
-
         context = getApplicationContext();
+
+        // Add monitoring/ALM libs
+        addThirdPartyLibs();
 
         setContentView(R.layout.gasp_console_layout);
         mDisplay = (TextView) findViewById(R.id.display);
+
+        // Get GPS location if available
+        enableLocationChecking();
 
         // Load shared preferences from res/xml/preferences.xml (first time only)
         // Subsequent activations will use the saved shared preferences from the device

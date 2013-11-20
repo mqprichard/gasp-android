@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.fragment.AddEventFragment;
 import com.cloudbees.gasp.fragment.DeleteEventFragment;
+import com.cloudbees.gasp.fragment.LocationFragment;
 import com.cloudbees.gasp.fragment.NearbySearchFragment;
 import com.cloudbees.gasp.fragment.PlaceDetailsFragment;
 import com.cloudbees.gasp.model.EventResponse;
@@ -59,10 +61,15 @@ public class PlacesActivity extends Activity {
     private AddEventFragment mAddEventFragment;
     private DeleteEventFragment mDeleteEventFragment;
 
-    private static final double lat = 37.3750274;
-    private static final double lng = -122.1142916;
+    private static double lat = 37.3750274;
+    private static double lng = -122.1142916;
     private static final int radius = 500;
     private static String token = "";
+
+    public static void setLocation(double latitude, double longitude) {
+        lat = latitude;
+        lng = longitude;
+    }
 
     private void showLocations(Places places) {
         for (Place place : places.getResults()) {
@@ -209,6 +216,17 @@ public class PlacesActivity extends Activity {
         placesButton.setText(resId);
     }
 
+    private void checkLocation() {
+        try {
+            Location location = LocationFragment.getLocation(this);
+            if (location != null) {
+                setLocation(location.getLatitude(), location.getLongitude());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,6 +234,7 @@ public class PlacesActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         try {
+            checkLocation();
             addPlacesFragments();
             addListViewAdapter();
             addButtonListener();
