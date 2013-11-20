@@ -18,11 +18,10 @@
 package com.cloudbees.gasp.gcm;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.activity.MainActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -50,23 +49,6 @@ public final class GCMRegistration {
     private static final String SERVER_URL = MainActivity.getGaspPushServerUrl();
 
     /**
-     * Notifies UI to display a message.
-     * <p/>
-     * This method is defined in the common helper because it's used both by
-     * the UI and the background service.
-     *
-     * @param context application's context.
-     * @param message message to be displayed.
-     */
-    public static void displayMessage(Context context, String message) {
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, message);
-        context.sendBroadcast(broadcastIntent);
-    }
-
-    /**
      * Register this account/device pair within the server.
      *
      * @return whether the registration succeeded or not.
@@ -83,7 +65,7 @@ public final class GCMRegistration {
                 post(serverUrl, params);
                 Log.d(TAG, "Registered: " + regId);
                 String message = context.getString(R.string.server_registered);
-                displayMessage(context, message);
+                MainActivity.displayMessage(context, message);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Failed to register on attempt " + i, e);
@@ -105,7 +87,7 @@ public final class GCMRegistration {
         }
         String message = context.getString(R.string.server_register_error,
                 MAX_ATTEMPTS);
-        displayMessage(context, message);
+        MainActivity.displayMessage(context, message);
         return false;
     }
 
@@ -126,14 +108,14 @@ public final class GCMRegistration {
                 post(serverUrl, params);
                 Log.d(TAG, "Unregistered: " + regId);
                 message = context.getString(R.string.server_unregistered);
-                displayMessage(context, message);
+                MainActivity.displayMessage(context, message);
                 return;
 
             } catch (IOException e) {
                 Log.e(TAG, "Failed to unregister on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     message = context.getString(R.string.server_unregister_error, e.getMessage());
-                    displayMessage(context, message);
+                    MainActivity.displayMessage(context, message);
                     break;
                 }
                 try {

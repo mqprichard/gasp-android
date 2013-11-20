@@ -325,6 +325,12 @@ public class MainActivity extends Activity {
         ft.commit();
     }
 
+    /**
+     * Notifies Gasp Console Activity to display a message.
+     *
+     * @param context application's context.
+     * @param message message to be displayed.
+     */
     public static void displayMessage(Context context, String message) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
