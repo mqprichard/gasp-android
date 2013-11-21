@@ -12,6 +12,11 @@
         android:title="@string/gasp_push_uri_title"
         android:dialogTitle="@string/gasp_push_uri_dialog"
         android:defaultValue="@string/gasp_push_uri" />
+    <EditTextPreference
+        android:key="@string/gasp_twitter_preferences"
+        android:title="@string/gasp_twitter_title"
+        android:dialogTitle="@string/gasp_twitter_dialog"
+        android:defaultValue="@string/gasp_twitter_default" />
     <ListPreference
         android:key="@string/places_search_radius_preferences"
         android:title="@string/places_search_radius_title"

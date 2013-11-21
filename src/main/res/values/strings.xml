@@ -74,4 +74,8 @@
     <string name="gasp_reviews_location">reviews</string>
     <string name="gasp_restaurants_location">restaurants</string>
     <string name="gasp_users_location">users</string>
+    <string name="gasp_twitter_preferences">gasp_twitter_keyword</string>
+    <string name="gasp_twitter_title">Twitter Stream Settings</string>
+    <string name="gasp_twitter_dialog">Keyword for Twitter Search</string>
+    <string name="gasp_twitter_default">CloudBees</string>
 </resources>

@@ -18,8 +18,10 @@ package com.cloudbees.gasp.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -58,13 +60,18 @@ public class TwitterResponderFragment extends RESTResponderFragment {
 
     private void setTweets() {
         TwitterStreamActivity activity = (TwitterStreamActivity) getActivity();
-        
+
+        // Get Twitter search keyword from Shared Preferences
+        SharedPreferences gaspSharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String keyword = gaspSharedPreferences.getString(getString(R.string.gasp_twitter_preferences), "");
+
         if (mTweets == null && activity != null) {
             Intent intent = new Intent(activity, RESTIntentService.class);
             intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
 
             Bundle params = new Bundle();
-            params.putString("q", "cloudbees");
+            params.putString("q", keyword);
             params.putString("count", "10");
 
             Bundle headers = new Bundle();

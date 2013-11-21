@@ -92,7 +92,7 @@
 
         <!-- Gasp! add review activity -->
         <activity
-            android:name=".activity.ReviewActivity"
+            android:name="com.cloudbees.gasp.activity.ReviewActivity"
             android:parentActivityName="com.cloudbees.gasp.activity.PlacesActivity"
             android:label="@string/gasp_add_review">
             <meta-data
@@ -150,12 +150,8 @@
         <!-- Handles incoming messages from GCM -->
         <service android:name="com.cloudbees.gasp.gcm.GCMIntentService" />
 
-        <!-- BroadcastReceiver that will receive intents from GCM
-             services and hand them to the custom IntentService.
-
-             The com.google.android.c2dm.permission.SEND permission is necessary
-             so only GCM services can send data messages for the app.
-         -->
+        <!-- BroadcastReceiver for GCM messages -->
+        <!-- Only GCM services can send data messages for the app -->
         <receiver
             android:name="com.cloudbees.gasp.gcm.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">

@@ -39,10 +39,13 @@ public class PreferencesFragment extends PreferenceFragment {
                 getPreferenceScreen().findPreference(getString(R.string.gasp_server_uri_preferences));
         Preference gaspPushPreference =
                 getPreferenceScreen().findPreference(getString(R.string.gasp_push_uri_preferences));
+        Preference gaspTwitterPreference =
+                getPreferenceScreen().findPreference(getString(R.string.gasp_twitter_preferences));
 
         radiusPreference.setOnPreferenceChangeListener(changeListener);
         gaspServerPreference.setOnPreferenceChangeListener(changeListener);
         gaspPushPreference.setOnPreferenceChangeListener(changeListener);
+        gaspTwitterPreference.setOnPreferenceChangeListener(changeListener);
     }
 
     Preference.OnPreferenceChangeListener changeListener = new Preference.OnPreferenceChangeListener() {
