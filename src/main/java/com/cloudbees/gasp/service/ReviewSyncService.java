@@ -93,7 +93,8 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                 }.getType();
                 List<Review> reviews = gson.fromJson(results, type);
 
-                Log.d(TAG, "Found " + checkLastId() + " records");
+                // Check how many records already in local SQLite database
+                long localRecords = checkLastId();
 
                 ReviewDataAdapter reviewsDB = new ReviewDataAdapter(getApplicationContext());
                 reviewsDB.open();
@@ -103,16 +104,18 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                 while (iterator.hasNext()) {
                     try {
                         Review review = iterator.next();
-                        reviewsDB.insert(review);
-                        index = review.getId();
+                        if (review.getId() > localRecords) {
+                            reviewsDB.insert(review);
+                            index++;
+                        }
                     } catch (SQLiteConstraintException e) {
-                        // Attempting to overwrite existing records will throw an exception
-                        // Ignore these as we want to re-sync on startup
+                        e.printStackTrace();
                     }
                 }
                 reviewsDB.close();
 
-                String resultTxt = "Loaded " + index + " reviews from " + getGaspReviewsUri();
+                String resultTxt = "Sync: Found " + localRecords + ", Loaded " + index
+                        + " reviews from " + getGaspReviewsUri();
                 Log.i(TAG, resultTxt + '\n');
 
                 Intent broadcastIntent = new Intent();

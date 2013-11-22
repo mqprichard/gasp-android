@@ -24,8 +24,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.R;
+import com.cloudbees.gasp.activity.MainActivity;
 import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.model.User;
 import com.google.gson.Gson;
@@ -57,6 +57,22 @@ public class UserSyncService extends IntentService implements IRESTListener {
         super(UserSyncService.class.getName());
     }
 
+    private long checkLastId() {
+        long lastId = 0;
+
+        UserDataAdapter userData = new UserDataAdapter(this);
+        userData.open();
+        try {
+            lastId = userData.getLastId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            userData.close();
+        }
+
+        return lastId;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         getGaspUsersUriSharedPreferences();
@@ -77,23 +93,29 @@ public class UserSyncService extends IntentService implements IRESTListener {
                 }.getType();
                 List<User> users = gson.fromJson(results, type);
 
+                // Check how many records already in local SQLite database
+                long localRecords = checkLastId();
+
                 UserDataAdapter userDB = new UserDataAdapter(getApplicationContext());
                 userDB.open();
                 ListIterator<User> iterator = users.listIterator();
+
                 int index = 0;
                 while (iterator.hasNext()) {
                     try {
                         User user = iterator.next();
-                        userDB.insert(user);
-                        index = user.getId();
+                        if (user.getId() > localRecords) {
+                            userDB.insert(user);
+                            index++;
+                        }
                     } catch (SQLiteConstraintException e) {
-                        // Attempting to overwrite existing records will throw an exception
-                        // Ignore these as we want to re-sync on startup
+                        e.printStackTrace();
                     }
                 }
                 userDB.close();
 
-                String resultTxt = "Loaded " + index + " users from " + mGaspUsersUri;
+                String resultTxt = "Sync: Found " + localRecords + ", Loaded " + index
+                        + " users from " + mGaspUsersUri;
                 Log.i(TAG, resultTxt + '\n');
 
                 Intent broadcastIntent = new Intent();

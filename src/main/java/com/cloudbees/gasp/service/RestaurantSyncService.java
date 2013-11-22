@@ -57,6 +57,22 @@ public class RestaurantSyncService extends IntentService implements IRESTListene
         super(RestaurantSyncService.class.getName());
     }
 
+    private long checkLastId() {
+        long lastId = 0;
+
+        RestaurantDataAdapter restaurantData = new RestaurantDataAdapter(this);
+        restaurantData.open();
+        try {
+            lastId = restaurantData.getLastId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            restaurantData.close();
+        }
+
+        return lastId;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         getGaspRestaurantsUriSharedPreferences();
@@ -77,23 +93,29 @@ public class RestaurantSyncService extends IntentService implements IRESTListene
                 }.getType();
                 List<Restaurant> restaurants = gson.fromJson(results, type);
 
+                // Check how many records already in local SQLite database
+                long localRecords = checkLastId();
+
                 RestaurantDataAdapter restaurantsDB = new RestaurantDataAdapter(getApplicationContext());
                 restaurantsDB.open();
                 ListIterator<Restaurant> iterator = restaurants.listIterator();
                 int index = 0;
+
                 while (iterator.hasNext()) {
                     try {
                         Restaurant restaurant = iterator.next();
-                        restaurantsDB.insert(restaurant);
-                        index = restaurant.getId();
+                        if (restaurant.getId() > localRecords) {
+                            restaurantsDB.insert(restaurant);
+                            index = restaurant.getId();
+                        }
                     } catch (SQLiteConstraintException e) {
-                        // Attempting to overwrite existing records will throw an exception
-                        // Ignore these as we want to re-sync on startup
+                        e.printStackTrace();
                     }
                 }
                 restaurantsDB.close();
 
-                String resultTxt = "Loaded " + index + " restaurants from " + mGaspRestaurantsUri;
+                String resultTxt = "Sync: Found " + localRecords + ", Loaded " + index
+                        + " restaurants from " + mGaspRestaurantsUri;
                 Log.i(TAG, resultTxt + '\n');
 
                 Intent broadcastIntent = new Intent();

@@ -255,7 +255,7 @@ public class MainActivity extends Activity {
                     protected String doInBackground(Void... params) {
                         try {
                             GCMRegistration.unregister(context, regId);
-                            return ("Unregistered Id: " + regId);
+                            return ("Unregistered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -287,11 +287,11 @@ public class MainActivity extends Activity {
                     protected String doInBackground(Void... params) {
                         try {
                             if (GCMRegistration.register(context, regId))
-                                return ("Registered Id: " + regId);
+                                return ("Registered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
-                        return ("Unregister failed for Id: " + regId);
+                        return ("Registration failed for Id: " + regId);
                     }
 
                     @Override
@@ -406,9 +406,11 @@ public class MainActivity extends Activity {
             gcm = GoogleCloudMessaging.getInstance(this);
             regId = getRegistrationId(context);
 
-            if (regId.isEmpty()) {
+            if (regId.isEmpty())
                 doRegisterGCM();
-            }
+            else
+                mDisplay.append("Device Id already registered: " + regId + '\n');
+
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
