@@ -98,7 +98,7 @@ public class PlacesDetailActivityTest extends ActivityInstrumentationTestCase2 <
         Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
-        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 5000);
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 3000);
         assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
         a.finish();
     }
