@@ -22,12 +22,12 @@ import com.cloudbees.gasp.R;
  * limitations under the License.
  */
 
-public class PlacesActivityTest extends ActivityInstrumentationTestCase2<PlacesActivity> {
+public class TwitterStreamActivityTest extends ActivityInstrumentationTestCase2<TwitterStreamActivity> {
     private Activity mActivity;
     private FragmentManager mFragmentManager;
 
-    public PlacesActivityTest() {
-        super(PlacesActivity.class);
+    public TwitterStreamActivityTest() {
+        super(TwitterStreamActivity.class);
     }
 
     @Override
@@ -38,9 +38,6 @@ public class PlacesActivityTest extends ActivityInstrumentationTestCase2<PlacesA
 
     public void testFragments() throws Exception {
         mFragmentManager = mActivity.getFragmentManager();
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_add_event)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_delete_event)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_location_search)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_place_details)));
+        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.twitter_responder)));
     }
 }

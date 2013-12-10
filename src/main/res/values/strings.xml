@@ -85,4 +85,5 @@
     <string name="fragment_gasp_review">Gasp Review Fragment</string>
     <string name="fragment_gasp_restaurant">Gasp Restaurant Fragment</string>
     <string name="fragment_gasp_database">Gasp Database Fragment</string>
+    <string name="twitter_responder">TwitterResponder</string>
 </resources>

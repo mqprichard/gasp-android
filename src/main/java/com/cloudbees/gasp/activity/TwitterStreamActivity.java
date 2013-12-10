@@ -73,11 +73,11 @@ public class TwitterStreamActivity extends Activity {
 
         // RESTResponderFragments call setRetainedInstance(true) in onCreate()
         TwitterResponderFragment responder =
-                (TwitterResponderFragment) fm.findFragmentByTag("TwitterResponder");
+                (TwitterResponderFragment) fm.findFragmentByTag(getString(R.string.twitter_responder));
         if (responder == null) {
             responder = new TwitterResponderFragment();
 
-            ft.add(responder, "TwitterResponder");
+            ft.add(responder, getString(R.string.twitter_responder));
         }
 
         ft.commit();

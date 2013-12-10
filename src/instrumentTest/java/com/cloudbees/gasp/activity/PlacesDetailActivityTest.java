@@ -2,8 +2,11 @@ package com.cloudbees.gasp.activity;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.KeyEvent;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.cloudbees.gasp.R;
@@ -91,8 +94,35 @@ public class PlacesDetailActivityTest extends ActivityInstrumentationTestCase2 <
         assert(detailLatitude.getText().toString().contains(mPlaceDetail.getGeometry().getLocation().getLng().toString()));
     }
 
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
+    private void testOptionsMenuStartActivity(String className, int id){
+        Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
+        getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 1000);
+        assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
+        a.finish();
+    }
+
+    public void testOptionsMenuPreferences() throws Exception {
+        testOptionsMenuStartActivity(SetPreferencesActivity.class.getName(), R.id.gasp_settings);
+    }
+
+    private void testButtonStartActivity(String className, int id){
+        Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
+        final Button button = (Button) mActivity.findViewById(id);
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // click button and open next activity.
+                button.performClick();
+            }
+        });
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 1000);
+        assertNotNull(a);
+        a .finish();
+    }
+
+    public void testAddReviewButton() throws Exception {
+        testButtonStartActivity(ReviewActivity.class.getName(), R.id.detail_review_button);
     }
 }
