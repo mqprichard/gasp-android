@@ -70,21 +70,21 @@
         <!-- Gasp! preferences activity -->
         <activity
             android:name="com.cloudbees.gasp.activity.SetPreferencesActivity"
-            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.ConsoleActivity"
             android:label="@string/gasp_preferences">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.gasp.activity.MainActivity" />
+                android:value="com.cloudbees.gasp.activity.ConsoleActivity" />
         </activity>
 
         <!-- Gasp! Twitter stream activity -->
         <activity
             android:name="com.cloudbees.gasp.activity.TwitterStreamActivity"
-            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity"
+            android:parentActivityName="com.cloudbees.gasp.activity.ConsoleActivity"
             android:label="@string/gasp_twitter">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.gasp.activity.MainActivity" />
+                android:value="com.cloudbees.gasp.activity.ConsoleActivity" />
         </activity>
 
         <!-- Gasp! REST data services -->
@@ -103,10 +103,10 @@
         <!-- Gasp! Google Places API activity -->
         <activity
             android:name="com.cloudbees.gasp.activity.PlacesActivity"
-            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            android:parentActivityName="com.cloudbees.gasp.activity.ConsoleActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.gasp.activity.MainActivity" />
+                android:value="com.cloudbees.gasp.activity.ConsoleActivity" />
         </activity>
         <activity
             android:name="com.cloudbees.gasp.activity.PlacesDetailActivity"
@@ -119,24 +119,24 @@
         <!-- Gasp! database activities -->
         <activity
             android:name="com.cloudbees.gasp.activity.ReviewListActivity"
-            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            android:parentActivityName="com.cloudbees.gasp.activity.ConsoleActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.gasp.activity.MainActivity" />
+                android:value="com.cloudbees.gasp.activity.ConsoleActivity" />
         </activity>
         <activity
             android:name="com.cloudbees.gasp.activity.RestaurantListActivity"
-            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            android:parentActivityName="com.cloudbees.gasp.activity.ConsoleActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.gasp.activity.MainActivity" />
+                android:value="com.cloudbees.gasp.activity.ConsoleActivity" />
         </activity>
         <activity
             android:name="com.cloudbees.gasp.activity.UserListActivity"
-            android:parentActivityName="com.cloudbees.gasp.activity.MainActivity">
+            android:parentActivityName="com.cloudbees.gasp.activity.ConsoleActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.gasp.activity.MainActivity" />
+                android:value="com.cloudbees.gasp.activity.ConsoleActivity" />
         </activity>
 
         <!-- Gasp! data synchronization services -->
