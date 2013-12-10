@@ -46,7 +46,7 @@ public class ConsoleActivityTest extends ActivityInstrumentationTestCase2<Consol
         getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
 
         // Check Activity started correctly
-        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 1000);
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 5000);
         assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
         a.finish();
     }
