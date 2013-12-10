@@ -27,7 +27,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.activity.ConsoleActivity;
 import com.cloudbees.gasp.service.RestaurantUpdateService;
 import com.cloudbees.gasp.service.ReviewUpdateService;
 import com.cloudbees.gasp.service.UserUpdateService;
@@ -67,13 +67,13 @@ public class GCMIntentService extends IntentService {
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
-                                    .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(ConsoleActivity.ResponseReceiver.PARAM_ID, index));
                         } else if (table.matches("restaurants")) {
                             startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
-                                    .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(ConsoleActivity.ResponseReceiver.PARAM_ID, index));
                         } else if (table.matches("users")) {
                             startService(new Intent(getApplicationContext(), UserUpdateService.class)
-                                    .putExtra(MainActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(ConsoleActivity.ResponseReceiver.PARAM_ID, index));
                         }
                         // Send notification message for message bar display etc
                         sendNotification(notificationMessage);
@@ -99,7 +99,7 @@ public class GCMIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class).setFlags(
+                new Intent(this, ConsoleActivity.class).setFlags(
                         Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
         NotificationCompat.Builder mBuilder =

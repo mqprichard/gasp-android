@@ -207,9 +207,9 @@ public class PlacesDetailActivity extends Activity {
             }
         };
 
-        ft.add(mGaspDatabaseFragment, "Gasp Database Fragment");
-        ft.add(mGaspRestaurantFragment, "Gasp Restaurant Fragment");
-        ft.add(mGaspReviewFragment, "Gasp Review Fragment");
+        ft.add(mGaspDatabaseFragment, getString(R.string.fragment_gasp_database));
+        ft.add(mGaspRestaurantFragment, getString(R.string.fragment_gasp_restaurant));
+        ft.add(mGaspReviewFragment, getString(R.string.fragment_gasp_review));
 
         ft.commit();
     }

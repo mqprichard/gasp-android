@@ -161,10 +161,10 @@ public class PlacesActivity extends Activity {
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(mSearchFragment, "LocationSearchFragment");
-        ft.add(mDetailsFragment, "PlaceDetailsFragment");
-        ft.add(mAddEventFragment, "AddEventFragment");
-        ft.add(mDeleteEventFragment, "DeleteEventFragment");
+        ft.add(mSearchFragment, getString(R.string.fragment_location_search));
+        ft.add(mDetailsFragment, getString(R.string.fragment_place_details));
+        ft.add(mAddEventFragment, getString(R.string.fragment_add_event));
+        ft.add(mDeleteEventFragment, getString(R.string.fragment_delete_event));
         ft.commit();
     }
 

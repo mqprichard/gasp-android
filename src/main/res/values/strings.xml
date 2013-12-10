@@ -78,4 +78,11 @@
     <string name="gasp_twitter_title">Twitter Stream Settings</string>
     <string name="gasp_twitter_dialog">Keyword for Twitter Search</string>
     <string name="gasp_twitter_default">CloudBees</string>
+    <string name="fragment_delete_event">DeleteEventFragment</string>
+    <string name="fragment_add_event">AddEventFragment</string>
+    <string name="fragment_place_details">PlaceDetailsFragment</string>
+    <string name="fragment_location_search">LocationSearchFragment</string>
+    <string name="fragment_gasp_review">Gasp Review Fragment</string>
+    <string name="fragment_gasp_restaurant">Gasp Restaurant Fragment</string>
+    <string name="fragment_gasp_database">Gasp Database Fragment</string>
 </resources>

@@ -21,7 +21,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.activity.ConsoleActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,7 +46,7 @@ public final class GCMRegistration {
     private static final Random random = new Random();
 
     // Base URL of the Gasp! GCM Push Server
-    private static final String SERVER_URL = MainActivity.getGaspPushServerUrl();
+    private static final String SERVER_URL = ConsoleActivity.getGaspPushServerUrl();
 
     /**
      * Register this account/device pair within the server.
@@ -65,7 +65,7 @@ public final class GCMRegistration {
                 post(serverUrl, params);
                 Log.d(TAG, "Registered: " + regId);
                 String message = context.getString(R.string.server_registered);
-                MainActivity.displayMessage(context, message);
+                ConsoleActivity.displayMessage(context, message);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Failed to register on attempt " + i, e);
@@ -87,7 +87,7 @@ public final class GCMRegistration {
         }
         String message = context.getString(R.string.server_register_error,
                 MAX_ATTEMPTS);
-        MainActivity.displayMessage(context, message);
+        ConsoleActivity.displayMessage(context, message);
         return false;
     }
 
@@ -108,14 +108,14 @@ public final class GCMRegistration {
                 post(serverUrl, params);
                 Log.d(TAG, "Unregistered: " + regId);
                 message = context.getString(R.string.server_unregistered);
-                MainActivity.displayMessage(context, message);
+                ConsoleActivity.displayMessage(context, message);
                 return;
 
             } catch (IOException e) {
                 Log.e(TAG, "Failed to unregister on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     message = context.getString(R.string.server_unregister_error, e.getMessage());
-                    MainActivity.displayMessage(context, message);
+                    ConsoleActivity.displayMessage(context, message);
                     break;
                 }
                 try {
@@ -173,6 +173,7 @@ public final class GCMRegistration {
             // post the request
             OutputStream out = conn.getOutputStream();
             out.write(bytes);
+            out.flush();
             out.close();
             // handle the response
             int status = conn.getResponseCode();

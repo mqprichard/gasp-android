@@ -50,8 +50,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
-public class MainActivity extends Activity {
-    private static final String TAG = MainActivity.class.getName();
+public class ConsoleActivity extends Activity {
+    private static final String TAG = ConsoleActivity.class.getName();
 
     // Base URL of the Gasp! GCM Push Server
     private static String mGaspPushServerUrl;
@@ -165,7 +165,7 @@ public class MainActivity extends Activity {
     private SharedPreferences getGcmPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return getSharedPreferences(MainActivity.class.getSimpleName(),
+        return getSharedPreferences(ConsoleActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
 
@@ -333,9 +333,9 @@ public class MainActivity extends Activity {
      */
     public static void displayMessage(Context context, String message) {
         Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+        broadcastIntent.setAction(ConsoleActivity.ResponseReceiver.ACTION_RESP);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, message);
+        broadcastIntent.putExtra(ConsoleActivity.ResponseReceiver.PARAM_OUT_MSG, message);
         context.sendBroadcast(broadcastIntent);
     }
 
@@ -457,37 +457,37 @@ public class MainActivity extends Activity {
 
             case R.id.gasp_settings:
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, SetPreferencesActivity.class);
+                intent.setClass(ConsoleActivity.this, SetPreferencesActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_menu_twitter:
                 intent = new Intent();
-                intent.setClass(MainActivity.this, TwitterStreamActivity.class);
+                intent.setClass(ConsoleActivity.this, TwitterStreamActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_reviews_data:
                 intent = new Intent();
-                intent.setClass(MainActivity.this, ReviewListActivity.class);
+                intent.setClass(ConsoleActivity.this, ReviewListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_restaurants_data:
                 intent = new Intent();
-                intent.setClass(MainActivity.this, RestaurantListActivity.class);
+                intent.setClass(ConsoleActivity.this, RestaurantListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_users_data:
                 intent = new Intent();
-                intent.setClass(MainActivity.this, UserListActivity.class);
+                intent.setClass(ConsoleActivity.this, UserListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 
             case R.id.gasp_menu_places:
                 intent = new Intent();
-                intent.setClass(MainActivity.this, PlacesActivity.class);
+                intent.setClass(ConsoleActivity.this, PlacesActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
 

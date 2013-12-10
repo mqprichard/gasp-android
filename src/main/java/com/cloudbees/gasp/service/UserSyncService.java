@@ -25,7 +25,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.activity.ConsoleActivity;
 import com.cloudbees.gasp.adapter.UserDataAdapter;
 import com.cloudbees.gasp.model.User;
 import com.google.gson.Gson;
@@ -119,9 +119,9 @@ public class UserSyncService extends IntentService implements IRESTListener {
                 Log.i(TAG, resultTxt + '\n');
 
                 Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+                broadcastIntent.setAction(ConsoleActivity.ResponseReceiver.ACTION_RESP);
                 broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
+                broadcastIntent.putExtra(ConsoleActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
                 sendBroadcast(broadcastIntent);
 
             } catch (Exception e) {

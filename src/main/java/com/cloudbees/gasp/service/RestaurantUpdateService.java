@@ -23,7 +23,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cloudbees.gasp.activity.MainActivity;
+import com.cloudbees.gasp.activity.ConsoleActivity;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.gasp.model.Restaurant;
@@ -52,7 +52,7 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int index = intent.getIntExtra(MainActivity.ResponseReceiver.PARAM_ID, 0);
+        int index = intent.getIntExtra(ConsoleActivity.ResponseReceiver.PARAM_ID, 0);
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");
@@ -84,9 +84,9 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
                 Log.i(TAG, resultTxt + '\n');
 
                 Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+                broadcastIntent.setAction(ConsoleActivity.ResponseReceiver.ACTION_RESP);
                 broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(MainActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
+                broadcastIntent.putExtra(ConsoleActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
                 sendBroadcast(broadcastIntent);
 
             } catch (Exception e) {

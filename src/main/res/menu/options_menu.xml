@@ -21,7 +21,7 @@
     <!-- Typically, an application registers automatically, so options below
          are disabled. Uncomment them if you want to manually register or
          unregister the device (you will also need to uncomment the equivalent
-         options on MainActivity.onOptionsItemSelected())
+         options on ConsoleActivity.onOptionsItemSelected())
     -->
     <item
         android:id="@+id/options_register"
