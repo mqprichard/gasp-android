@@ -40,8 +40,12 @@ public class ConsoleActivityTest extends ActivityInstrumentationTestCase2<Consol
 
     private void testOptionsMenuStartActivity(String className, int id){
         Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
+
+        // Simulate Options Menu -> {id}
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
+
+        // Check Activity started correctly
         Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 1000);
         assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
         a.finish();
