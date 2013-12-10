@@ -61,35 +61,38 @@ public class TwitterResponderFragment extends RESTResponderFragment {
     private void setTweets() {
         TwitterStreamActivity activity = (TwitterStreamActivity) getActivity();
 
-        // Get Twitter search keyword from Shared Preferences
-        SharedPreferences gaspSharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String keyword = gaspSharedPreferences.getString(getString(R.string.gasp_twitter_preferences), "");
+        try {
+            // Get Twitter search keyword from Shared Preferences
+            SharedPreferences gaspSharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String keyword = gaspSharedPreferences.getString(getString(R.string.gasp_twitter_preferences), "");
 
-        if (mTweets == null && activity != null) {
-            Intent intent = new Intent(activity, RESTIntentService.class);
-            intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
+            if (mTweets == null && activity != null) {
+                Intent intent = new Intent(activity, RESTIntentService.class);
+                intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
 
-            Bundle params = new Bundle();
-            params.putString("q", keyword);
-            params.putString("count", "10");
+                Bundle params = new Bundle();
+                params.putString("q", keyword);
+                params.putString("count", "10");
 
-            Bundle headers = new Bundle();
-            headers. putString("Authorization", "Bearer " + TwitterStreamActivity.getTwitterOAuthToken());
-            
-            intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
-            intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
-            intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+                Bundle headers = new Bundle();
+                headers.putString("Authorization", "Bearer " + TwitterStreamActivity.getTwitterOAuthToken());
 
-            activity.startService(intent);
-        }
-        else if (activity != null) {
-            ArrayAdapter<String> adapter = activity.getArrayAdapter();
-            
-            adapter.clear();
-            for (String tweet : mTweets) {
-                adapter.add(tweet);
+                intent.putExtra(RESTIntentService.EXTRA_PARAMS, params);
+                intent.putExtra(RESTIntentService.EXTRA_HEADERS, headers);
+                intent.putExtra(RESTIntentService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+
+                activity.startService(intent);
+            } else if (activity != null) {
+                ArrayAdapter<String> adapter = activity.getArrayAdapter();
+
+                adapter.clear();
+                for (String tweet : mTweets) {
+                    adapter.add(tweet);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
