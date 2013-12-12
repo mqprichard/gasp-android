@@ -33,6 +33,8 @@ dependencies {
     compile 'com.google.code.geocoder-java:geocoder-java:0.15'
     compile files('libs/TestFlightLib.jar')
     compile files('libs/vesselsdk.jar')
+
+    instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.+'
 }
 
 android {

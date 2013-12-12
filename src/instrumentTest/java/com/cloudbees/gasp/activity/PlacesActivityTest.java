@@ -2,7 +2,9 @@ package com.cloudbees.gasp.activity;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.KeyEvent;
 
 import com.cloudbees.gasp.R;
 
@@ -42,5 +44,22 @@ public class PlacesActivityTest extends ActivityInstrumentationTestCase2<PlacesA
         assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_delete_event)));
         assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_location_search)));
         assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_place_details)));
+    }
+
+    private void testOptionsMenuStartActivity(String className, int id){
+        Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
+
+        // Simulate Options Menu -> {id}
+        getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
+
+        // Check Activity started correctly
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 3000);
+        assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
+        a.finish();
+    }
+
+    public void testOptionsMenuPreferences() throws Exception {
+        testOptionsMenuStartActivity(SetPreferencesActivity.class.getName(), R.id.gasp_settings);
     }
 }
