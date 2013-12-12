@@ -1,5 +1,6 @@
 package com.cloudbees.gasp.robotium;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.cloudbees.gasp.R;
@@ -31,7 +32,7 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActivity> {
     private Solo solo;
-    // TODO: Robotium bug? Fix to use resource ids
+    // TODO: Fix to use resource ids
     private String menuRestaurants = "Gasp! Restaurants";
     private String menuReviews = "Gasp! Reviews";
     private String menuUsers = "Gasp! Users";
@@ -46,110 +47,93 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActi
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    // TODO: Refactor into private methods
-    public void testPlacesNavigation() {
-        // Action Bar -> PlacesActivity
-        solo.clickOnActionBarItem(R.id.gasp_menu_places);
-        solo.waitForActivity(PlacesActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar PlacesActivity", PlacesActivity.class);
-        // Action Bar -> Home
+    /**
+     * Start Activity from Action Bar
+     * @param resId     Resource id for the Activity
+     * @param to        Activity subclass to start
+     */
+    private void actionBarActivity(int resId, Class<? extends Activity> to) {
+        solo.clickOnActionBarItem(resId);
+        solo.waitForActivity(to, 5000);
+        solo.assertCurrentActivity("Action Bar: " + to.getClass().getName(), to);
+    }
+
+    /**
+     * Start Activity from Options Menu
+     * @param text  Resource id for the Activity
+     * @param to    Activity subclass to start
+     */
+    private void optionsMenuActivity(String text, Class<? extends Activity> to) {
+        solo.clickOnMenuItem(text);
+        solo.waitForActivity(to, 5000);
+        solo.assertCurrentActivity("Action Bar: " + to.getClass().getName(), to);
+    }
+
+    /**
+     * Simulate Action Bar Home click
+     * @param to    Parent Activity
+     */
+    private void actionBarHome(Class<? extends Activity> to) {
         solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        solo.waitForActivity(to, 5000);
+        solo.assertCurrentActivity("Action Bar Home", to);
+    }
+
+    public void testPlacesNavigation() {
+        actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testPlacesDetailNavigation() {
-        // Action Bar -> PlacesActivity
-        solo.clickOnActionBarItem(R.id.gasp_menu_places);
-        solo.waitForActivity(PlacesActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar PlacesActivity", PlacesActivity.class);
+        actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
+
+        // Allow time for ListActivity to populate
+        solo.sleep(10000);
+        assertTrue(solo.waitForView(R.id.places_list, 1, 1000));
 
         // Select first item from list
-        solo.sleep(5000);
-        assertTrue(solo.waitForView(R.id.places_list));
         solo.clickInList(1);
         solo.waitForActivity(PlacesDetailActivity.class,5000);
         solo.assertCurrentActivity("Clicked", PlacesDetailActivity.class);
 
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(PlacesActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", PlacesActivity.class);
+        actionBarHome(PlacesActivity.class);
 
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        // Allow time for ListActivity to populate
+        solo.sleep(10000);
+        assertTrue(solo.waitForView(R.id.places_list, 1, 1000));
+
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testTwitterNavigation() {
-        // Action Bar -> TwitterActivity
-        solo.clickOnActionBarItem(R.id.gasp_menu_twitter);
-        solo.waitForActivity(TwitterStreamActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar TwitterStreamActivity", TwitterStreamActivity.class);
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        actionBarActivity(R.id.gasp_menu_twitter, TwitterStreamActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testSettingsNavigation() {
-        // Options Menu -> Settings
-        solo.clickOnMenuItem(menuSettings);
-        solo.waitForActivity(SetPreferencesActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar SetPreferencesActivity", SetPreferencesActivity.class);
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        optionsMenuActivity(menuSettings, SetPreferencesActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testPlacesSettingsNavigation() {
-        // Action Bar -> PlacesActivity
-        solo.clickOnActionBarItem(R.id.gasp_menu_places);
-        solo.waitForActivity(PlacesActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar PlacesActivity", PlacesActivity.class);
-        // Options Menu -> Settings
-        solo.clickOnMenuItem(menuSettings);
-        solo.waitForActivity(SetPreferencesActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar SetPreferencesActivity", SetPreferencesActivity.class);
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
+        optionsMenuActivity(menuSettings, SetPreferencesActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testRestaurantsNavigation() {
-        // OptionsMenu -> RestaurantListActivity
-        solo.clickOnMenuItem(menuRestaurants);
-        solo.waitForActivity(RestaurantListActivity.class, 5000);
-        solo.assertCurrentActivity("Options Menu RestaurantListActivity", RestaurantListActivity.class);
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        optionsMenuActivity(menuRestaurants, RestaurantListActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testReviewsNavigation() {
-        // OptionsMenu -> ReviewListActivity
-        solo.clickOnMenuItem(menuReviews);
-        solo.waitForActivity(ReviewListActivity.class, 5000);
-        solo.assertCurrentActivity("Options Menu ReviewListActivity", ReviewListActivity.class);
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        optionsMenuActivity(menuReviews, ReviewListActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     public void testUsersNavigation() {
-        // OptionsMenu -> UserListActivity
-        solo.clickOnMenuItem(menuUsers);
-        solo.waitForActivity(UserListActivity.class, 5000);
-        solo.assertCurrentActivity("Options Menu UserListActivity", UserListActivity.class);
-        // Action Bar -> Home
-        solo.clickOnActionBarHomeButton();
-        solo.waitForActivity(ConsoleActivity.class, 5000);
-        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+        optionsMenuActivity(menuUsers, UserListActivity.class);
+        actionBarHome(ConsoleActivity.class);
     }
 
     @Override
