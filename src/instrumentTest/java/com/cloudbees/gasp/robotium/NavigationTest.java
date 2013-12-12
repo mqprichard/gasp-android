@@ -5,6 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.cloudbees.gasp.R;
 import com.cloudbees.gasp.activity.ConsoleActivity;
 import com.cloudbees.gasp.activity.PlacesActivity;
+import com.cloudbees.gasp.activity.PlacesDetailActivity;
 import com.cloudbees.gasp.activity.RestaurantListActivity;
 import com.cloudbees.gasp.activity.ReviewListActivity;
 import com.cloudbees.gasp.activity.SetPreferencesActivity;
@@ -51,6 +52,30 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActi
         solo.clickOnActionBarItem(R.id.gasp_menu_places);
         solo.waitForActivity(PlacesActivity.class, 5000);
         solo.assertCurrentActivity("Action Bar PlacesActivity", PlacesActivity.class);
+        // Action Bar -> Home
+        solo.clickOnActionBarHomeButton();
+        solo.waitForActivity(ConsoleActivity.class, 5000);
+        solo.assertCurrentActivity("Action Bar Home", ConsoleActivity.class);
+    }
+
+    public void testPlacesDetailNavigation() {
+        // Action Bar -> PlacesActivity
+        solo.clickOnActionBarItem(R.id.gasp_menu_places);
+        solo.waitForActivity(PlacesActivity.class, 5000);
+        solo.assertCurrentActivity("Action Bar PlacesActivity", PlacesActivity.class);
+
+        // Select first item from list
+        solo.sleep(5000);
+        assertTrue(solo.waitForView(R.id.places_list));
+        solo.clickInList(1);
+        solo.waitForActivity(PlacesDetailActivity.class,5000);
+        solo.assertCurrentActivity("Clicked", PlacesDetailActivity.class);
+
+        // Action Bar -> Home
+        solo.clickOnActionBarHomeButton();
+        solo.waitForActivity(PlacesActivity.class, 5000);
+        solo.assertCurrentActivity("Action Bar Home", PlacesActivity.class);
+
         // Action Bar -> Home
         solo.clickOnActionBarHomeButton();
         solo.waitForActivity(ConsoleActivity.class, 5000);
