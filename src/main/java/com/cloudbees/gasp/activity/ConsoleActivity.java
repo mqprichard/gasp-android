@@ -144,7 +144,7 @@ public class ConsoleActivity extends Activity {
         final SharedPreferences prefs = getGcmPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
-            Log.i(TAG, "Registration not found.");
+            Log.i(TAG, "Registration Id not found.");
             return "";
         }
         // Check if app was updated; if so, it must clear the registration ID
@@ -271,7 +271,7 @@ public class ConsoleActivity extends Activity {
                 e.printStackTrace();
             }
         } else {
-            Log.e(TAG, "Registration Id not found");
+            Log.e(TAG, "Device not registered");
         }
     }
 

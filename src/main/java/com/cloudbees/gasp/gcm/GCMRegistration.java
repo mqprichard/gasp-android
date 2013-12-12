@@ -180,6 +180,8 @@ public final class GCMRegistration {
             if (status != 200) {
                 throw new IOException("Post failed with error code " + status);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (conn != null) {
                 conn.disconnect();
