@@ -54,7 +54,7 @@ public class PlacesActivityTest extends ActivityInstrumentationTestCase2<PlacesA
         getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
 
         // Check Activity started correctly
-        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, 3000);
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, TestParams.getTIMEOUT());
         assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
         a.finish();
     }
