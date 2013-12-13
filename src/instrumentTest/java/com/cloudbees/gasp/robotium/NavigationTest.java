@@ -32,11 +32,6 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActivity> {
     private Solo solo;
-    // TODO: Fix to use resource ids
-    private String menuRestaurants = "Gasp! Restaurants";
-    private String menuReviews = "Gasp! Reviews";
-    private String menuUsers = "Gasp! Users";
-    private String menuSettings = "Gasp! Settings";
 
     public NavigationTest() {
         super(ConsoleActivity.class);
@@ -60,7 +55,7 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActi
 
     /**
      * Start Activity from Options Menu
-     * @param text  Resource id for the Activity
+     * @param text  Menu item text
      * @param to    Activity subclass to start
      */
     private void optionsMenuActivity(String text, Class<? extends Activity> to) {
@@ -111,28 +106,28 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActi
     }
 
     public void testSettingsNavigation() {
-        optionsMenuActivity(menuSettings, SetPreferencesActivity.class);
+        optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
         actionBarHome(ConsoleActivity.class);
     }
 
     public void testPlacesSettingsNavigation() {
         actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
-        optionsMenuActivity(menuSettings, SetPreferencesActivity.class);
+        optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
         actionBarHome(ConsoleActivity.class);
     }
 
     public void testRestaurantsNavigation() {
-        optionsMenuActivity(menuRestaurants, RestaurantListActivity.class);
+        optionsMenuActivity(solo.getString(R.string.gasp_restaurants_data), RestaurantListActivity.class);
         actionBarHome(ConsoleActivity.class);
     }
 
     public void testReviewsNavigation() {
-        optionsMenuActivity(menuReviews, ReviewListActivity.class);
+        optionsMenuActivity(solo.getString(R.string.gasp_reviews_data), ReviewListActivity.class);
         actionBarHome(ConsoleActivity.class);
     }
 
     public void testUsersNavigation() {
-        optionsMenuActivity(menuUsers, UserListActivity.class);
+        optionsMenuActivity(solo.getString(R.string.gasp_users_data), UserListActivity.class);
         actionBarHome(ConsoleActivity.class);
     }
 
