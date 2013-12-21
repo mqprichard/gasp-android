@@ -32,8 +32,8 @@ dependencies {
     compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.android.gms:play-services:3.2.+'
     //compile 'com.newrelic.agent.android:android-agent:2.426.0'
-    compile files('libs/TestFlightLib.jar')
-    compile files('libs/vesselsdk.jar')
+    //compile files('libs/TestFlightLib.jar')
+    //compile files('libs/vesselsdk.jar')
 
     instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
 }
