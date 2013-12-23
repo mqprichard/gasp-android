@@ -7,7 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -70,10 +70,16 @@ public class LocationFragment extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        String locationMessage = "Location: " + String.format("%.6f", location.getLatitude())
-                + ", " + String.format("%.6f", location.getLongitude())
-                + " (via " + location.getProvider() + ")";
-        Toast.makeText(getActivity(), locationMessage, Toast.LENGTH_SHORT).show();
+        try {
+            String locationMessage = "Location: " + String.format("%.6f", location.getLatitude())
+                    + ", " + String.format("%.6f", location.getLongitude())
+                    + " (via " + location.getProvider() + ")";
+            Log.d(TAG, locationMessage);
+            //Toast.makeText(getActivity(), locationMessage, Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -83,11 +89,13 @@ public class LocationFragment extends Fragment implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(getActivity(), "Enabled provider " + provider, Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Enabled provider: " + provider);
+        //Toast.makeText(getActivity(), "Enabled provider " + provider, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(getActivity(), "Disabled provider: " + provider, Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Disabled provider: " + provider);
+        //Toast.makeText(getActivity(), "Disabled provider: " + provider, Toast.LENGTH_SHORT).show();
     }
 }
