@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        //Not required if using Artifactory virtual repo
         //mavenCentral()
         maven {
             //url "https://repository-partnerdemo.forge.cloudbees.com/release/"
@@ -62,11 +63,16 @@ android {
         }
     }
 
+    //Using Product flavors to define test subsets
     productFlavors {
-        paidVersion {
+        //Default: TestCase, AndroidTestCase and InstrumentationTestCase tests
+        //Test sources: src/instrumentTest
+        base {
         }
 
-        freeVersion {
+        //ActivityInstrumentationTestCase2 tests
+        //Test sources: src/instrumentTestFull
+        full {
         }
     }
 }
