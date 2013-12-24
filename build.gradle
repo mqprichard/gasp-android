@@ -17,22 +17,35 @@ task wrapper(type: Wrapper) {
 }
 
 apply plugin: 'android'
+
+//Uncomment to use NewRelic plugin
 //apply plugin: 'newrelic'
 
 repositories {
+    //Not required if using Artifactory virtual repo
     //mavenCentral()
     maven {
+        //Get Android jars from private CloudBees forge repo
         //url "https://repository-partnerdemo.forge.cloudbees.com/release/"
+
+        //Get Android and other dependencies from Artifactory virtual repo
         url "http://partnerdemo.artifactoryonline.com/partnerdemo/snapshots"
     }
 }
 
 dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
+
     compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.android.gms:play-services:3.2.+'
+
+    //Uncomment for New Relic integration
     //compile 'com.newrelic.agent.android:android-agent:2.426.0'
+
+    //Uncomment for TestFlight integration
     //compile files('libs/TestFlightLib.jar')
+
+    //Uncomment for Vessel integration
     //compile files('libs/vesselsdk.jar')
 
     instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
@@ -46,6 +59,14 @@ android {
         release {
             runProguard false
             proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    productFlavors {
+        paidVersion {
+        }
+
+        freeVersion {
         }
     }
 }

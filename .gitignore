@@ -18,3 +18,7 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+
+# Keyfiles etc
+src/main/java/com/cloudbees/gasp/gcm/GCMProjectKey.java
+src/main/java/com/cloudbees/gasp/location/GooglePlacesKey.java
