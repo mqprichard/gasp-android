@@ -36,8 +36,8 @@ import java.util.List;
 public class RestaurantArrayAdapter extends ArrayAdapter<Restaurant> {
     private final static String TAG = RestaurantArrayAdapter.class.getName();
 
-    private List<Restaurant> mRestaurants;
-    private int mResource;
+    private final List<Restaurant> mRestaurants;
+    private final int mResource;
 
     /**
      * Default constructor

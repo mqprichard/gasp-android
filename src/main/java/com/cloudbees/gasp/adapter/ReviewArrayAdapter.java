@@ -36,8 +36,8 @@ import java.util.List;
 public class ReviewArrayAdapter extends ArrayAdapter<Review> {
     private final static String TAG = ReviewArrayAdapter.class.getName();
 
-    private List<Review> mReviews;
-    private int mResource;
+    private final List<Review> mReviews;
+    private final int mResource;
 
     /**
      * Default constructor

@@ -33,8 +33,8 @@ import java.util.concurrent.TimeUnit;
 
 public class TwitterAuthServiceTest extends ServiceTestCase<RESTIntentService> {
 
-    private CountDownLatch signal = new CountDownLatch(1);
-    private ResultReceiver mResultReceiver;
+    private final CountDownLatch signal = new CountDownLatch(1);
+    private final ResultReceiver mResultReceiver;
 
     public TwitterAuthServiceTest() {
         super(RESTIntentService.class);

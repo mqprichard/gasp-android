@@ -36,8 +36,8 @@ import java.util.List;
 public class UserArrayAdapter extends ArrayAdapter<User> {
     private final static String TAG = UserArrayAdapter.class.getName();
 
-    private List<User> mUsers;
-    private int mResource;
+    private final List<User> mUsers;
+    private final int mResource;
 
     /**
      * Default constructor

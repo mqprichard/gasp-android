@@ -22,7 +22,6 @@ import android.database.Cursor;
 
 import com.cloudbees.gasp.model.Review;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,7 +88,7 @@ public class ReviewDataAdapter extends GaspDataAdapter<Review> {
      * @return ArrayList of reviews
      */
     public List<Review> getAllByRestaurant(int id) {
-        List<Review> reviews = new ArrayList<Review>();
+        //List<Review> reviews = new ArrayList<Review>();
 
         Cursor cursor = database.query(getTableName(), getAllColumns(),
                 GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID + " = ?",
@@ -105,7 +104,7 @@ public class ReviewDataAdapter extends GaspDataAdapter<Review> {
      * @return ArrayList of reviews
      */
     public List<Review> getLastNByRestaurant(int id, int n) {
-        List<Review> reviews = new ArrayList<Review>();
+        //List<Review> reviews = new ArrayList<Review>();
 
         Cursor cursor = database.query(getTableName(), getAllColumns(),
                 GaspSQLiteHelper.REVIEWS_COLUMN_RESTAURANT_ID + " = ?",

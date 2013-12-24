@@ -166,8 +166,8 @@ public class DataAdapterQueryTest extends AndroidTestCase {
 
             // Check selection by Restaurant
             assert (reviewList.size() > 0);
-            for (int i = 0; i < reviewList.size(); i++) {
-                assertEquals(reviewList.get(i).getRestaurant_id(), testId);
+            for (Review aReviewList : reviewList) {
+                assertEquals(aReviewList.getRestaurant_id(), testId);
             }
 
             // Check ordering
@@ -192,8 +192,8 @@ public class DataAdapterQueryTest extends AndroidTestCase {
             assertEquals(reviewList.size(), n);
 
             // Check selection by Restaurant
-            for (int i = 0; i < reviewList.size(); i++) {
-                assertEquals(reviewList.get(i).getRestaurant_id(), testId);
+            for (Review aReviewList : reviewList) {
+                assertEquals(aReviewList.getRestaurant_id(), testId);
             }
 
             // Check DESC ordering

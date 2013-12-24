@@ -36,10 +36,10 @@ import java.util.List;
  * @param <T> The GaspDataObject type for the Adapter
  */
 public abstract class GaspDataAdapter<T extends GaspDataObject> {
-    protected String TAG = GaspDataAdapter.class.getName();
+    protected final String TAG = GaspDataAdapter.class.getName();
 
     protected SQLiteDatabase database;
-    protected GaspSQLiteHelper dbHelper;
+    protected final GaspSQLiteHelper dbHelper;
 
     // Sub-classes must implement to support database calls
     abstract protected String getTableName();

@@ -3,12 +3,17 @@ buildscript {
         //Not required if using Artifactory virtual repo
         //mavenCentral()
         maven {
+            //Get Android jars from private CloudBees forge repo
             //url "https://repository-partnerdemo.forge.cloudbees.com/release/"
+
+            //Get Android and other dependencies from Artifactory virtual repo
             url "http://partnerdemo.artifactoryonline.com/partnerdemo/snapshots"
         }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.6.+'
+
+        //Uncomment to use NewRelic plugin
         //classpath 'com.newrelic.agent.android:agent-gradle-plugin:2.426.0'
     }
 }
