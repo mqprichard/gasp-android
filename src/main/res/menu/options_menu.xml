@@ -70,6 +70,11 @@
         android:showAsAction="never">
     </item>
     <item
+        android:id="@+id/gasp_map"
+        android:title="@string/gasp_restaurants_map"
+        android:showAsAction="never">
+    </item>
+    <item
         android:id="@+id/gasp_menu_twitter"
         android:title="@string/gasp_twitter"
         android:showAsAction="ifRoom"

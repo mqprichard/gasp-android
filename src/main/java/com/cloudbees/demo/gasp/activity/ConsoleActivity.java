@@ -503,6 +503,12 @@ public class ConsoleActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return true;
 
+            case R.id.gasp_map:
+                intent = new Intent();
+                intent.setClass(ConsoleActivity.this, LocationsActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
