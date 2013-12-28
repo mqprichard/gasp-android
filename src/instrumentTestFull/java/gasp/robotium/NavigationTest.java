@@ -3,15 +3,15 @@ package com.cloudbees.gasp.robotium;
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.cloudbees.gasp.R;
-import com.cloudbees.gasp.activity.ConsoleActivity;
-import com.cloudbees.gasp.activity.PlacesActivity;
-import com.cloudbees.gasp.activity.PlacesDetailActivity;
-import com.cloudbees.gasp.activity.RestaurantListActivity;
-import com.cloudbees.gasp.activity.ReviewListActivity;
-import com.cloudbees.gasp.activity.SetPreferencesActivity;
-import com.cloudbees.gasp.activity.TwitterStreamActivity;
-import com.cloudbees.gasp.activity.UserListActivity;
+import com.cloudbees.demo.gasp.R;
+import com.cloudbees.demo.gasp.activity.ConsoleActivity;
+import com.cloudbees.demo.gasp.activity.PlacesActivity;
+import com.cloudbees.demo.gasp.activity.PlacesDetailActivity;
+import com.cloudbees.demo.gasp.activity.RestaurantListActivity;
+import com.cloudbees.demo.gasp.activity.ReviewListActivity;
+import com.cloudbees.demo.gasp.activity.SetPreferencesActivity;
+import com.cloudbees.demo.gasp.activity.TwitterStreamActivity;
+import com.cloudbees.demo.gasp.activity.UserListActivity;
 import com.jayway.android.robotium.solo.Solo;
 
 /**
