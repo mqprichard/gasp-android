@@ -16,9 +16,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
     <string name="app_name">Gasp!</string>
-    <string name="gasp_twitter">Gasp! Twitter Stream</string>
     <string name="gasp_places">Google Places</string>
     <string name="gasp_console">Gasp! Console</string>
+    <string name="gasp_twitter">Gasp! Twitter Stream</string>
+
+    <!-- GCM string resources -->
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
@@ -32,19 +34,44 @@
     <string name="server_unregistered">From Demo Server: successfully removed device!</string>
     <string name="server_register_error">Could not register device on Demo Server after %1$d attempts.</string>
     <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).</string>
+
+    <!-- Options Menu -->
+    <string name="action_settings">Settings</string>
     <string name="options_register">Register</string>
     <string name="options_unregister">Unregister</string>
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
+
+    <!-- Network error messages -->
     <string name="gasp_network_error">Failed to load Gasp! reviews: Please check your internet settings</string>
     <string name="gasp_twitter_error">Failed to load Twitter stream: Please check your internet settings</string>
     <string name="gasp_twitter_auth_error">Unable to get Twitter authorization token</string>
+
+    <!-- Gasp! Settings -->
     <string name="gasp_settings">Gasp! Settings</string>
     <string name="gasp_reviews_data">Gasp! Reviews</string>
     <string name="gasp_review_comment_hint">Please enter your review</string>
     <string name="gasp_restaurants_data">Gasp! Restaurants</string>
     <string name="gasp_users_data">Gasp! Users</string>
     <string name="gasp_preferences">Gasp! Preferences</string>
+    <string name="places_search_radius_preferences">places_search_radius</string>
+    <string name="places_search_radius_title">Google Places API Search Radius</string>
+    <string name="places_search_radius_dialog">Select search radius (in meters)</string>
+    <string name="places_search_radius_default">500 meters</string>
+    <string name="gasp_push_uri">http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm</string>
+    <string name="gasp_push_uri_preferences">gasp_push_uri</string>
+    <string name="gasp_push_uri_title">Gasp! GCM Push Notification Settings</string>
+    <string name="gasp_push_uri_dialog">Gasp! GCM Push Server URI</string>
+    <string name="gasp_server_uri_preferences">gasp_server_uri</string>
+    <string name="gasp_server_uri_base">http://gasp2.partnerdemo.cloudbees.net/</string>
+    <string name="gasp_server_uri_title">Gasp! Server Settings</string>
+    <string name="gasp_server_uri_dialog">Gasp! Server URI</string>
+    <string name="gasp_twitter_preferences">gasp_twitter_keyword</string>
+    <string name="gasp_twitter_title">Twitter Stream Settings</string>
+    <string name="gasp_twitter_dialog">Keyword for Twitter Search</string>
+    <string name="gasp_twitter_default">CloudBees</string>
+
+    <!-- Gasp! Location/Review  -->
     <string name="gasp_add_review">Add a Review</string>
     <string name="places_button_details">Get Location Details</string>
     <string name="places_button_add_event">Add Event</string>
@@ -57,27 +84,15 @@
     <string name="places_latitude">"Latitude: "</string>
     <string name="places_longitude">"Longitude: "</string>
     <string name="places_google_id">"Google Places Id: "</string>
-    <string name="places_search_radius_preferences">places_search_radius</string>
-    <string name="places_search_radius_title">Google Places API Search Radius</string>
-    <string name="places_search_radius_dialog">Select search radius (in meters)</string>
-    <string name="places_search_radius_default">500 meters</string>
-    <string name="gasp_push_uri">http://gasp-gcm-server.partnerdemo.cloudbees.net/gcm</string>
-    <string name="gasp_push_uri_preferences">gasp_push_uri</string>
-    <string name="gasp_push_uri_title">Gasp! GCM Push Notification Settings</string>
-    <string name="gasp_push_uri_dialog">Gasp! GCM Push Server URI</string>
     <string name="gasp_details_title_reviews">Gasp! Reviews</string>
     <string name="gasp_details_title_events">Gasp! Events</string>
-    <string name="gasp_server_uri_preferences">gasp_server_uri</string>
-    <string name="gasp_server_uri_base">http://gasp2.partnerdemo.cloudbees.net/</string>
-    <string name="gasp_server_uri_title">Gasp! Server Settings</string>
-    <string name="gasp_server_uri_dialog">Gasp! Server URI</string>
+
+    <!-- Gasp Services -->
     <string name="gasp_reviews_location">reviews</string>
     <string name="gasp_restaurants_location">restaurants</string>
     <string name="gasp_users_location">users</string>
-    <string name="gasp_twitter_preferences">gasp_twitter_keyword</string>
-    <string name="gasp_twitter_title">Twitter Stream Settings</string>
-    <string name="gasp_twitter_dialog">Keyword for Twitter Search</string>
-    <string name="gasp_twitter_default">CloudBees</string>
+
+    <!-- Fragment names -->
     <string name="fragment_delete_event">DeleteEventFragment</string>
     <string name="fragment_add_event">AddEventFragment</string>
     <string name="fragment_place_details">PlaceDetailsFragment</string>
@@ -86,4 +101,28 @@
     <string name="fragment_gasp_restaurant">Gasp Restaurant Fragment</string>
     <string name="fragment_gasp_database">Gasp Database Fragment</string>
     <string name="twitter_responder">TwitterResponder</string>
+
+    <!-- Login with Google -->
+    <string name="default_status"/>
+    <string name="loading_status">Loading…</string>
+    <string name="signing_in_status">Signing in with Google+.</string>
+    <string name="signed_in_status">Signed in as \"%s\".</string>
+    <string name="unknown_person">Unknown</string>
+    <string name="signed_out_status">Signed out.</string>
+    <string name="revoke_access_status">Revoked access.</string>
+    <string name="revoke_access_error_status">Unable to revoke access.</string>
+    <string name="plus_generic_error">Sign in with Google is not available.</string>
+    <string name="progress_message">Signing in to Google&#8230;</string>
+    <string name="sign_out_button_name">Sign out</string>
+    <string name="revoke_access_button_name">Revoke access</string>
+    <string name="disconnect_button_name">Disconnect</string>
+    <string name="login_with_google">Login with Google</string>
+
+    <!-- Login with Amazon -->
+    <string name="login_with_amazon">Login with Amazon</string>
+    <string name="logout">Logout</string>
+    <string name="default_message">Welcome to Login with Amazon!\nIf this is your first time logging in, you will be asked to give permission for this application to access your profile data.</string>
+    <string name="login_button_content_description">"Button for authorization through Login with Amazon"</string>
+    <string name="return_to_app">Return To App</string>
+
 </resources>
