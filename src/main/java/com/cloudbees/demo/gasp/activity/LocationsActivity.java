@@ -76,7 +76,7 @@ public class LocationsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         if (checkPlayServices()) {
-            setContentView(R.layout.activity_locations);
+            setContentView(R.layout.gasp_locations_layout);
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             setLocation();
             setCamera();
