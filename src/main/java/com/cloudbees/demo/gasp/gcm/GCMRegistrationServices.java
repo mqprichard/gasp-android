@@ -36,8 +36,8 @@ import java.util.Random;
 /**
  * Helper class used to communicate with the Gasp! GCM Push Notification server.
  */
-public final class GCMRegistration {
-    static final String TAG = GCMRegistration.class.getName();
+public final class GCMRegistrationServices {
+    static final String TAG = GCMRegistrationServices.class.getName();
 
     // Control backoff/retry behaviour for HTTP Post requests
     private static final int MAX_ATTEMPTS = 5;

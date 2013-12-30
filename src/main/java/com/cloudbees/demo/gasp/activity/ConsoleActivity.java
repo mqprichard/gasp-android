@@ -39,7 +39,7 @@ import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
 import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.demo.gasp.gcm.GCMProjectKey;
-import com.cloudbees.demo.gasp.gcm.GCMRegistration;
+import com.cloudbees.demo.gasp.gcm.GCMRegistrationServices;
 import com.cloudbees.demo.gasp.service.RestaurantSyncService;
 import com.cloudbees.demo.gasp.service.ReviewSyncService;
 import com.cloudbees.demo.gasp.service.UserSyncService;
@@ -219,7 +219,7 @@ public class ConsoleActivity extends Activity {
                         Log.d(TAG, "Device already registered: " + regId + '\n');
 
                     // Register with Gasp GCM Push Notification Server
-                    boolean registered = GCMRegistration.register(context, regId, getGaspPushServerUrl());
+                    boolean registered = GCMRegistrationServices.register(context, regId, getGaspPushServerUrl());
                     if (registered)
                         Log.d(TAG, "Registered with server (" + mGaspPushServerUrl + "): " + regId);
                     else
@@ -251,7 +251,7 @@ public class ConsoleActivity extends Activity {
                     @Override
                     protected String doInBackground(Void... params) {
                         try {
-                            GCMRegistration.unregister(context, regId, getGaspPushServerUrl());
+                            GCMRegistrationServices.unregister(context, regId, getGaspPushServerUrl());
                             return ("Unregistered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -283,7 +283,7 @@ public class ConsoleActivity extends Activity {
                     @Override
                     protected String doInBackground(Void... params) {
                         try {
-                            if (GCMRegistration.register(context, regId, getGaspPushServerUrl()))
+                            if (GCMRegistrationServices.register(context, regId, getGaspPushServerUrl()))
                                 return ("Registered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();
