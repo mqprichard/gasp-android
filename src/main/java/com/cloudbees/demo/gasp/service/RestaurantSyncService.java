@@ -25,7 +25,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.demo.gasp.model.Restaurant;
 import com.google.gson.Gson;
@@ -117,12 +116,6 @@ public class RestaurantSyncService extends IntentService implements IRESTListene
                 String resultTxt = "Sync: Found " + localRecords + ", Loaded " + index
                         + " restaurants from " + mGaspRestaurantsUri;
                 Log.i(TAG, resultTxt + '\n');
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(ConsoleActivity.ResponseReceiver.ACTION_RESP);
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(ConsoleActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
-                sendBroadcast(broadcastIntent);
 
             } catch (Exception e) {
                 e.printStackTrace();

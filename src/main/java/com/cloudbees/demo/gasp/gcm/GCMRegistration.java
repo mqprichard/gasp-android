@@ -65,7 +65,7 @@ public final class GCMRegistration {
                 post(serverUrl, params);
                 Log.d(TAG, "Registered: " + regId);
                 String message = context.getString(R.string.server_registered);
-                ConsoleActivity.displayMessage(context, message);
+                //ConsoleActivity.displayMessage(context, message);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Failed to register on attempt " + i, e);
@@ -87,7 +87,7 @@ public final class GCMRegistration {
         }
         String message = context.getString(R.string.server_register_error,
                 MAX_ATTEMPTS);
-        ConsoleActivity.displayMessage(context, message);
+        //ConsoleActivity.displayMessage(context, message);
         return false;
     }
 
@@ -108,14 +108,14 @@ public final class GCMRegistration {
                 post(serverUrl, params);
                 Log.d(TAG, "Unregistered: " + regId);
                 message = context.getString(R.string.server_unregistered);
-                ConsoleActivity.displayMessage(context, message);
+                //ConsoleActivity.displayMessage(context, message);
                 return;
 
             } catch (IOException e) {
                 Log.e(TAG, "Failed to unregister on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     message = context.getString(R.string.server_unregister_error, e.getMessage());
-                    ConsoleActivity.displayMessage(context, message);
+                    //ConsoleActivity.displayMessage(context, message);
                     break;
                 }
                 try {

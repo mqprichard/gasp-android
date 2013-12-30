@@ -83,12 +83,6 @@ public class ReviewUpdateService extends IntentService implements IRESTListener 
                 String resultTxt = "Loaded review: " + mReview.getId();
                 Log.i(TAG, resultTxt + '\n');
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(ConsoleActivity.ResponseReceiver.ACTION_RESP);
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(ConsoleActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
-                sendBroadcast(broadcastIntent);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

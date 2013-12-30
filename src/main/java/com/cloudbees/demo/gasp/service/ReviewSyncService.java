@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.demo.gasp.model.Review;
@@ -118,11 +117,6 @@ public class ReviewSyncService extends IntentService implements IRESTListener {
                         + " reviews from " + getGaspReviewsUri();
                 Log.i(TAG, resultTxt + '\n');
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(ConsoleActivity.ResponseReceiver.ACTION_RESP);
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(ConsoleActivity.ResponseReceiver.PARAM_OUT_MSG, resultTxt);
-                sendBroadcast(broadcastIntent);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -34,7 +34,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
@@ -65,8 +64,8 @@ public class ConsoleActivity extends Activity {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    private AsyncTask<Void, Void, Void> mRegisterTask;
-    private TextView mDisplay;
+    //private AsyncTask<Void, Void, Void> mRegisterTask;
+    //private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
     private GoogleCloudMessaging gcm;
     private Context context;
@@ -99,9 +98,9 @@ public class ConsoleActivity extends Activity {
                 // Check current location
                 Location location = LocationFragment.getLocation(this);
                 if (location != null) {
-                    mDisplay.append("Location: " + String.format("%.6f", location.getLatitude())
-                            + ", " + String.format("%.6f", location.getLongitude())
-                            + " (via " + location.getProvider() + ")" + '\n');
+                    Log.d(TAG, "Location: " + String.format("%.6f", location.getLatitude())
+                                + ", " + String.format("%.6f", location.getLongitude())
+                                + " (via " + location.getProvider() + ")" + '\n');
                 }
 
                 // Add LocationFragment to enable location updates
@@ -176,7 +175,7 @@ public class ConsoleActivity extends Activity {
         PackageInfo packageInfo;
         try {
             packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
+                                 .getPackageInfo(context.getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException("Could not get package name: " + e);
         } catch (NullPointerException e) {
@@ -205,43 +204,43 @@ public class ConsoleActivity extends Activity {
      * Stores the registration ID and the app versionCode in the application's
      * shared preferences. Use when first registering with GCM/Gasp Push Server.
      */
-    private void doRegisterGCM() {
-        new AsyncTask<Void, Void, String>() {
+    private void registerGCM() {
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            protected String doInBackground(Void... params) {
-                String msg;
+            protected Void doInBackground(Void... params) {
                 try {
                     // Register device with Google Cloud Messaging
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(context);
+                    gcm = GoogleCloudMessaging.getInstance(context);
+                    regId = getRegistrationId(context);
+
+                    if (regId.isEmpty()) {
+                        regId = gcm.register(GCMProjectKey.SENDER_ID);
+                        Log.d(TAG, "Registered device: " + regId);
                     }
-                    regId = gcm.register(GCMProjectKey.SENDER_ID);
-                    msg = "Device registered: " + regId;
+                    else
+                        Log.d(TAG, "Device already registered: " + regId + '\n');
 
                     // Register with Gasp GCM Push Notification Server
                     boolean registered = GCMRegistration.register(context, regId);
                     if (registered)
                         Log.d(TAG, "Registered with server (" + mGaspPushServerUrl + "): " + regId);
-                    else Log.e(TAG, "Could not register with server (" + mGaspPushServerUrl + ")");
+                    else
+                        Log.e(TAG, "Could not register with server (" + mGaspPushServerUrl + ")");
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(context, regId);
                 } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
                     // TODO:
                     // If there is an error, don't just keep trying to register.
                     // Require the user to click a button again, or perform
                     // exponential back-off.
                 }
-                return msg;
-            }
 
-            @Override
-            protected void onPostExecute(String msg) {
-                mDisplay.append(msg + "\n");
+                return null;
             }
         }.execute(null, null, null);
     }
+
 
     /**
      * Unregister Device with Gasp GCM Server (for Options Menu)
@@ -264,7 +263,7 @@ public class ConsoleActivity extends Activity {
 
                     @Override
                     protected void onPostExecute(String msg) {
-                        mDisplay.append(msg + "\n");
+                        Log.d(TAG, msg + "\n");
                     }
                 }.execute(null, null, null);
             } catch (Exception e) {
@@ -296,7 +295,7 @@ public class ConsoleActivity extends Activity {
 
                     @Override
                     protected void onPostExecute(String msg) {
-                        mDisplay.append(msg + "\n");
+                        Log.d(TAG, msg + "\n");
                     }
                 }.execute(null, null, null);
 
@@ -339,6 +338,7 @@ public class ConsoleActivity extends Activity {
         context.sendBroadcast(broadcastIntent);
     }
 
+
     // BroadcastReceiver for Gasp sync/update/location messages
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String PARAM_IN_MSG = "gaspInMsg";
@@ -351,44 +351,11 @@ public class ConsoleActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra(PARAM_OUT_MSG);
             Log.d(TAG, text);
-            mDisplay.append(text + "\n");
+            //mDisplay.append(text + "\n");
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getApplicationContext();
-
-        // Add monitoring/ALM libs
-        addThirdPartyLibs();
-
-        setContentView(R.layout.gasp_console_layout);
-        mDisplay = (TextView) findViewById(R.id.display);
-
-        // Get GPS location if available
-        enableLocationChecking();
-
-        // Load shared preferences from res/xml/preferences.xml (first time only)
-        // Subsequent activations will use the saved shared preferences from the device
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.i(TAG, "Using Gasp Server URI: "
-                + gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_base), ""));
-
-        mGaspPushServerUrl = gaspSharedPreferences.getString(getString(R.string.gasp_push_uri_preferences), "");
-        Log.i(TAG, "Using Gasp Push Server URI: " + mGaspPushServerUrl);
-
-        // Add support for third-party libraries
-        //addThirdPartyLibs();
-
-        // Register Broadcast Receiver to listen for replies from data sync services
-        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        mGaspMessageReceiver = new ResponseReceiver();
-        registerReceiver(mGaspMessageReceiver, filter);
-
-        // Intent Services handle initial data sync
+    private void startDataSyncServices() {
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
         reviewsIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "reviews");
         startService(reviewsIntent);
@@ -400,20 +367,48 @@ public class ConsoleActivity extends Activity {
         Intent usersIntent = new Intent(this, UserSyncService.class);
         usersIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "users");
         startService(usersIntent);
+    }
 
-        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
-        if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(this);
-            regId = getRegistrationId(context);
+    private void registerBroadcastReceiver() {
+        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        mGaspMessageReceiver = new ResponseReceiver();
+        registerReceiver(mGaspMessageReceiver, filter);
+    }
 
-            if (regId.isEmpty())
-                doRegisterGCM();
-            else
-                mDisplay.append("Device Id already registered: " + regId + '\n');
+    private void getGaspSharedPreferences() {
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.i(TAG, "Using Gasp Server URI: "
+                + gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_base), ""));
 
-        } else {
-            Log.i(TAG, "No valid Google Play Services APK found.");
-        }
+        mGaspPushServerUrl = gaspSharedPreferences.getString(getString(R.string.gasp_push_uri_preferences), "");
+        Log.i(TAG, "Using Gasp Push Server URI: " + mGaspPushServerUrl);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getApplicationContext();
+
+        // Add monitoring/ALM libs
+        addThirdPartyLibs();
+
+        // Get GPS location if available
+        enableLocationChecking();
+
+        // Load shared preferences from res/xml/preferences.xml (first time only)
+        // Subsequent activations will use the saved shared preferences from the device
+        getGaspSharedPreferences();
+
+        // Register Broadcast Receiver to listen for replies from data sync services
+        registerBroadcastReceiver();
+
+        // Intent Services handle initial data sync
+        startDataSyncServices();
+
+        // Register for Gasp GCM messages
+        registerGCM();
 
         // Request Twitter OAuth Token
         requestTwitterOAuthToken();
@@ -448,7 +443,7 @@ public class ConsoleActivity extends Activity {
                 return true;
 
             case R.id.options_clear:
-                mDisplay.setText(null);
+                //mDisplay.setText(null);
                 return true;
 
             case R.id.options_exit:
@@ -516,9 +511,9 @@ public class ConsoleActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        if (mRegisterTask != null) {
-            mRegisterTask.cancel(true);
-        }
+        //if (mRegisterTask != null) {
+        //    mRegisterTask.cancel(true);
+        //}
         // Unregister from Gasp GCM Server
         doUnregisterGasp();
         unregisterReceiver(mGaspMessageReceiver);
