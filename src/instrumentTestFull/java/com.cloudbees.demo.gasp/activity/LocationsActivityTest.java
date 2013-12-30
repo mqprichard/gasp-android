@@ -23,13 +23,13 @@ import com.cloudbees.demo.gasp.R;
  * limitations under the License.
  */
 
-public class ConsoleActivityTest extends ActivityInstrumentationTestCase2<ConsoleActivity> {
-    static final String TAG = ConsoleActivityTest.class.getName();
+public class LocationsActivityTest extends ActivityInstrumentationTestCase2<LocationsActivity> {
+    static final String TAG = LocationsActivityTest.class.getName();
 
-    private ConsoleActivity mActivity;
+    private LocationsActivity mActivity;
 
-    public ConsoleActivityTest() {
-        super(ConsoleActivity.class);
+    public LocationsActivityTest() {
+        super(LocationsActivity.class);
     }
 
     @Override

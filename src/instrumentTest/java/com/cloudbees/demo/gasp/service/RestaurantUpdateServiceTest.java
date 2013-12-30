@@ -3,7 +3,7 @@ package com.cloudbees.demo.gasp.service;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
+import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.demo.gasp.model.Restaurant;
 
@@ -58,7 +58,7 @@ public class RestaurantUpdateServiceTest extends ServiceTestCase<RestaurantUpdat
 
     public void testRestaurantUpdateIntent() throws InterruptedException {
         startService(new Intent(getContext(), RestaurantUpdateService.class)
-                .putExtra(ConsoleActivity.ResponseReceiver.PARAM_ID, 1));
+                .putExtra(LocationsActivity.ResponseReceiver.PARAM_ID, 1));
 
         // Allow 20 secs for the async REST call to complete
         signal.await(20, TimeUnit.SECONDS);

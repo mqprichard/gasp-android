@@ -23,8 +23,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
 import com.cloudbees.demo.gasp.R;
+import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.adapter.UserDataAdapter;
 import com.cloudbees.demo.gasp.model.User;
 import com.google.gson.Gson;
@@ -56,7 +56,7 @@ public class UserUpdateService extends IntentService implements IRESTListener {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int index = intent.getIntExtra(ConsoleActivity.ResponseReceiver.PARAM_ID, 0);
+        int index = intent.getIntExtra(LocationsActivity.ResponseReceiver.PARAM_ID, 0);
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");

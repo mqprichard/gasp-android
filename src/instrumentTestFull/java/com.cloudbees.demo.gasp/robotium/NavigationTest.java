@@ -30,11 +30,11 @@ import com.jayway.android.robotium.solo.Solo;
  * limitations under the License.
  */
 
-public class NavigationTest extends ActivityInstrumentationTestCase2<ConsoleActivity> {
+public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsActivity> {
     private Solo solo;
 
     public NavigationTest() {
-        super(ConsoleActivity.class);
+        super(LocationsActivity.class);
     }
 
     @Override
