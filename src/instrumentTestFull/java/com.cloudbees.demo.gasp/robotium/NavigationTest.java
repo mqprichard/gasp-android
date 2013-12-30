@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
+import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.activity.PlacesActivity;
 import com.cloudbees.demo.gasp.activity.PlacesDetailActivity;
 import com.cloudbees.demo.gasp.activity.RestaurantListActivity;
@@ -76,7 +76,7 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
 
     public void testPlacesNavigation() {
         actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testPlacesDetailNavigation() {
@@ -97,38 +97,38 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
         solo.sleep(10000);
         assertTrue(solo.waitForView(R.id.places_list, 1, 1000));
 
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testTwitterNavigation() {
         actionBarActivity(R.id.gasp_menu_twitter, TwitterStreamActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testSettingsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testPlacesSettingsNavigation() {
         actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
         optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testRestaurantsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_restaurants_data), RestaurantListActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testReviewsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_reviews_data), ReviewListActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     public void testUsersNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_users_data), UserListActivity.class);
-        actionBarHome(ConsoleActivity.class);
+        actionBarHome(LocationsActivity.class);
     }
 
     @Override

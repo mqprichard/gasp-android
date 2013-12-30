@@ -20,8 +20,6 @@ package com.cloudbees.demo.gasp.gcm;
 import android.content.Context;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.R;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -60,8 +58,6 @@ public final class GCMRegistrationServices {
             try {
                 post(serverUrl, params);
                 Log.d(TAG, "Registered: " + regId);
-                String message = context.getString(R.string.server_registered);
-                //ConsoleActivity.displayMessage(context, message);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Failed to register on attempt " + i, e);
@@ -81,9 +77,6 @@ public final class GCMRegistrationServices {
                 backoff *= 2;
             }
         }
-        String message = context.getString(R.string.server_register_error,
-                MAX_ATTEMPTS);
-        //ConsoleActivity.displayMessage(context, message);
         return false;
     }
 
@@ -103,15 +96,11 @@ public final class GCMRegistrationServices {
             try {
                 post(serverUrl, params);
                 Log.d(TAG, "Unregistered: " + regId);
-                message = context.getString(R.string.server_unregistered);
-                //ConsoleActivity.displayMessage(context, message);
                 return;
 
             } catch (IOException e) {
                 Log.e(TAG, "Failed to unregister on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
-                    message = context.getString(R.string.server_unregister_error, e.getMessage());
-                    //ConsoleActivity.displayMessage(context, message);
                     break;
                 }
                 try {

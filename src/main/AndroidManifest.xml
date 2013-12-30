@@ -139,7 +139,7 @@
                 android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
 
-        <!-- Login with Amamzon/Google -->
+        <!-- Login with Amazon/Google -->
         <activity
             android:name="com.cloudbees.demo.gasp.activity.AmazonSignInActivity">
         </activity>
