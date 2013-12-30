@@ -64,8 +64,6 @@ public class ConsoleActivity extends Activity {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    //private AsyncTask<Void, Void, Void> mRegisterTask;
-    //private TextView mDisplay;
     private ResponseReceiver mGaspMessageReceiver;
     private GoogleCloudMessaging gcm;
     private Context context;
@@ -221,7 +219,7 @@ public class ConsoleActivity extends Activity {
                         Log.d(TAG, "Device already registered: " + regId + '\n');
 
                     // Register with Gasp GCM Push Notification Server
-                    boolean registered = GCMRegistration.register(context, regId);
+                    boolean registered = GCMRegistration.register(context, regId, getGaspPushServerUrl());
                     if (registered)
                         Log.d(TAG, "Registered with server (" + mGaspPushServerUrl + "): " + regId);
                     else
@@ -253,7 +251,7 @@ public class ConsoleActivity extends Activity {
                     @Override
                     protected String doInBackground(Void... params) {
                         try {
-                            GCMRegistration.unregister(context, regId);
+                            GCMRegistration.unregister(context, regId, getGaspPushServerUrl());
                             return ("Unregistered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -285,7 +283,7 @@ public class ConsoleActivity extends Activity {
                     @Override
                     protected String doInBackground(Void... params) {
                         try {
-                            if (GCMRegistration.register(context, regId))
+                            if (GCMRegistration.register(context, regId, getGaspPushServerUrl()))
                                 return ("Registered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();

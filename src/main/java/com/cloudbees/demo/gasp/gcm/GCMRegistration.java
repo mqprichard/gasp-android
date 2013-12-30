@@ -21,7 +21,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -45,17 +44,14 @@ public final class GCMRegistration {
     private static final int BACKOFF_MILLI_SECONDS = 2000;
     private static final Random random = new Random();
 
-    // Base URL of the Gasp! GCM Push Server
-    private static final String SERVER_URL = ConsoleActivity.getGaspPushServerUrl();
-
     /**
      * Register this account/device pair within the server.
      *
      * @return whether the registration succeeded or not.
      */
-    public static boolean register(final Context context, final String regId) {
+    public static boolean register(final Context context, final String regId, final String baseUrl) {
         Log.i(TAG, "Registering device (regId = " + regId + ")");
-        String serverUrl = SERVER_URL + "/register";
+        String serverUrl = baseUrl + "/register";
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);
         long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
@@ -94,9 +90,9 @@ public final class GCMRegistration {
     /**
      * Unregister this account/device pair within the server.
      */
-    public static void unregister(final Context context, final String regId) {
+    public static void unregister(final Context context, final String regId, final String baseUrl) {
         Log.i(TAG, "Unregistering device (regId = " + regId + ")");
-        String serverUrl = SERVER_URL + "/unregister";
+        String serverUrl = baseUrl + "/unregister";
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);
 

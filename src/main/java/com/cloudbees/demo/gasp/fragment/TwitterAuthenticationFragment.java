@@ -24,7 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.ConsoleActivity;
+import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.activity.TwitterStreamActivity;
 import com.cloudbees.demo.gasp.model.TwitterTokenResponse;
 import com.cloudbees.demo.gasp.service.RESTIntentService;
@@ -50,7 +50,7 @@ public class TwitterAuthenticationFragment extends RESTResponderFragment {
 
     private void requestOAuthToken() {
         try {
-            ConsoleActivity activity = (ConsoleActivity) getActivity();
+            LocationsActivity activity = (LocationsActivity) getActivity();
 
             Intent intent = new Intent(activity, RESTIntentService.class);
             intent.setData(Uri.parse(TwitterAuthentication.getTwitterApiOAuthToken()));
