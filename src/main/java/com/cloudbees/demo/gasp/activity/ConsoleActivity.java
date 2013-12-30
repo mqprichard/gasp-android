@@ -442,10 +442,6 @@ public class ConsoleActivity extends Activity {
                 doUnregisterGasp();
                 return true;
 
-            case R.id.options_clear:
-                //mDisplay.setText(null);
-                return true;
-
             case R.id.options_exit:
                 finish();
                 return true;
