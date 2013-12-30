@@ -3,8 +3,8 @@ package com.cloudbees.demo.gasp.service;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
-import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.adapter.ReviewDataAdapter;
+import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.model.Review;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class ReviewUpdateServiceTest extends ServiceTestCase<ReviewUpdateService
 
     public void testReviewUpdateIntent() throws InterruptedException {
         startService(new Intent(getContext(), ReviewUpdateService.class)
-                .putExtra(LocationsActivity.ResponseReceiver.PARAM_ID, 1));
+                .putExtra(GCMIntentService.PARAM_ID, 1));
 
         // Allow 20 secs for the async REST call to complete
         signal.await(20, TimeUnit.SECONDS);

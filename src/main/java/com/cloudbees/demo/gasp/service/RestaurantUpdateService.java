@@ -24,8 +24,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
+import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.model.Restaurant;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -52,7 +52,7 @@ public class RestaurantUpdateService extends IntentService implements IRESTListe
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int index = intent.getIntExtra(LocationsActivity.ResponseReceiver.PARAM_ID, 0);
+        int index = intent.getIntExtra(GCMIntentService.PARAM_ID, 0);
 
         if (index == 0) {
             Log.d(TAG, "Error - invalid index");

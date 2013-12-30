@@ -41,6 +41,9 @@ public class GCMIntentService extends IntentService {
 
     public static final int NOTIFICATION_ID = 1;
 
+    public static final String PARAM_IN_MSG = "gaspInMsg";
+    public static final String PARAM_ID = "id";
+
     public GCMIntentService() {
         super(TAG);
     }
@@ -67,13 +70,13 @@ public class GCMIntentService extends IntentService {
                     if (table != null) {
                         if (table.matches("reviews")) {
                             startService(new Intent(getApplicationContext(), ReviewUpdateService.class)
-                                    .putExtra(LocationsActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(PARAM_ID, index));
                         } else if (table.matches("restaurants")) {
                             startService(new Intent(getApplicationContext(), RestaurantUpdateService.class)
-                                    .putExtra(LocationsActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(PARAM_ID, index));
                         } else if (table.matches("users")) {
                             startService(new Intent(getApplicationContext(), UserUpdateService.class)
-                                    .putExtra(LocationsActivity.ResponseReceiver.PARAM_ID, index));
+                                    .putExtra(PARAM_ID, index));
                         }
                         // Send notification message for message bar display etc
                         sendNotification(notificationMessage);

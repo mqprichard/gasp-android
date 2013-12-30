@@ -2,10 +2,8 @@ package com.cloudbees.demo.gasp.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
@@ -26,6 +24,7 @@ import com.cloudbees.demo.gasp.fragment.LocationFragment;
 import com.cloudbees.demo.gasp.fragment.NearbySearchFragment;
 import com.cloudbees.demo.gasp.fragment.PlaceDetailsFragment;
 import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
+import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.gcm.GaspRegistrationClient;
 import com.cloudbees.demo.gasp.model.Place;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
@@ -35,7 +34,6 @@ import com.cloudbees.demo.gasp.model.Restaurant;
 import com.cloudbees.demo.gasp.service.RestaurantSyncService;
 import com.cloudbees.demo.gasp.service.ReviewSyncService;
 import com.cloudbees.demo.gasp.service.UserSyncService;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -89,26 +87,8 @@ public class LocationsActivity extends FragmentActivity {
         return mGaspPushServerUrl;
     }
 
-    // BroadcastReceiver for Gasp sync/update/location messages
-    private ResponseReceiver mGaspMessageReceiver;
-
     // Proxy to handle Gasp GCM registration services
     private GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
-
-    public class ResponseReceiver extends BroadcastReceiver {
-        public static final String PARAM_IN_MSG = "gaspInMsg";
-        public static final String PARAM_OUT_MSG = "gaspOutMsg";
-        public static final String PARAM_ID = "id";
-        public static final String ACTION_RESP =
-                "com.cloudbees.demo.gasp.gcm.intent.action.MESSAGE_PROCESSED";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String text = intent.getStringExtra(PARAM_OUT_MSG);
-            Log.d(TAG, "Response Receiver: " + text);
-        }
-    }
-
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -159,47 +139,22 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
-    private void addButtonListener() {
-        Button placesButton = (Button) findViewById(R.id.places_button);
-        placesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getLocations();
-            }
-        });
-    }
-
-    private void setMarkerClickListener() {
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Log.d(TAG, "Place Id: " + mPlacesMap.get(marker.getId()));
-                Log.d(TAG, "Reference: " + mReferencesMap.get(mPlacesMap.get(marker.getId())));
-                mDetailsFragment.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
-                return false;
-            }
-        });
-    }
-
+    /**
+     * Start Gasp data synchronization services
+     * Handle initial REST sync and GCM updates
+     */
     private void startDataSyncServices() {
         Intent reviewsIntent = new Intent(this, ReviewSyncService.class);
-        reviewsIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "reviews");
+        reviewsIntent.putExtra(GCMIntentService.PARAM_IN_MSG, "reviews");
         startService(reviewsIntent);
 
         Intent restaurantsIntent = new Intent(this, RestaurantSyncService.class);
-        restaurantsIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "restaurants");
+        restaurantsIntent.putExtra(GCMIntentService.PARAM_IN_MSG, "restaurants");
         startService(restaurantsIntent);
 
         Intent usersIntent = new Intent(this, UserSyncService.class);
-        usersIntent.putExtra(ResponseReceiver.PARAM_IN_MSG, "users");
+        usersIntent.putExtra(GCMIntentService.PARAM_IN_MSG, "users");
         startService(usersIntent);
-    }
-
-    private void registerBroadcastReceiver() {
-        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        mGaspMessageReceiver = new ResponseReceiver();
-        registerReceiver(mGaspMessageReceiver, filter);
     }
 
     /**
@@ -234,6 +189,28 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     private void addThirdPartyLibs() {
+    }
+
+    private void addButtonListener() {
+        Button placesButton = (Button) findViewById(R.id.places_button);
+        placesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocations();
+            }
+        });
+    }
+
+    private void setMarkerClickListener() {
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.d(TAG, "Place Id: " + mPlacesMap.get(marker.getId()));
+                Log.d(TAG, "Reference: " + mReferencesMap.get(mPlacesMap.get(marker.getId())));
+                mDetailsFragment.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
+                return false;
+            }
+        });
     }
 
     private void addFragments() {
@@ -373,7 +350,6 @@ public class LocationsActivity extends FragmentActivity {
             addThirdPartyLibs();
             enableLocationChecking();
             getGaspSharedPreferences();
-            registerBroadcastReceiver();
             startDataSyncServices();
 
             mGaspRegistrationClient.registerGCM(this);
@@ -381,6 +357,7 @@ public class LocationsActivity extends FragmentActivity {
 
             setContentView(R.layout.gasp_locations_layout);
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+
             setLocation();
             setCamera();
             addFragments();
@@ -474,7 +451,6 @@ public class LocationsActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         mGaspRegistrationClient.doUnregisterGasp(this);
-        unregisterReceiver(mGaspMessageReceiver);
         super.onDestroy();
     }
 }
