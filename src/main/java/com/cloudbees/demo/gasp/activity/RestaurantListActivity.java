@@ -35,9 +35,6 @@ public class RestaurantListActivity extends ListActivity {
     private RestaurantDataAdapter restaurantAdapter;
 
 
-    public RestaurantListActivity() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

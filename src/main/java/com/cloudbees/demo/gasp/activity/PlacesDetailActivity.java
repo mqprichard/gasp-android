@@ -18,8 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.model.GaspDatabase;
-import com.cloudbees.demo.gasp.model.GaspRestaurants;
+import com.cloudbees.demo.gasp.adapter.GaspDatabase;
+import com.cloudbees.demo.gasp.server.GaspRestaurants;
 import com.cloudbees.demo.gasp.model.PlaceDetail;
 import com.cloudbees.demo.gasp.model.PlaceEvent;
 import com.cloudbees.demo.gasp.model.Restaurant;
@@ -93,6 +93,7 @@ public class PlacesDetailActivity extends Activity {
             Log.e(TAG, "Error adding Gasp! review");
         }
     };
+
 
     public PlacesDetailActivity() {
     }

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.location.GaspAddEvent;
-import com.cloudbees.demo.gasp.model.GaspReviews;
+import com.cloudbees.demo.gasp.server.GaspReviews;
 import com.cloudbees.demo.gasp.model.EventRequest;
 import com.cloudbees.demo.gasp.model.EventResponse;
 import com.cloudbees.demo.gasp.model.Review;
@@ -85,8 +85,6 @@ public class ReviewActivity extends Activity {
     private EditText mComment;
     private Button mAddReviewButton;
 
-    public ReviewActivity() {
-    }
 
     private void setViews() {
         mStars = (Spinner) findViewById(R.id.gasp_review_stars_spinner);

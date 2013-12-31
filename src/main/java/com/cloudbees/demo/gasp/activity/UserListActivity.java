@@ -34,8 +34,6 @@ import java.util.List;
 public class UserListActivity extends ListActivity {
     private UserDataAdapter userAdapter;
 
-    public UserListActivity() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

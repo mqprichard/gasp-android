@@ -61,8 +61,6 @@ public class GoogleSignInActivity extends FragmentActivity implements OnClickLis
     private View mRevokeAccessButton;
     private ConnectionResult mConnectionResult;
 
-    public GoogleSignInActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

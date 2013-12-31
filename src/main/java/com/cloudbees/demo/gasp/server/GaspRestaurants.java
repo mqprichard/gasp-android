@@ -1,10 +1,9 @@
-package com.cloudbees.demo.gasp.model;
+package com.cloudbees.demo.gasp.server;
 
 import android.os.AsyncTask;
 
-import com.cloudbees.demo.gasp.server.GaspServerAPI;
+import com.cloudbees.demo.gasp.model.Restaurant;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.net.URL;
 
@@ -24,24 +23,23 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class GaspReviews {
-    private static final String TAG = GaspReviews.class.getName();
+public abstract class GaspRestaurants {
+    private static final String TAG = GaspRestaurants.class.getName();
 
     /**
-     * Adds a new review to Gasp database via HTTP Post
+     * Adds a new restaurant to Gasp database via HTTP Post
      *
-     * @param review Review object to add to Gasp database
+     * @param restaurant Restaurant object to add to Gasp database
      * @param url Gasp server URL for HTTP POST
      */
-    public void addReview(final Review review, final URL url) {
+    public void addRestaurant(final Restaurant restaurant, final URL url) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 String location = "";
                 try {
-                    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-                    String jsonInput = gson.toJson(review, Review.class);
+                    String jsonInput = new Gson().toJson(restaurant, Restaurant.class);
                     location = GaspServerAPI.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {

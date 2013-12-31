@@ -48,8 +48,6 @@ public class AmazonSignInActivity extends Activity {
     private ProgressBar mLogInProgress;
     private boolean mIsLoggedIn;
 
-    public AmazonSignInActivity() {
-    }
 
     /* (non-Javadoc)
          * @see android.app.Activity#onCreate(android.os.Bundle)

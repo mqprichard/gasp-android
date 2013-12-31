@@ -34,8 +34,6 @@ import java.util.List;
 public class ReviewListActivity extends ListActivity {
     private ReviewDataAdapter reviewAdapter;
 
-    public ReviewListActivity() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

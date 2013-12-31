@@ -21,7 +21,7 @@ import android.widget.Button;
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.location.GaspPlaces;
 import com.cloudbees.demo.gasp.location.GaspSearch;
-import com.cloudbees.demo.gasp.model.GaspDatabase;
+import com.cloudbees.demo.gasp.adapter.GaspDatabase;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
 import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.demo.gasp.gcm.GCMIntentService;
@@ -112,8 +112,6 @@ public class LocationsActivity extends FragmentActivity {
     // Proxy to handle Gasp GCM registration services
     private GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
 
-    public LocationsActivity() {
-    }
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If

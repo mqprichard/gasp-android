@@ -80,8 +80,6 @@ public class PlacesActivity extends Activity {
     private static double lng = -122.1142916;
     private static String token = "";
 
-    public PlacesActivity() {
-    }
 
     public static void setLocation(double latitude, double longitude) {
         lat = latitude;

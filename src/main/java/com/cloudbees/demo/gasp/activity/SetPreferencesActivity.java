@@ -25,9 +25,6 @@ import com.cloudbees.demo.gasp.fragment.PreferencesFragment;
 
 public class SetPreferencesActivity extends Activity {
 
-    public SetPreferencesActivity() {
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
