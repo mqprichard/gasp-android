@@ -1,8 +1,6 @@
 package com.cloudbees.demo.gasp.activity;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -20,12 +18,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.fragment.AddEventFragment;
-import com.cloudbees.demo.gasp.fragment.DeleteEventFragment;
+import com.cloudbees.demo.gasp.location.GaspNearbySearch;
+import com.cloudbees.demo.gasp.location.GaspPlaceDetails;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
-import com.cloudbees.demo.gasp.fragment.NearbySearchFragment;
-import com.cloudbees.demo.gasp.fragment.PlaceDetailsFragment;
-import com.cloudbees.demo.gasp.model.EventResponse;
 import com.cloudbees.demo.gasp.model.Place;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
 import com.cloudbees.demo.gasp.model.Places;
@@ -58,12 +53,35 @@ public class PlacesActivity extends Activity {
     private final ArrayList<String> mReferenceList = new ArrayList<String>();
     private String mReference;
 
-    private NearbySearchFragment mSearchFragment;
-    private PlaceDetailsFragment mDetailsFragment;
+    // Gasp proxy objects
+    private GaspNearbySearch search = new GaspNearbySearch() {
+        public void onSuccess(Places places) {
+            showLocations(places);
+            checkToken(places);
+        }
+
+        public void onFailure(String status) {
+            Log.e(TAG, "Google Places API search failed: status = " + status);
+        }
+    };
+    private GaspPlaceDetails details = new GaspPlaceDetails() {
+        @Override
+        public void onSuccess(PlaceDetails placeDetails) {
+            showDetails(placeDetails);
+        }
+
+        @Override
+        public void onFailure(String status) {
+            Log.e(TAG, "Google Places API search failed: status = " + status);
+        }
+    };
 
     private static double lat = 37.3750274;
     private static double lng = -122.1142916;
     private static String token = "";
+
+    public PlacesActivity() {
+    }
 
     public static void setLocation(double latitude, double longitude) {
         lat = latitude;
@@ -108,69 +126,12 @@ public class PlacesActivity extends Activity {
         }
     }
 
-    private void addPlacesFragments() {
-        mSearchFragment = new NearbySearchFragment() {
-            public void onSuccess(Places places) {
-                showLocations(places);
-                checkToken(places);
-            }
-
-            public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status);
-            }
-        };
-
-        mDetailsFragment = new PlaceDetailsFragment() {
-            @Override
-            public void onSuccess(PlaceDetails placeDetails) {
-                showDetails(placeDetails);
-            }
-
-            @Override
-            public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status);
-            }
-        };
-
-        AddEventFragment mAddEventFragment = new AddEventFragment() {
-            @Override
-            public void onSuccess(EventResponse eventResponse) {
-                Log.d(TAG, "Event Added: " + eventResponse.getEvent_id());
-            }
-
-            @Override
-            public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status);
-            }
-        };
-
-        DeleteEventFragment mDeleteEventFragment = new DeleteEventFragment() {
-            @Override
-            public void onSuccess(EventResponse eventResponse) {
-                Log.d(TAG, "Event Deleted");
-            }
-
-            @Override
-            public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status);
-            }
-        };
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(mSearchFragment, getString(R.string.fragment_location_search));
-        ft.add(mDetailsFragment, getString(R.string.fragment_place_details));
-        ft.add(mAddEventFragment, getString(R.string.fragment_add_event));
-        ft.add(mDeleteEventFragment, getString(R.string.fragment_delete_event));
-        ft.commit();
-    }
-
     private void getLocations() {
         try {
             SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             int radius = Integer.valueOf(gaspSharedPreferences.getString(getString(R.string.places_search_radius_preferences), ""));
             Query query = new Query(lat, lng, radius, token);
-            mSearchFragment.nearbySearch(query);
+            search.nearbySearch(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,7 +168,7 @@ public class PlacesActivity extends Activity {
                         + mReferenceList.get((int) id) + "]");
                 mReference = mReferenceList.get((int) id);
                 Query query = new Query(mReferenceList.get((int) id));
-                mDetailsFragment.placeDetails(query);
+                details.placeDetails(query);
             }
         });
     }
@@ -236,7 +197,6 @@ public class PlacesActivity extends Activity {
 
         try {
             checkLocation();
-            addPlacesFragments();
             addListViewAdapter();
             addButtonListener();
             addItemClickListener();

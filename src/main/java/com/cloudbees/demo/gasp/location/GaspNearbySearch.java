@@ -1,13 +1,10 @@
-package com.cloudbees.demo.gasp.fragment;
+package com.cloudbees.demo.gasp.location;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.location.GooglePlacesClient;
-import com.cloudbees.demo.gasp.model.EventRequest;
-import com.cloudbees.demo.gasp.model.EventResponse;
+import com.cloudbees.demo.gasp.model.Places;
+import com.cloudbees.demo.gasp.model.Query;
 import com.google.gson.Gson;
 
 import java.net.URL;
@@ -28,30 +25,25 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class DeleteEventFragment extends Fragment {
-    private static final String TAG = DeleteEventFragment.class.getName();
+public abstract class GaspNearbySearch {
+    private static String TAG = GaspNearbySearch.class.getName();
 
-    private EventRequest mEventRequest;
+    private Query mQuery;
     private String mJsonOutput;
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    public void deleteEvent(EventRequest eventRequest) {
-        mEventRequest = eventRequest;
-
-        Log.d(TAG, "Event reference: " + eventRequest.getReference());
-        Log.d(TAG, "Event reference: " + eventRequest.getEvent_id());
+    public void nearbySearch(Query query) {
+        mQuery = query;
+        Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
+        Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
+        Log.d(TAG, "Radius: " + query.getRadius());
+        Log.d(TAG, "Token: " + query.getNext_page_token());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.getQueryStringDeleteEvent();
-                    mJsonOutput = GooglePlacesClient.doPost(
-                            new Gson().toJson(mEventRequest, EventRequest.class), new URL(search));
+                    String search = GooglePlacesClient.getQueryStringNearbySearch(mQuery);
+                    mJsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
                     Log.e(TAG, "Exception: ", e);
@@ -63,12 +55,12 @@ public abstract class DeleteEventFragment extends Fragment {
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
-                    EventResponse eventResponse = new Gson().fromJson(jsonOutput, EventResponse.class);
+                    Places places = new Gson().fromJson(jsonOutput, Places.class);
 
-                    if (eventResponse.getStatus().equalsIgnoreCase("OK"))
-                        onSuccess(eventResponse);
+                    if (places.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(places);
                     else
-                        onFailure(eventResponse.getStatus());
+                        onFailure(places.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -78,6 +70,6 @@ public abstract class DeleteEventFragment extends Fragment {
     }
 
     // Callbacks to calling Activity
-    abstract public void onSuccess(EventResponse eventResponse);
+    abstract public void onSuccess(Places places);
     abstract public void onFailure(String status);
 }

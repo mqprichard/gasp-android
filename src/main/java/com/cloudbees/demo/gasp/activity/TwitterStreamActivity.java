@@ -51,6 +51,9 @@ public class TwitterStreamActivity extends Activity {
 
     private ArrayAdapter<String> mAdapter;
 
+    public TwitterStreamActivity() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

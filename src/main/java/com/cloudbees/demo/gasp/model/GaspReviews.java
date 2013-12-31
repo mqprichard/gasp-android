@@ -1,9 +1,7 @@
-package com.cloudbees.demo.gasp.fragment;
+package com.cloudbees.demo.gasp.model;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
 
-import com.cloudbees.demo.gasp.model.Review;
 import com.cloudbees.demo.gasp.server.GaspServerAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,8 +24,8 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class GaspReviewFragment extends Fragment {
-    private static final String TAG = GaspReviewFragment.class.getName();
+public abstract class GaspReviews {
+    private static final String TAG = GaspReviews.class.getName();
 
     /**
      * Adds a new review to Gasp database via HTTP Post

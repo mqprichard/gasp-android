@@ -38,14 +38,6 @@ public class PlacesActivityTest extends ActivityInstrumentationTestCase2<PlacesA
         mActivity = getActivity();
     }
 
-    public void testFragments() throws Exception {
-        mFragmentManager = mActivity.getFragmentManager();
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_add_event)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_delete_event)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_location_search)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_place_details)));
-    }
-
     private void testOptionsMenuStartActivity(String className, int id){
         Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
 

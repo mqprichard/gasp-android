@@ -19,10 +19,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.fragment.GaspDatabaseFragment;
+import com.cloudbees.demo.gasp.model.GaspDatabase;
+import com.cloudbees.demo.gasp.location.GaspNearbySearch;
+import com.cloudbees.demo.gasp.location.GaspPlaceDetails;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
-import com.cloudbees.demo.gasp.fragment.NearbySearchFragment;
-import com.cloudbees.demo.gasp.fragment.PlaceDetailsFragment;
 import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.gcm.GaspRegistrationClient;
@@ -72,9 +72,31 @@ public class LocationsActivity extends FragmentActivity {
     // Next page token for Google Maps API queries
     private static String token = "";
 
-    private NearbySearchFragment mSearchFragment;
-    private PlaceDetailsFragment mDetailsFragment;
-    private GaspDatabaseFragment mDatabaseFragment;
+    // Gasp proxy objects
+    private GaspNearbySearch search = new GaspNearbySearch() {
+        @Override
+        public void onSuccess(Places places) {
+            showLocations(places);
+            checkToken(places);
+        }
+
+        @Override
+        public void onFailure(String status) {
+            Log.e(TAG, "Google Places API search failed: status = " + status);
+        }
+    };
+    private GaspPlaceDetails details = new GaspPlaceDetails() {
+        @Override
+        public void onSuccess(PlaceDetails placeDetails) {
+            launchPlacesDetailActivity(placeDetails);
+        }
+
+        @Override
+        public void onFailure(String status) {
+            Log.e(TAG, "Google Places API search failed: status = " + status);
+        }
+    };
+    private GaspDatabase database = new GaspDatabase(this);
 
     // Map GoogleMap Markers to Place Ids
     private HashMap<String, String> mPlacesMap = new HashMap<String, String>();
@@ -89,6 +111,9 @@ public class LocationsActivity extends FragmentActivity {
 
     // Proxy to handle Gasp GCM registration services
     private GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
+
+    public LocationsActivity() {
+    }
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -207,43 +232,11 @@ public class LocationsActivity extends FragmentActivity {
             public boolean onMarkerClick(Marker marker) {
                 Log.d(TAG, "Place Id: " + mPlacesMap.get(marker.getId()));
                 Log.d(TAG, "Reference: " + mReferencesMap.get(mPlacesMap.get(marker.getId())));
-                mDetailsFragment.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
+                //mDetailsFragment.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
+                details.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
                 return false;
             }
         });
-    }
-
-    private void addFragments() {
-        mSearchFragment = new NearbySearchFragment() {
-            @Override
-            public void onSuccess(Places places) {
-                showLocations(places);
-                checkToken(places);
-            }
-
-            @Override
-            public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status);
-            }
-        };
-        mDetailsFragment = new PlaceDetailsFragment() {
-            @Override
-            public void onSuccess(PlaceDetails placeDetails) {
-                launchPlacesDetailActivity(placeDetails);
-            }
-
-            @Override
-            public void onFailure(String status) {
-                Log.e(TAG, "Google Places API search failed: status = " + status);
-            }
-        };
-        mDatabaseFragment = new GaspDatabaseFragment();
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(mSearchFragment, getString(R.string.fragment_location_search));
-        ft.add(mDatabaseFragment, getString(R.string.fragment_gasp_database));
-        ft.commit();
-
     }
 
     private void setCamera() {
@@ -285,7 +278,8 @@ public class LocationsActivity extends FragmentActivity {
             LatLng pos = new LatLng(place.getGeometry().getLocation().getLat().doubleValue(),
                     place.getGeometry().getLocation().getLng().doubleValue());
 
-            restaurant = mDatabaseFragment.getRestaurantByPlacesId(place.getId());
+            //restaurant = mDatabaseFragment.getRestaurantByPlacesId(place.getId());
+            restaurant = database.getRestaurantByPlacesId(place.getId());
             if (restaurant != null)
                 markerColour = BitmapDescriptorFactory.HUE_GREEN;
             else
@@ -335,7 +329,8 @@ public class LocationsActivity extends FragmentActivity {
             SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             int radius = Integer.valueOf(gaspSharedPreferences.getString(getString(R.string.places_search_radius_preferences), ""));
             Query query = new Query(mLocation.getLatitude(), mLocation.getLongitude(), radius, token);
-            mSearchFragment.nearbySearch(query);
+            //mSearchFragment.nearbySearch(query);
+            search.nearbySearch(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -360,7 +355,6 @@ public class LocationsActivity extends FragmentActivity {
 
             setLocation();
             setCamera();
-            addFragments();
             addButtonListener();
             setMarkerClickListener();
             getLocations();

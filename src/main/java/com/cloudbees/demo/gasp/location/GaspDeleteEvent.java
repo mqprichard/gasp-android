@@ -1,11 +1,8 @@
-package com.cloudbees.demo.gasp.fragment;
+package com.cloudbees.demo.gasp.location;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.location.GooglePlacesClient;
 import com.cloudbees.demo.gasp.model.EventRequest;
 import com.cloudbees.demo.gasp.model.EventResponse;
 import com.google.gson.Gson;
@@ -28,31 +25,23 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class AddEventFragment extends Fragment {
-    private static final String TAG = AddEventFragment.class.getName();
+public abstract class GaspDeleteEvent {
+    private static final String TAG = GaspDeleteEvent.class.getName();
 
     private EventRequest mEventRequest;
     private String mJsonOutput;
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    public void addEvent(EventRequest eventRequest) {
+    public void deleteEvent(EventRequest eventRequest) {
         mEventRequest = eventRequest;
 
         Log.d(TAG, "Event reference: " + eventRequest.getReference());
-        Log.d(TAG, "Event summary: " + eventRequest.getSummary());
-        Log.d(TAG, "Event url: "+ eventRequest.getUrl());
-        Log.d(TAG, "Event duration: " + eventRequest.getDuration());
-        Log.d(TAG, "Event language: " + eventRequest.getLanguage());
+        Log.d(TAG, "Event reference: " + eventRequest.getEvent_id());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.getQueryStringAddEvent();
+                    String search = GooglePlacesClient.getQueryStringDeleteEvent();
                     mJsonOutput = GooglePlacesClient.doPost(
                             new Gson().toJson(mEventRequest, EventRequest.class), new URL(search));
 

@@ -1,12 +1,9 @@
-package com.cloudbees.demo.gasp.fragment;
+package com.cloudbees.demo.gasp.model;
 
-import android.app.Fragment;
-import android.os.Bundle;
+import android.content.Context;
 
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.demo.gasp.adapter.ReviewDataAdapter;
-import com.cloudbees.demo.gasp.model.Restaurant;
-import com.cloudbees.demo.gasp.model.Review;
 
 import java.util.List;
 
@@ -26,17 +23,13 @@ import java.util.List;
  * limitations under the License.
  */
 
-public class GaspDatabaseFragment extends Fragment {
-    private static final String TAG = GaspDatabaseFragment.class.getName();
-
+public class GaspDatabase {
     private RestaurantDataAdapter mRestaurantAdapter;
     private ReviewDataAdapter mReviewAdapter;
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mRestaurantAdapter = new RestaurantDataAdapter(getActivity());
-        mReviewAdapter = new ReviewDataAdapter(getActivity());
+    public GaspDatabase (Context context) {
+        mRestaurantAdapter = new RestaurantDataAdapter(context);
+        mReviewAdapter = new ReviewDataAdapter(context);
     }
 
     public Restaurant getRestaurantByPlacesId(String placesId) {

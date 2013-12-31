@@ -1,8 +1,6 @@
 package com.cloudbees.demo.gasp.activity;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,8 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.fragment.AddEventFragment;
-import com.cloudbees.demo.gasp.fragment.GaspReviewFragment;
+import com.cloudbees.demo.gasp.location.GaspAddEvent;
+import com.cloudbees.demo.gasp.model.GaspReviews;
 import com.cloudbees.demo.gasp.model.EventRequest;
 import com.cloudbees.demo.gasp.model.EventResponse;
 import com.cloudbees.demo.gasp.model.Review;
@@ -53,15 +51,42 @@ public class ReviewActivity extends Activity {
     private String mPlacesReference;    // The Google Places reference
     private URL mGaspUrl;               // The Gasp reviews URI
 
-    // Headless fragments for Gasp API and Places API calls
-    private GaspReviewFragment mGaspReviewFragment;
-    private AddEventFragment mAddEventFragment;
+    // Gasp proxy objects
+    private GaspReviews mGaspReviews = new GaspReviews() {
+        @Override
+        public void onSuccess(String location) {
+            try {
+                Log.d(TAG, "Gasp! review added: " + location);
+                addGaspEvent(mPlacesReference, new URL(location));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onFailure() {
+            Log.e(TAG, "Error adding Gasp! review");
+        }
+    };
+    private GaspAddEvent mGaspAddEvent = new GaspAddEvent() {
+        @Override
+        public void onSuccess(EventResponse eventResponse) {
+            Log.d(TAG, "Event added: " + eventResponse.getEvent_id());
+        }
+
+        @Override
+        public void onFailure(String status) {
+            Log.d(TAG, "Error adding event to Google Places API");
+        }
+    };
 
     // Layout views
     private Spinner mStars;
     private EditText mComment;
     private Button mAddReviewButton;
 
+    public ReviewActivity() {
+    }
 
     private void setViews() {
         mStars = (Spinner) findViewById(R.id.gasp_review_stars_spinner);
@@ -71,43 +96,6 @@ public class ReviewActivity extends Activity {
         mAddReviewButton = (Button) findViewById(R.id.gasp_review_button);
     }
 
-    private void addGaspFragments() {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        mGaspReviewFragment = new GaspReviewFragment() {
-            @Override
-            public void onSuccess(String location) {
-                try {
-                    Log.d(TAG, "Gasp! review added: " + location);
-                    addGaspEvent(mPlacesReference, new URL(location));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure() {
-                Log.e(TAG, "Error adding Gasp! review");
-            }
-        };
-        mAddEventFragment = new AddEventFragment() {
-            @Override
-            public void onSuccess(EventResponse eventResponse) {
-                Log.d(TAG, "Event added: " + eventResponse.getEvent_id());
-            }
-
-            @Override
-            public void onFailure(String status) {
-                Log.d(TAG, "Error adding event to Google Places API");
-            }
-        };
-
-        ft.add(mGaspReviewFragment, "Gasp Review Fragment");
-        ft.add(mAddEventFragment, "Add Event Fragment");
-        ft.commit();
-    }
-
     private void addGaspReview(int stars, String comment, int restaurantId) {
         Review review = new Review();
         review.setStar(stars);
@@ -115,7 +103,7 @@ public class ReviewActivity extends Activity {
         review.setRestaurant_id(restaurantId);
         review.setUser_id(1);
 
-        mGaspReviewFragment.addReview(review, mGaspUrl);
+        mGaspReviews.addReview(review, mGaspUrl);
     }
 
     private void addGaspEvent(String reference, URL reviewId) {
@@ -130,7 +118,7 @@ public class ReviewActivity extends Activity {
         eventRequest.setSummary(summary);
         eventRequest.setUrl(reviewId.toString());
 
-        mAddEventFragment.addEvent(eventRequest);
+        mGaspAddEvent.addEvent(eventRequest);
     }
 
     private void addButtonListener() {
@@ -174,7 +162,6 @@ public class ReviewActivity extends Activity {
 
             setContentView(R.layout.gasp_add_review_layout);
             setViews();
-            addGaspFragments();
             addButtonListener();
         } catch (Exception e) {
             e.printStackTrace();

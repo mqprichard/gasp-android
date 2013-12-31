@@ -72,13 +72,6 @@ public class PlacesDetailActivityTest extends ActivityInstrumentationTestCase2 <
         mActivity = getActivity();
     }
 
-    public void testFragments() throws Exception {
-        mFragmentManager = mActivity.getFragmentManager();
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_gasp_database)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_gasp_restaurant)));
-        assertNotNull(mFragmentManager.findFragmentByTag(mActivity.getString(R.string.fragment_gasp_review)));
-    }
-
     public void testViews() throws Exception {
         TextView detailName = (TextView)mActivity.findViewById(R.id.detail_name);
         assertEquals(detailName.getText(), mPlaceDetail.getName());

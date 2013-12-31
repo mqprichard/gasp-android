@@ -1,11 +1,8 @@
-package com.cloudbees.demo.gasp.fragment;
+package com.cloudbees.demo.gasp.location;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.location.GooglePlacesClient;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
 import com.cloudbees.demo.gasp.model.Query;
 import com.google.gson.Gson;
@@ -28,16 +25,10 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class PlaceDetailsFragment extends Fragment {
-    private static final String TAG = PlaceDetailsFragment.class.getName();
-
+public abstract class GaspPlaceDetails {
+    private static final String TAG = GaspPlaceDetails.class.getName();
     private Query mQuery;
     private String jsonOutput;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     public void placeDetails(Query query) {
         mQuery = query;

@@ -1,10 +1,7 @@
-package com.cloudbees.demo.gasp.fragment;
+package com.cloudbees.demo.gasp.model;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
-import android.os.Bundle;
 
-import com.cloudbees.demo.gasp.model.Restaurant;
 import com.cloudbees.demo.gasp.server.GaspServerAPI;
 import com.google.gson.Gson;
 
@@ -26,13 +23,8 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class GaspRestaurantFragment extends Fragment {
-    private static final String TAG = GaspRestaurantFragment.class.getName();
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
+public abstract class GaspRestaurants {
+    private static final String TAG = GaspRestaurants.class.getName();
 
     /**
      * Adds a new restaurant to Gasp database via HTTP Post

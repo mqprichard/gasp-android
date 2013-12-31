@@ -47,10 +47,13 @@ public class AmazonSignInActivity extends Activity {
     private AmazonAuthorizationManager mAuthManager;
     private ProgressBar mLogInProgress;
     private boolean mIsLoggedIn;
-    
+
+    public AmazonSignInActivity() {
+    }
+
     /* (non-Javadoc)
-     * @see android.app.Activity#onCreate(android.os.Bundle)
-     */
+         * @see android.app.Activity#onCreate(android.os.Bundle)
+         */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
