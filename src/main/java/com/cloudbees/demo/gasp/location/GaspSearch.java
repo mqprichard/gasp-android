@@ -3,7 +3,7 @@ package com.cloudbees.demo.gasp.location;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.model.PlaceDetails;
+import com.cloudbees.demo.gasp.model.Places;
 import com.cloudbees.demo.gasp.model.Query;
 import com.google.gson.Gson;
 
@@ -25,37 +25,42 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public abstract class GaspPlaceDetails {
-    private static final String TAG = GaspPlaceDetails.class.getName();
-    private Query mQuery;
-    private String jsonOutput;
+public abstract class GaspSearch {
+    private static String TAG = GaspSearch.class.getName();
 
-    public void placeDetails(Query query) {
+    private Query mQuery;
+    private String mJsonOutput;
+
+    public void nearbySearch(Query query) {
         mQuery = query;
+        Log.d(TAG, "Lat: " + String.valueOf(query.getLat()));
+        Log.d(TAG, "Lng: " + String.valueOf(query.getLng()));
+        Log.d(TAG, "Radius: " + query.getRadius());
+        Log.d(TAG, "Token: " + query.getNext_page_token());
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.getQueryStringPlaceDetails(mQuery.getReference());
-                    jsonOutput = GooglePlacesClient.doGet(new URL(search));
+                    String search = GooglePlacesClient.getQueryStringNearbySearch(mQuery);
+                    mJsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
                     Log.e(TAG, "Exception: ", e);
                 }
-                return jsonOutput;
+                return mJsonOutput;
             }
 
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
-                    PlaceDetails placeDetails = new Gson().fromJson(jsonOutput, PlaceDetails.class);
+                    Places places = new Gson().fromJson(jsonOutput, Places.class);
 
-                    if (placeDetails.getStatus().equalsIgnoreCase("OK"))
-                        onSuccess(placeDetails);
+                    if (places.getStatus().equalsIgnoreCase("OK"))
+                        onSuccess(places);
                     else
-                        onFailure(placeDetails.getStatus());
+                        onFailure(places.getStatus());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -65,6 +70,6 @@ public abstract class GaspPlaceDetails {
     }
 
     // Callbacks to calling Activity
-    abstract public void onSuccess(PlaceDetails placeDetails);
+    abstract public void onSuccess(Places places);
     abstract public void onFailure(String status);
 }

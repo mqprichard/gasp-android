@@ -18,8 +18,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.location.GaspNearbySearch;
-import com.cloudbees.demo.gasp.location.GaspPlaceDetails;
+import com.cloudbees.demo.gasp.location.GaspSearch;
+import com.cloudbees.demo.gasp.location.GaspPlaces;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
 import com.cloudbees.demo.gasp.model.Place;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
@@ -54,7 +54,7 @@ public class PlacesActivity extends Activity {
     private String mReference;
 
     // Gasp proxy objects
-    private GaspNearbySearch search = new GaspNearbySearch() {
+    private GaspSearch search = new GaspSearch() {
         public void onSuccess(Places places) {
             showLocations(places);
             checkToken(places);
@@ -64,7 +64,7 @@ public class PlacesActivity extends Activity {
             Log.e(TAG, "Google Places API search failed: status = " + status);
         }
     };
-    private GaspPlaceDetails details = new GaspPlaceDetails() {
+    private GaspPlaces details = new GaspPlaces() {
         @Override
         public void onSuccess(PlaceDetails placeDetails) {
             showDetails(placeDetails);
