@@ -16,19 +16,19 @@ package com.cloudbees.demo.gasp.activity;
  * limitations under the License.
  */
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
+import com.cloudbees.demo.gasp.fragment.PlayServicesDialogFragment;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
@@ -41,16 +41,16 @@ import com.google.android.gms.plus.PlusClient;
 
 import java.io.IOException;
 
-public class GoogleSignInActivity extends Activity implements OnClickListener,
+public class GoogleSignInActivity extends FragmentActivity implements OnClickListener,
         PlusClient.ConnectionCallbacks, PlusClient.OnConnectionFailedListener,
-        PlusClient.OnAccessRevokedListener {
+        PlusClient.OnAccessRevokedListener, PlayServicesDialogFragment.PlayServicesDialogListener {
     private static String TAG = GoogleSignInActivity.class.getName();
 
     private static final String scopes = "https://www.googleapis.com/auth/userinfo.email "
                                          + "https://www.googleapis.com/auth/plus.login "
                                          + "https://www.googleapis.com/auth/userinfo.profile";
 
-    private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
+    //private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
 
@@ -97,7 +97,9 @@ public class GoogleSignInActivity extends Activity implements OnClickListener,
             case R.id.sign_in_button:
                 int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
                 if (available != ConnectionResult.SUCCESS) {
-                    showDialog(DIALOG_GET_GOOGLE_PLAY_SERVICES);
+                    //showDialog(DIALOG_GET_GOOGLE_PLAY_SERVICES);
+                    DialogFragment dialog = new PlayServicesDialogFragment();
+                    dialog.show(getSupportFragmentManager(), "PlayServicesDialogFragment");
                     return;
                 }
 
@@ -125,6 +127,8 @@ public class GoogleSignInActivity extends Activity implements OnClickListener,
         }
     }
 
+    // Deprecated: replaced with PlayServicesDialogFragment
+    /**
     @Override
     protected Dialog onCreateDialog(int id) {
         if (id != DIALOG_GET_GOOGLE_PLAY_SERVICES) {
@@ -143,6 +147,17 @@ public class GoogleSignInActivity extends Activity implements OnClickListener,
                 .setMessage(R.string.plus_generic_error)
                 .setCancelable(true)
                 .create();
+    }
+    **/
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // TODO
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // TODO
     }
 
     @Override
