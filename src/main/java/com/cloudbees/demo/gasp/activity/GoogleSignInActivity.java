@@ -50,7 +50,6 @@ public class GoogleSignInActivity extends FragmentActivity implements OnClickLis
                                          + "https://www.googleapis.com/auth/plus.login "
                                          + "https://www.googleapis.com/auth/userinfo.profile";
 
-    //private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
 
@@ -127,29 +126,6 @@ public class GoogleSignInActivity extends FragmentActivity implements OnClickLis
                 break;
         }
     }
-
-    // Deprecated: replaced with PlayServicesDialogFragment
-    /**
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        if (id != DIALOG_GET_GOOGLE_PLAY_SERVICES) {
-            return super.onCreateDialog(id);
-        }
-
-        int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (available == ConnectionResult.SUCCESS) {
-            return null;
-        }
-        if (GooglePlayServicesUtil.isUserRecoverableError(available)) {
-            return GooglePlayServicesUtil.getErrorDialog(
-                    available, this, REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES);
-        }
-        return new AlertDialog.Builder(this)
-                .setMessage(R.string.plus_generic_error)
-                .setCancelable(true)
-                .create();
-    }
-    **/
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
@@ -229,7 +205,7 @@ public class GoogleSignInActivity extends FragmentActivity implements OnClickLis
         }
     }
 
-    void getAuthToken() {
+    private void getAuthToken() {
         try {
             final String token = GoogleAuthUtil.getToken(this, mPlusClient.getAccountName(), "oauth2:" + scopes);
             Log.d(TAG, "Token: " + token);

@@ -141,10 +141,18 @@
 
         <!-- Login with Amazon/Google -->
         <activity
-            android:name="com.cloudbees.demo.gasp.activity.AmazonSignInActivity">
+            android:name="com.cloudbees.demo.gasp.activity.AmazonSignInActivity"
+            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
         <activity
-            android:name="com.cloudbees.demo.gasp.activity.GoogleSignInActivity">
+            android:name="com.cloudbees.demo.gasp.activity.GoogleSignInActivity"
+            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
         <activity
             android:name="com.amazon.identity.auth.device.authorization.AuthorizationActivity"

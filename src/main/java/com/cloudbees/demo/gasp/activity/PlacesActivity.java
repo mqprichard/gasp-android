@@ -242,10 +242,6 @@ public class PlacesActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return true;
 
-            case R.id.options_exit:
-                finish();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
