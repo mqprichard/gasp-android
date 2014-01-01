@@ -15,11 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.location.GaspAddEvent;
-import com.cloudbees.demo.gasp.server.GaspReviews;
+import com.cloudbees.demo.gasp.location.GaspEvents;
 import com.cloudbees.demo.gasp.model.EventRequest;
 import com.cloudbees.demo.gasp.model.EventResponse;
 import com.cloudbees.demo.gasp.model.Review;
+import com.cloudbees.demo.gasp.server.GaspReviews;
 
 import java.net.URL;
 
@@ -68,15 +68,25 @@ public class ReviewActivity extends Activity {
             Log.e(TAG, "Error adding Gasp! review");
         }
     };
-    private GaspAddEvent mGaspAddEvent = new GaspAddEvent() {
+    private GaspEvents mGaspEvents = new GaspEvents() {
         @Override
-        public void onSuccess(EventResponse eventResponse) {
+        public void onEventAdded(EventResponse eventResponse) {
             Log.d(TAG, "Event added: " + eventResponse.getEvent_id());
         }
 
         @Override
-        public void onFailure(String status) {
-            Log.d(TAG, "Error adding event to Google Places API");
+        public void onErrorAddEvent(String status) {
+            Log.d(TAG, "Error adding event via Google Places API");
+        }
+
+        @Override
+        public void onEventDeleted(EventResponse eventResponse) {
+            Log.d(TAG, "Event deleted: " + eventResponse.getEvent_id());
+        }
+
+        @Override
+        public void onErrorDeleteEvent(String status) {
+            Log.d(TAG, "Error deleting event via Google Places API");
         }
     };
 
@@ -116,7 +126,7 @@ public class ReviewActivity extends Activity {
         eventRequest.setSummary(summary);
         eventRequest.setUrl(reviewId.toString());
 
-        mGaspAddEvent.addEvent(eventRequest);
+        mGaspEvents.addEvent(eventRequest);
     }
 
     private void addButtonListener() {
