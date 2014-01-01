@@ -54,7 +54,7 @@ public abstract class GaspEntityTest extends InstrumentationTestCase {
             protected String doInBackground(Void... params) {
                 String location = "";
                 try {
-                    location = GaspServerAPI.newGaspEntity(jsonInput, url);
+                    location = GaspServer.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -86,7 +86,7 @@ public abstract class GaspEntityTest extends InstrumentationTestCase {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    GaspServerAPI.deleteGaspEntity(url);
+                    GaspServer.deleteGaspEntity(url);
                 }
                 catch (Exception e) {
                     fail();

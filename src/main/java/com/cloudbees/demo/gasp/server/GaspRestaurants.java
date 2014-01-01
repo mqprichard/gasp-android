@@ -40,7 +40,7 @@ public abstract class GaspRestaurants {
                 String location = "";
                 try {
                     String jsonInput = new Gson().toJson(restaurant, Restaurant.class);
-                    location = GaspServerAPI.newGaspEntity(jsonInput, url);
+                    location = GaspServer.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {
                     e.printStackTrace();

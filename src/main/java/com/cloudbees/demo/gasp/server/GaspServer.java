@@ -24,8 +24,8 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public class GaspServerAPI {
-    private static final String TAG = GaspServerAPI.class.getName();
+public class GaspServer {
+    private static final String TAG = GaspServer.class.getName();
 
     /**
      * Adds a new Gasp entity via HTTP POST

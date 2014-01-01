@@ -42,7 +42,7 @@ public abstract class GaspReviews {
                 try {
                     Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                     String jsonInput = gson.toJson(review, Review.class);
-                    location = GaspServerAPI.newGaspEntity(jsonInput, url);
+                    location = GaspServer.newGaspEntity(jsonInput, url);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
