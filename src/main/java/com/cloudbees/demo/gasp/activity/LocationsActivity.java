@@ -2,8 +2,10 @@ package com.cloudbees.demo.gasp.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
@@ -11,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,6 +111,10 @@ public class LocationsActivity extends FragmentActivity {
     public static String getGaspPushServerUrl() {
         return mGaspPushServerUrl;
     }
+
+    // On initial load, we need to wait for Gasp data sync before drawing location markers
+    private static boolean waitForSync = true;
+    public static final String SYNC_COMPLETED = "gasp-sync";
 
     // Proxy to handle Gasp GCM registration services
     private GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
@@ -334,6 +341,17 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Restaurant sync completed");
+            if (waitForSync) {
+                getLocations();
+                waitForSync = false;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -343,6 +361,10 @@ public class LocationsActivity extends FragmentActivity {
             addThirdPartyLibs();
             enableLocationChecking();
             getGaspSharedPreferences();
+
+            // Register listener for notification that restaurant data has been synced
+            LocalBroadcastManager.getInstance(this)
+                                 .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
             startDataSyncServices();
 
             mGaspRegistrationClient.registerGCM(this);
@@ -355,7 +377,11 @@ public class LocationsActivity extends FragmentActivity {
             setCamera();
             addButtonListener();
             setMarkerClickListener();
-            getLocations();
+
+            // Only show location markers if Gasp restaurant data loaded
+            if (!waitForSync) {
+                getLocations();
+            }
         }
         else {
             Log.e(TAG, "Cannot launch LocationsActivity");
@@ -443,6 +469,7 @@ public class LocationsActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         mGaspRegistrationClient.doUnregisterGasp(this);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
 }

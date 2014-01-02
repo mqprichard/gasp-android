@@ -22,9 +22,11 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.cloudbees.demo.gasp.R;
+import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.demo.gasp.model.Restaurant;
 import com.google.gson.Gson;
@@ -116,6 +118,10 @@ public class RestaurantSyncService extends IntentService implements IRESTListene
                 String resultTxt = "Sync: Found " + localRecords + ", Loaded " + index
                         + " restaurants from " + mGaspRestaurantsUri;
                 Log.i(TAG, resultTxt + '\n');
+
+                // Notify LocationsActivity that Gasp restaurant data has been synced
+                LocalBroadcastManager.getInstance(this)
+                                     .sendBroadcast(new Intent(LocationsActivity.SYNC_COMPLETED));
 
             } catch (Exception e) {
                 e.printStackTrace();
