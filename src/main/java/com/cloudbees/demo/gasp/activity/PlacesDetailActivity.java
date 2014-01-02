@@ -94,7 +94,6 @@ public class PlacesDetailActivity extends Activity {
         }
     };
 
-
     public PlacesDetailActivity() {
     }
 

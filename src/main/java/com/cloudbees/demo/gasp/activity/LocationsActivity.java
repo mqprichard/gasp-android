@@ -76,7 +76,7 @@ public class LocationsActivity extends FragmentActivity {
     private static String token = "";
 
     // Gasp proxy objects
-    private GaspSearch search = new GaspSearch() {
+    private GaspSearch mGaspSearch = new GaspSearch() {
         @Override
         public void onSuccess(Places places) {
             showLocations(places);
@@ -88,7 +88,7 @@ public class LocationsActivity extends FragmentActivity {
             Log.e(TAG, "Google Places API search failed: status = " + status);
         }
     };
-    private GaspPlaces details = new GaspPlaces() {
+    private GaspPlaces mGaspPlaces = new GaspPlaces() {
         @Override
         public void onSuccess(PlaceDetails placeDetails) {
             launchPlacesDetailActivity(placeDetails);
@@ -99,7 +99,7 @@ public class LocationsActivity extends FragmentActivity {
             Log.e(TAG, "Google Places API search failed: status = " + status);
         }
     };
-    private GaspDatabase database = new GaspDatabase(this);
+    private GaspDatabase mGaspDatabase = new GaspDatabase(this);
 
     // Map GoogleMap Markers to Place Ids
     private HashMap<String, String> mPlacesMap = new HashMap<String, String>();
@@ -238,7 +238,7 @@ public class LocationsActivity extends FragmentActivity {
                 Log.d(TAG, "Place Id: " + mPlacesMap.get(marker.getId()));
                 Log.d(TAG, "Reference: " + mReferencesMap.get(mPlacesMap.get(marker.getId())));
                 //mDetailsFragment.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
-                details.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
+                mGaspPlaces.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
                 return false;
             }
         });
@@ -283,8 +283,7 @@ public class LocationsActivity extends FragmentActivity {
             LatLng pos = new LatLng(place.getGeometry().getLocation().getLat().doubleValue(),
                     place.getGeometry().getLocation().getLng().doubleValue());
 
-            //restaurant = mDatabaseFragment.getRestaurantByPlacesId(place.getId());
-            restaurant = database.getRestaurantByPlacesId(place.getId());
+            restaurant = mGaspDatabase.getRestaurantByPlacesId(place.getId());
             if (restaurant != null)
                 markerColour = BitmapDescriptorFactory.HUE_GREEN;
             else
@@ -334,8 +333,7 @@ public class LocationsActivity extends FragmentActivity {
             SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             int radius = Integer.valueOf(gaspSharedPreferences.getString(getString(R.string.places_search_radius_preferences), ""));
             Query query = new Query(mLocation.getLatitude(), mLocation.getLongitude(), radius, token);
-            //mSearchFragment.nearbySearch(query);
-            search.nearbySearch(query);
+            mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
             e.printStackTrace();
         }

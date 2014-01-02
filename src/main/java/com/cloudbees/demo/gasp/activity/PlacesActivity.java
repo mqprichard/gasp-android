@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +17,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.location.GaspSearch;
-import com.cloudbees.demo.gasp.location.GaspPlaces;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
+import com.cloudbees.demo.gasp.location.GaspPlaces;
+import com.cloudbees.demo.gasp.location.GaspSearch;
 import com.cloudbees.demo.gasp.model.Place;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
 import com.cloudbees.demo.gasp.model.Places;
@@ -191,8 +190,6 @@ public class PlacesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         try {
             checkLocation();
             addListViewAdapter();
@@ -211,16 +208,6 @@ public class PlacesActivity extends Activity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu_short, menu);
@@ -231,11 +218,6 @@ public class PlacesActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-
             case R.id.gasp_settings:
                 Intent intent = new Intent();
                 intent.setClass(this, SetPreferencesActivity.class);
