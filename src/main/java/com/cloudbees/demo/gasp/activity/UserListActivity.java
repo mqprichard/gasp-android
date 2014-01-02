@@ -19,7 +19,6 @@ package com.cloudbees.demo.gasp.activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,8 +37,6 @@ public class UserListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         userAdapter = new UserDataAdapter(this);
         userAdapter.open();
@@ -79,10 +76,6 @@ public class UserListActivity extends ListActivity {
                 Intent intent = new Intent();
                 intent.setClass(this, SetPreferencesActivity.class);
                 startActivityForResult(intent, 0);
-                return true;
-
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
                 return true;
 
             default:

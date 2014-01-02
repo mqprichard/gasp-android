@@ -74,9 +74,19 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
         solo.assertCurrentActivity("Action Bar Home", to);
     }
 
+    /**
+     * Simulate Hardware back button press
+     * @param to    Parent Activity
+     */
+    private void backButton(Class<? extends Activity> to) {
+        solo.goBack();
+        solo.waitForActivity(to, 5000);
+        solo.assertCurrentActivity("Back: " + to.getClass().getName(), to);
+    }
+
     public void testPlacesNavigation() {
         actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     public void testPlacesDetailNavigation() {
@@ -97,38 +107,38 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
         solo.sleep(10000);
         assertTrue(solo.waitForView(R.id.places_list, 1, 1000));
 
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     public void testTwitterNavigation() {
         actionBarActivity(R.id.gasp_menu_twitter, TwitterStreamActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     public void testSettingsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     public void testPlacesSettingsNavigation() {
         actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
         optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(PlacesActivity.class);
     }
 
     public void testRestaurantsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_restaurants_data), RestaurantListActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     public void testReviewsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_reviews_data), ReviewListActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     public void testUsersNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_users_data), UserListActivity.class);
-        actionBarHome(LocationsActivity.class);
+        backButton(LocationsActivity.class);
     }
 
     @Override

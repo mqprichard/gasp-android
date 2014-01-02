@@ -15,10 +15,16 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
+    <!-- Activity labels -->
     <string name="app_name">Gasp!</string>
-    <string name="gasp_places">Google Places</string>
+    <string name="gasp_places">Gasp! Locations</string>
     <string name="gasp_console">Gasp! Console</string>
     <string name="gasp_twitter">Gasp! Twitter Stream</string>
+    <string name="gasp_preferences">Gasp! Preferences</string>
+    <string name="gasp_places_details">Gasp! Reviews and Events</string>
+    <string name="gasp_reviews">Gasp! Reviews</string>
+    <string name="gasp_restaurants">Gasp Restaurants</string>
+    <string name="gasp_users">Gasp! Users</string>
 
     <!-- GCM string resources -->
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
@@ -53,7 +59,6 @@
     <string name="gasp_review_comment_hint">Please enter your review</string>
     <string name="gasp_restaurants_data">Gasp! Restaurants</string>
     <string name="gasp_users_data">Gasp! Users</string>
-    <string name="gasp_preferences">Gasp! Preferences</string>
     <string name="places_search_radius_preferences">places_search_radius</string>
     <string name="places_search_radius_title">Google Places API Search Radius</string>
     <string name="places_search_radius_dialog">Select search radius (in meters)</string>
@@ -124,6 +129,5 @@
     <string name="default_message">Welcome to Login with Amazon!\nIf this is your first time logging in, you will be asked to give permission for this application to access your profile data.</string>
     <string name="login_button_content_description">"Button for authorization through Login with Amazon"</string>
     <string name="return_to_app">Return To App</string>
-
 
 </resources>

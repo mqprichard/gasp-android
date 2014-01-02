@@ -59,7 +59,8 @@
             android:value="AIzaSyCPeVw7KcmYYbnoXKqOEI6P63vTis3UZ0A" />
 
         <!-- Gasp! Maps activity -->
-        <activity android:name=".activity.LocationsActivity">
+        <activity android:name=".activity.LocationsActivity"
+                  android:label="@string/gasp_places">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -69,46 +70,29 @@
         <!-- Gasp! preferences activity -->
         <activity
             android:name="com.cloudbees.demo.gasp.activity.SetPreferencesActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity"
             android:label="@string/gasp_preferences">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
 
         <!-- Gasp! Twitter stream activity -->
         <activity
             android:name="com.cloudbees.demo.gasp.activity.TwitterStreamActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity"
             android:label="@string/gasp_twitter">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
-
-        <!-- Gasp! REST data services -->
-        <service android:name="com.cloudbees.demo.gasp.service.RESTIntentService" />
 
         <!-- Gasp! add review activity -->
         <activity
             android:name="com.cloudbees.demo.gasp.activity.ReviewActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.PlacesActivity"
             android:label="@string/gasp_add_review">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.PlacesActivity" />
         </activity>
 
         <!-- Gasp! Google Places API activity -->
         <activity
             android:name="com.cloudbees.demo.gasp.activity.PlacesActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
+            android:label="@string/gasp_places">
         </activity>
         <activity
             android:name="com.cloudbees.demo.gasp.activity.PlacesDetailActivity"
+            android:label="@string/gasp_places_details"
             android:parentActivityName="com.cloudbees.demo.gasp.activity.PlacesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -119,40 +103,23 @@
         <!-- Gasp! database activities -->
         <activity
             android:name="com.cloudbees.demo.gasp.activity.ReviewListActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
+            android:label="@string/gasp_reviews">
         </activity>
         <activity
             android:name="com.cloudbees.demo.gasp.activity.RestaurantListActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
+            android:label="@string/gasp_restaurants">
         </activity>
         <activity
             android:name="com.cloudbees.demo.gasp.activity.UserListActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
+            android:label="@string/gasp_users">
         </activity>
 
         <!-- Login with Amazon/Google -->
         <activity
-            android:name="com.cloudbees.demo.gasp.activity.AmazonSignInActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
+            android:name="com.cloudbees.demo.gasp.activity.AmazonSignInActivity">
         </activity>
         <activity
-            android:name="com.cloudbees.demo.gasp.activity.GoogleSignInActivity"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
+            android:name="com.cloudbees.demo.gasp.activity.GoogleSignInActivity">
         </activity>
         <activity
             android:name="com.amazon.identity.auth.device.authorization.AuthorizationActivity"
@@ -169,6 +136,9 @@
                     android:scheme="amzn" />
             </intent-filter>
         </activity>
+
+        <!-- Gasp! REST data services -->
+        <service android:name="com.cloudbees.demo.gasp.service.RESTIntentService" />
 
         <!-- Gasp! data synchronization services -->
         <service android:name="com.cloudbees.demo.gasp.service.ReviewSyncService" />
