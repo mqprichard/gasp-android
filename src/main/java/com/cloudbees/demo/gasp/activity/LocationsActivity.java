@@ -164,6 +164,8 @@ public class LocationsActivity extends FragmentActivity {
                 ft.add(locationFragment, "LocationFragment");
                 ft.commit();
             }
+            else
+                Log.e(TAG, "Google Play Services not available");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -245,34 +247,43 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     private void setCamera() {
-        LatLng myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(myLocation)
-                .zoom(16)
-                .bearing(0)
-                .tilt(0)
-                .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        try {
+            LatLng myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(myLocation)
+                    .zoom(16)
+                    .bearing(0)
+                    .tilt(0)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setLocation() {
-        String svcName = Context.LOCATION_SERVICE;
-        LocationManager locationManager = (LocationManager) getSystemService(svcName);
+        try {
+            String svcName = Context.LOCATION_SERVICE;
+            LocationManager locationManager = (LocationManager) getSystemService(svcName);
 
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setSpeedRequired(false);
-        criteria.setCostAllowed(true);
-        String provider = locationManager.getBestProvider(criteria, true);
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setSpeedRequired(false);
+            criteria.setCostAllowed(true);
+            String provider = locationManager.getBestProvider(criteria, true);
 
-        mLocation = locationManager.getLastKnownLocation(provider);
-        Log.i(TAG, "Current Latitude = " + mLocation.getLatitude());
-        Log.i(TAG, "Current Longitude = " + mLocation.getLongitude());
+            mLocation = locationManager.getLastKnownLocation(provider);
+            Log.i(TAG, "Current Latitude = " + mLocation.getLatitude());
+            Log.i(TAG, "Current Longitude = " + mLocation.getLongitude());
 
-        mMap.setMyLocationEnabled(true);
+            mMap.setMyLocationEnabled(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
     }
 
     private void showLocations(Places places) {
