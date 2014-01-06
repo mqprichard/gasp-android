@@ -36,19 +36,14 @@ import java.util.concurrent.TimeUnit;
 public class PlaceEventsTest extends AndroidTestCase {
     private static final String TAG = PlaceEventsTest.class.getName();
 
-    // Latches used to signal completion of async Google Places API calls
-    private CountDownLatch signal, signal2, signal3, signal4, signal5;
+    // Latch used to signal completion of async Google Places API calls
+    private CountDownLatch signal;
 
     private String jsonOutput;
 
     protected void setUp() throws Exception {
         super.setUp();
-
-        signal = new CountDownLatch(1);     // placesSearch()
-        signal2 = new CountDownLatch(1);    // eventAdd()
-        signal3 = new CountDownLatch(1);    // eventDelete()
-        signal4 = new CountDownLatch(1);    // placeDetailsEventAdded()
-        signal5 = new CountDownLatch(1);    // placeDetailsEventDeleted()
+        signal = new CountDownLatch(1);
     }
 
     /**
@@ -106,7 +101,6 @@ public class PlaceEventsTest extends AndroidTestCase {
                 } catch (Exception e) {
                     fail();
                 }
-                signal.countDown();
             }
         }.execute();
     }
@@ -155,7 +149,6 @@ public class PlaceEventsTest extends AndroidTestCase {
                 } catch (Exception e) {
                     fail();
                 }
-                signal2.countDown();
             }
         }.execute();
     }
@@ -200,7 +193,6 @@ public class PlaceEventsTest extends AndroidTestCase {
                 } catch (Exception e) {
                     fail();
                 }
-                signal3.countDown();
             }
         }.execute();
     }
@@ -258,7 +250,6 @@ public class PlaceEventsTest extends AndroidTestCase {
                 } catch (Exception e) {
                     fail();
                 }
-                signal4.countDown();
             }
         }.execute();
     }
@@ -308,9 +299,9 @@ public class PlaceEventsTest extends AndroidTestCase {
 
                 } catch (Exception e) {
                     fail();
-                    //e.printStackTrace();
                 }
-                signal5.countDown();
+                // Signal completion of async test processes
+                signal.countDown();
             }
         }.execute();
     }
@@ -324,8 +315,8 @@ public class PlaceEventsTest extends AndroidTestCase {
 
             placesSearch(new Query(lat, lng, radius, token));
 
-            signal5.await(120, TimeUnit.SECONDS);
-            //Log.d(TAG, "Finished: " + PlaceEventsTest.class.getName());
+            // Wait for async test processes to complete
+            signal.await(120, TimeUnit.SECONDS);
         }
         catch (Exception e) {
             fail();
