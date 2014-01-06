@@ -7,10 +7,12 @@ import android.util.Log;
 import com.cloudbees.demo.gasp.model.EventRequest;
 import com.cloudbees.demo.gasp.model.EventResponse;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
+import com.cloudbees.demo.gasp.model.PlaceEvent;
 import com.cloudbees.demo.gasp.model.Places;
 import com.cloudbees.demo.gasp.model.Query;
 import com.google.gson.Gson;
 
+import java.lang.String;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -34,35 +36,38 @@ import java.util.concurrent.TimeUnit;
 public class PlaceEventsTest extends AndroidTestCase {
     private static final String TAG = PlaceEventsTest.class.getName();
 
+    // Latches used to signal completion of async Google Places API calls
     private CountDownLatch signal, signal2, signal3, signal4, signal5;
-
-    private static String reference = "";
-    private static String eventId = "";
 
     private String jsonOutput;
 
     protected void setUp() throws Exception {
         super.setUp();
-        signal = new CountDownLatch(1);
-        signal2 = new CountDownLatch(1);
-        signal3 = new CountDownLatch(1);
-        signal4 = new CountDownLatch(1);
-        signal5 = new CountDownLatch(1);
+
+        signal = new CountDownLatch(1);     // placesSearch()
+        signal2 = new CountDownLatch(1);    // eventAdd()
+        signal3 = new CountDownLatch(1);    // eventDelete()
+        signal4 = new CountDownLatch(1);    // placeDetailsEventAdded()
+        signal5 = new CountDownLatch(1);    // placeDetailsEventDeleted()
     }
 
-    public void placesSearch(Query query) {
-        final Query searchQuery = query;
+    /**
+     * Initial Google Places API Search
+     * {@link} https://developers.google.com/places/documentation/search#PlaceSearchRequests
+     * @param query com.cloudbees.demo.gasp.model.Query
+     */
+    public void placesSearch(final Query query) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    String search = GooglePlacesClient.getQueryStringNearbySearch(searchQuery);
-                    Log.d(TAG, search);
+                    String search = GooglePlacesClient.getQueryStringNearbySearch(query);
+                    Log.d(TAG, "Places API search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -71,30 +76,47 @@ public class PlaceEventsTest extends AndroidTestCase {
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
+                    String reference = new String();
                     Places places = new Gson().fromJson(jsonOutput, Places.class);
 
                     if (places.getStatus().equalsIgnoreCase("OK")) {
                         assertNotNull(places);
                         assertTrue(places.getResults().length > 0);
                         reference = places.getResults()[0].getReference();
-                        Log.d(TAG, reference);
+                        Log.d(TAG, "Places API returns reference: " + reference);
                         assertFalse(places.getResults()[0].getReference().isEmpty());
                     }
                     else {
                         fail();
                     }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    EventRequest eventRequest = new EventRequest();
+                    eventRequest.setReference(reference);
+                    int duration = 86400;
+                    eventRequest.setDuration(duration);
+                    String language = "EN-US";
+                    eventRequest.setLanguage(language);
+                    String summary = "New Gasp! Review";
+                    eventRequest.setSummary(summary);
+                    String url = "http://gasp.partnerdemo.cloudbees.net/reviews";
+                    eventRequest.setUrl(url);
 
-                // Call countDown() on the latch so that the test completes immediately
+                    eventAdd(eventRequest);
+
+                } catch (Exception e) {
+                    fail();
+                }
                 signal.countDown();
             }
         }.execute();
     }
 
-    public void eventAdd(EventRequest request) {
+    /**
+     * Google Places API Add Event: calls placeDetailsEventAdded()
+     * {@link} https://developers.google.com/places/documentation/actions#event_intro
+     * @param request com.cloudbees.demo.gasp.model.EventRequest
+     */
+    public void eventAdd(final EventRequest request) {
         final EventRequest eventRequest = request;
 
         new AsyncTask<Void, Void, String>() {
@@ -102,7 +124,8 @@ public class PlaceEventsTest extends AndroidTestCase {
             protected String doInBackground(Void... params) {
                 try {
                     String requestString = GooglePlacesClient.getQueryStringAddEvent();
-                    Log.d(TAG, requestString);
+                    Log.d(TAG, "Places API Add Event URL: " + requestString);
+                    Log.d(TAG, "Places API Add Event Body: " + new Gson().toJson(eventRequest, EventRequest.class));
                     jsonOutput = GooglePlacesClient.doPost(
                             new Gson().toJson(eventRequest, EventRequest.class), new URL(requestString));
 
@@ -117,42 +140,45 @@ public class PlaceEventsTest extends AndroidTestCase {
                 super.onPostExecute(jsonOutput);
                 try {
                     EventResponse eventResponse = new Gson().fromJson(jsonOutput, EventResponse.class);
-
+                    assertNotNull(eventResponse);
                     if (eventResponse.getStatus().equalsIgnoreCase("OK")) {
-                        assertNotNull(eventResponse);
                         assertFalse(eventResponse.getEvent_id().isEmpty());
-                        Log.d(TAG, eventResponse.getEvent_id());
-                        eventId = eventResponse.getEvent_id();
-
+                        Log.d(TAG, "Places API Event Response: " + eventResponse.getEvent_id());
                     }
                     else {
                         fail();
                     }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    placeDetailsEventAdded(eventRequest.getReference(),
+                                           eventResponse.getEvent_id());
 
-                // Call countDown() on the latch so that the test completes immediately
+                } catch (Exception e) {
+                    fail();
+                }
                 signal2.countDown();
             }
         }.execute();
     }
 
-    public void eventDelete(EventRequest request) {
-        final EventRequest eventRequest = request;
+    /**
+     * Google Places API Delete Event: calls PlaceDetailsEventDeleted()
+     * {@link} https://developers.google.com/places/documentation/actions#event_intro
+     * @param request com.cloudbees.demo.gasp.model.EventRequest
+     */
+    public void eventDelete(final EventRequest request) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
                     String requestString = GooglePlacesClient.getQueryStringDeleteEvent();
-                    Log.d(TAG, requestString);
+                    Log.d(TAG, "Places API Delete Event URL: " + requestString);
+                    Log.d(TAG, "Places API Delete Event Body: " + new Gson().toJson(request, EventRequest.class));
                     jsonOutput = GooglePlacesClient.doPost(
-                            new Gson().toJson(eventRequest, EventRequest.class), new URL(requestString));
+                            new Gson().toJson(request, EventRequest.class), new URL(requestString));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -162,37 +188,41 @@ public class PlaceEventsTest extends AndroidTestCase {
                 super.onPostExecute(jsonOutput);
                 try {
                     EventResponse eventResponse = new Gson().fromJson(jsonOutput, EventResponse.class);
-
+                    assertNotNull(eventResponse);
                     if (eventResponse.getStatus().equalsIgnoreCase("OK")) {
-                        Log.d(TAG, jsonOutput);
-                        assertNotNull(eventResponse);
+                        Log.d(TAG, "Places API Delete Event Response: " + eventResponse.getStatus());
                     }
                     else {
                         fail();
                     }
+                    placeDetailsEventDeleted(request.getReference(), request.getEvent_id());
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    fail();
                 }
-
-                // Call countDown() on the latch so that the test completes immediately
                 signal3.countDown();
             }
         }.execute();
     }
 
-    public void placeDetailsEventAdded() {
+    /**
+     * Google Places API Search (to verify event added): calls eventDelete()
+     * {@link} https://developers.google.com/places/documentation/search#PlaceSearchRequests
+     * @param reference
+     * @param eventId
+     */
+    public void placeDetailsEventAdded(final String reference, final String eventId) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.getQueryStringPlaceDetails(reference);
-                    Log.d(TAG, search);
+                    Log.d(TAG, "Places API Search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -202,36 +232,55 @@ public class PlaceEventsTest extends AndroidTestCase {
                 super.onPostExecute(jsonOutput);
                 try {
                     PlaceDetails details = new Gson().fromJson(jsonOutput, PlaceDetails.class);
-
+                    assertNotNull(details);
                     if (details.getStatus().equalsIgnoreCase("OK")) {
-                        assertNotNull(details);
+                        Log.d(TAG, "Places API Add Event Response: " + details.getStatus());
+                        boolean found = false;
+                        for (PlaceEvent event: details.getResult().getEvents()) {
+                            if (event.getEvent_id().compareTo(eventId) == 0) {
+                                found = true;
+                                assertEquals(event.getEvent_id(), eventId);
+                                Log.d(TAG, "Places API Event: " + event.getEvent_id());
+                            }
+                        }
+                        assertTrue(found == true);
                     }
                     else {
                         fail();
                     }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    EventRequest eventRequest = new EventRequest();
+                    eventRequest.setReference(reference);
+                    eventRequest.setEvent_id(eventId);
 
-                // Call countDown() on the latch so that the test completes immediately
+                    eventDelete(eventRequest);
+
+                } catch (Exception e) {
+                    fail();
+                }
                 signal4.countDown();
             }
         }.execute();
     }
 
-    public void placeDetailsEventDeleted() {
+    /**
+     * Google Places API Search (to verify event deleted)
+     * {@link} https://developers.google.com/places/documentation/search#PlaceSearchRequests
+     * @param reference
+     * @param eventId
+     */
+    public void placeDetailsEventDeleted(final String reference, final String eventId) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.getQueryStringPlaceDetails(reference);
-                    Log.d(TAG, search);
+                    Log.d(TAG, "Places API Search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -240,20 +289,27 @@ public class PlaceEventsTest extends AndroidTestCase {
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
+                    //Log.d(TAG, "Places API Search returns: " + jsonOutput);
                     PlaceDetails details = new Gson().fromJson(jsonOutput, PlaceDetails.class);
+                    assertNotNull(details);
 
                     if (details.getStatus().equalsIgnoreCase("OK")) {
-                        assertNotNull(details);
+                        boolean found = false;
+                        for (PlaceEvent event: details.getResult().getEvents()) {
+                            if (event.getEvent_id().compareTo(eventId) == 0) {
+                                found = true;
+                            }
+                        }
+                        assertTrue(found == false);
                     }
                     else {
                         fail();
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    fail();
+                    //e.printStackTrace();
                 }
-
-                // Call countDown() on the latch so that the test completes immediately
                 signal5.countDown();
             }
         }.execute();
@@ -265,66 +321,11 @@ public class PlaceEventsTest extends AndroidTestCase {
             double lng = -122.1142916;
             int radius = 500;
             String token = "";
+
             placesSearch(new Query(lat, lng, radius, token));
 
-            // Allow 30 secs for Google Places API call to complete
-            signal.await(30, TimeUnit.SECONDS);
-
-            EventRequest eventRequest = new EventRequest();
-            eventRequest.setReference(reference);
-            int duration = 86400;
-            eventRequest.setDuration(duration);
-            String language = "EN-US";
-            eventRequest.setLanguage(language);
-            String summary = "New Gasp! Review";
-            eventRequest.setSummary(summary);
-            String url = "http://gasp.partnerdemo.cloudbees.net/reviews";
-            eventRequest.setUrl(url);
-
-            eventAdd(eventRequest);
-
-            // Allow 30 secs for Google Places API call to complete
-            signal2.await(30, TimeUnit.SECONDS);
-        }
-        catch (Exception e) {
-            fail();
-        }
-    }
-
-    public void testAddedEvent() {
-        try {
-            placeDetailsEventAdded();
-
-            // Allow 30 secs for Google Places API call to complete
-            signal4.await(30, TimeUnit.SECONDS);
-        }
-        catch (Exception e) {
-            fail();
-        }
-    }
-
-    public void testDeleteEvent() {
-        try {
-            EventRequest eventRequest = new EventRequest();
-            eventRequest.setReference(reference);
-            eventRequest.setEvent_id(eventId);
-
-            eventDelete(eventRequest);
-
-            // Allow 30 secs for Google Places API call to complete
-            signal3.await(30, TimeUnit.SECONDS);
-        }
-        catch (Exception e) {
-            fail();
-        }
-    }
-
-    public void testDeletedEvent() {
-        try {
-            placeDetailsEventDeleted();
-
-            // Allow 30 secs for Google Places API call to complete
-            signal5.await(30, TimeUnit.SECONDS);
+            signal5.await(120, TimeUnit.SECONDS);
+            //Log.d(TAG, "Finished: " + PlaceEventsTest.class.getName());
         }
         catch (Exception e) {
             fail();

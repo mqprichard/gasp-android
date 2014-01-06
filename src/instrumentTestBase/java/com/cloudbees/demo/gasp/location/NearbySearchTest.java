@@ -32,17 +32,16 @@ import java.util.concurrent.TimeUnit;
 public class NearbySearchTest extends AndroidTestCase {
     private static final String TAG = NearbySearchTest.class.getName();
 
+    // Latches used to signal completion of async Google Places API calls
     private CountDownLatch signal, signal2;
 
+    // Constants for initial Places API NearbySearch
     private final double lat = 37.3750274;
     private final double lng = -122.1142916;
     private final int radius = 500;
+    private final String token = "";
 
-    private Query mQuery;
     private String jsonOutput;
-
-    private static String token = "";
-
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -58,11 +57,11 @@ public class NearbySearchTest extends AndroidTestCase {
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.getQueryStringNearbySearch(searchQuery);
-                    Log.d(TAG, search);
+                    Log.d(TAG, "Places API Search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -70,6 +69,8 @@ public class NearbySearchTest extends AndroidTestCase {
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
+
+                String token = new String();
                 try {
                     Places places = new Gson().fromJson(jsonOutput, Places.class);
 
@@ -78,22 +79,23 @@ public class NearbySearchTest extends AndroidTestCase {
                         assertTrue(places.getResults().length > 0);
 
                         for (Place place : places.getResults()) {
-                            Log.d(TAG, place.getName() + " " + place.getReference());
+                            Log.d(TAG, "Places API Search result: " + place.getName());
                         }
-
-                        Log.d(TAG, "pagetoken = " + places.getNext_page_token());
                         token = places.getNext_page_token();
                     }
                     else {
                         fail();
                     }
+                    assertFalse(token.isEmpty());
+
+                    // Wait for 30 seconds before repeating NearbySearch call
+                    // Places API will not return a valid result immediately
+                    signal.await(30, TimeUnit.SECONDS);
+                    repeatSearch(new Query(lat, lng, radius, token));
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    fail();
                 }
-
-                // Do not call countDown() on the latch: allow signal.await() call to timeout
-                // Google Places API will not return follow-on pagetoken queries immediately
             }
         }.execute();
     }
@@ -106,11 +108,11 @@ public class NearbySearchTest extends AndroidTestCase {
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.getQueryStringNearbySearch(searchQuery);
-                    Log.d(TAG, search);
+                    Log.d(TAG, "Places API Search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -123,20 +125,18 @@ public class NearbySearchTest extends AndroidTestCase {
 
                     if (places.getStatus().equalsIgnoreCase("OK")) {
                         assertNotNull(places);
+                        assertTrue(places.getResults().length > 0);
 
                         for (Place place : places.getResults()) {
-                            Log.d(TAG, place.getName() + " " + place.getReference());
+                            Log.d(TAG, "Places API Search result: " + place.getName());
                         }
-
-                        assertTrue(places.getResults().length > 0);
-                        assertTrue(places.getNext_page_token().isEmpty());
                     }
                     else {
                         fail();
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    fail();
                 }
 
                 // This time call countdown so that the test completes immediately
@@ -145,29 +145,9 @@ public class NearbySearchTest extends AndroidTestCase {
         }.execute();
     }
 
-    //@UiThreadTest
     public void testLocationSearch() {
         try {
             placesSearch(new Query(lat, lng, radius, token));
-
-            // Allow 30 secs for Google Places API call to complete
-            // We will wait for the full timeout so that following call with pagetoken works
-            signal.await(30, TimeUnit.SECONDS);
-        }
-        catch (Exception e) {
-            fail();
-        }
-    }
-
-    //@UiThreadTest
-    public void testRepeatSearch() {
-        try {
-            assertFalse(token.isEmpty());
-            repeatSearch(new Query(lat, lng, radius, token));
-
-            // Allow 20 secs for Google Places API call to complete
-            // Test will complete on signal2.countDown() or timeout
-            signal2.await(20, TimeUnit.SECONDS);
         }
         catch (Exception e) {
             fail();

@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -32,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class PlaceDetailsTest extends AndroidTestCase {
     private static final String TAG = PlaceDetailsTest.class.getName();
 
+    // Latches used to signal completion of async Google Places API calls
     private CountDownLatch signal, signal2;
 
     private String jsonOutput;
@@ -39,8 +39,9 @@ public class PlaceDetailsTest extends AndroidTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        signal = new CountDownLatch(1);
-        signal2 = new CountDownLatch(1);
+
+        signal = new CountDownLatch(1);     // placesSearch()
+        signal2 = new CountDownLatch(1);    // placeDetails()
     }
 
     public void placesSearch(Query query) {
@@ -51,7 +52,7 @@ public class PlaceDetailsTest extends AndroidTestCase {
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.getQueryStringNearbySearch(searchQuery);
-                    Log.d(TAG, search);
+                    Log.d(TAG, "Places API search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
@@ -65,9 +66,10 @@ public class PlaceDetailsTest extends AndroidTestCase {
                 super.onPostExecute(jsonOutput);
                 try {
                     Places places = new Gson().fromJson(jsonOutput, Places.class);
+                    assertNotNull(places);
+                    //Log.d(TAG, "Places API Response: " + jsonOutput);
 
                     if (places.getStatus().equalsIgnoreCase("OK")) {
-                        assertNotNull(places);
                         assertTrue(places.getResults().length > 0);
                         reference = places.getResults()[0].getReference();
                         assertFalse(places.getResults()[0].getReference().isEmpty());
@@ -79,8 +81,6 @@ public class PlaceDetailsTest extends AndroidTestCase {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                // Call countDown() on the latch so that the test completes immediately
                 signal.countDown();
             }
         }.execute();
@@ -93,11 +93,11 @@ public class PlaceDetailsTest extends AndroidTestCase {
             protected String doInBackground(Void... params) {
                 try {
                     String search = GooglePlacesClient.getQueryStringPlaceDetails(reference);
-                    Log.d(TAG, search);
+                    Log.d(TAG, "Places API search: " + search);
                     jsonOutput = GooglePlacesClient.doGet(new URL(search));
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Exception: ", e);
+                    fail();
                 }
                 return jsonOutput;
             }
@@ -105,11 +105,12 @@ public class PlaceDetailsTest extends AndroidTestCase {
             @Override
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
+                //Log.d(TAG, "Places API Response: " + jsonOutput);
+
                 try {
                     PlaceDetails details = new Gson().fromJson(jsonOutput, PlaceDetails.class);
-
+                    assertNotNull(details);
                     if (details.getStatus().equalsIgnoreCase("OK")) {
-                        assertNotNull(details);
                         assertFalse(details.getResult().getId().isEmpty());
                         assertFalse(details.getResult().getName().isEmpty());
                         assertFalse(details.getResult().getFormatted_address().isEmpty());
@@ -123,8 +124,6 @@ public class PlaceDetailsTest extends AndroidTestCase {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                // Call countDown() on the latch so that the test completes immediately
                 signal2.countDown();
             }
         }.execute();
@@ -137,14 +136,6 @@ public class PlaceDetailsTest extends AndroidTestCase {
             int radius = 500;
             String token = "";
             placesSearch(new Query(lat, lng, radius, token));
-
-            // Allow 30 secs for Google Places API call to complete
-            signal.await(30, TimeUnit.SECONDS);
-
-            placeDetails();
-
-            // Allow 30 secs for Google Places API call to complete
-            signal2.await(30, TimeUnit.SECONDS);
         }
         catch (Exception e) {
             fail();

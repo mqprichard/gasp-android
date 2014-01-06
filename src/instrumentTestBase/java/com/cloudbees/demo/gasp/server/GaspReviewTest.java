@@ -2,8 +2,9 @@ package com.cloudbees.demo.gasp.server;
 
 import android.webkit.URLUtil;
 
-import com.cloudbees.demo.gasp.model.Restaurant;
+import com.cloudbees.demo.gasp.model.Review;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -24,9 +25,9 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  */
 
-public class GaspRestaurantTest extends GaspEntityTest {
+public class GaspReviewTest extends GaspEntityTest {
     //Store Gasp entity URL across add/delete test cases
-    private static String mLocation;
+    //private static String mLocation;
 
     @Override
     protected void setUp() throws Exception {
@@ -35,20 +36,27 @@ public class GaspRestaurantTest extends GaspEntityTest {
 
     @Override
     protected void onEntityAdded(String location) {
-        assert(URLUtil.isValidUrl(location));
-        assert(location.startsWith(mGaspRestaurantsUrl));
-        mLocation = location;
+        try {
+            assert(URLUtil.isValidUrl(location));
+            assert(location.startsWith(mGaspReviewsUrl));
+            deleteGaspEntity(new URL(location));
+            signal2.await(20, TimeUnit.SECONDS);
+        } catch(Exception e) {
+
+        }
     }
 
-    public void testAddRestaurant() {
+    public void testAddReview() {
         try {
-            Restaurant restaurant = new Restaurant();
-            restaurant.setName("Test Restaurant");
-            restaurant.setPlacesId("1234567890");
-            restaurant.setWebsite("www.testrestaurant.com");
+            Review review = new Review();
+            review.setStar(5);
+            review.setComment("Test Comment");
+            review.setRestaurant(mGaspRestaurantsUrl + "/1");
+            review.setUser(mGaspUsersUrl + "/1");
 
-            final String jsonInput = new Gson().toJson(restaurant, Restaurant.class);
-            final URL gaspUrl = new URL(mGaspRestaurantsUrl);
+            final URL gaspUrl = new URL(mGaspReviewsUrl);
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+            String jsonInput = gson.toJson(review, Review.class);
 
             addGaspEntity(jsonInput, gaspUrl);
             signal.await(20, TimeUnit.SECONDS);
@@ -58,7 +66,8 @@ public class GaspRestaurantTest extends GaspEntityTest {
         }
     }
 
-    public void testDeleteRestaurant() {
+    /**
+    public void testDeleteReview() {
         try {
             deleteGaspEntity(new URL(mLocation));
             signal2.await(20, TimeUnit.SECONDS);
@@ -67,4 +76,5 @@ public class GaspRestaurantTest extends GaspEntityTest {
             fail();
         }
     }
+    **/
 }

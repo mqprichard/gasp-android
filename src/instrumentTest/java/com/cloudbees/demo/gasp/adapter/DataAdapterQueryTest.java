@@ -60,6 +60,7 @@ public class DataAdapterQueryTest extends AndroidTestCase {
             review.setStar(1);
             reviewData.insert(review);
         }
+        reviewData.close();
 
         // Clear Restaurant data
         RestaurantDataAdapter restaurantData = new RestaurantDataAdapter(getContext());
@@ -85,6 +86,7 @@ public class DataAdapterQueryTest extends AndroidTestCase {
             restaurant.setWebsite("http://www.gasp.com/");
             restaurantData.insert(restaurant);
         }
+        restaurantData.close();
 
     }
 
