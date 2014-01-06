@@ -77,13 +77,18 @@ android {
 
     //Using Product flavors to define test subsets
     productFlavors {
-        //Default: TestCase, AndroidTestCase and InstrumentationTestCase tests
-        //Test sources: src/instrumentTest
+        // Standalone AndroidTestCase tests
+        // Do not require Gasp! server integration
         base {
         }
 
-        //ActivityInstrumentationTestCase2 tests
-        //Test sources: src/instrumentTestFull
+        // Integration tests (AndroidTestCase, InstrumentationTestCase, Service TestCase)
+        // Requires Gasp! server
+        integration {
+
+        }
+        //ActivityInstrumentationTestCase2 and Robotium tests
+        //Requires Gasp! server
         full {
         }
     }
