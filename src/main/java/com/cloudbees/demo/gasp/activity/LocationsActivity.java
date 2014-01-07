@@ -239,7 +239,6 @@ public class LocationsActivity extends FragmentActivity {
             public boolean onMarkerClick(Marker marker) {
                 Log.d(TAG, "Place Id: " + mPlacesMap.get(marker.getId()));
                 Log.d(TAG, "Reference: " + mReferencesMap.get(mPlacesMap.get(marker.getId())));
-                //mDetailsFragment.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
                 mGaspPlaces.placeDetails(new Query(mReferencesMap.get(mPlacesMap.get(marker.getId()))));
                 return false;
             }
@@ -288,23 +287,27 @@ public class LocationsActivity extends FragmentActivity {
     private void showLocations(Places places) {
         Restaurant restaurant;
         float markerColour;
+        try {
 
-        for (Place place : places.getResults()) {
-            LatLng pos = new LatLng(place.getGeometry().getLocation().getLat().doubleValue(),
-                    place.getGeometry().getLocation().getLng().doubleValue());
+            for (Place place : places.getResults()) {
+                LatLng pos = new LatLng(place.getGeometry().getLocation().getLat().doubleValue(),
+                        place.getGeometry().getLocation().getLng().doubleValue());
 
-            restaurant = mGaspDatabase.getRestaurantByPlacesId(place.getId());
-            if (restaurant != null)
-                markerColour = BitmapDescriptorFactory.HUE_GREEN;
-            else
-                markerColour = BitmapDescriptorFactory.HUE_RED;
+                restaurant = mGaspDatabase.getRestaurantByPlacesId(place.getId());
+                if (restaurant != null)
+                    markerColour = BitmapDescriptorFactory.HUE_GREEN;
+                else
+                    markerColour = BitmapDescriptorFactory.HUE_RED;
 
-            Marker marker = mMap.addMarker(new MarkerOptions().position(pos)
-                    .title(place.getName())
-                    .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
-            Log.d(TAG, place.getName() + " " + pos.toString());
-            mPlacesMap.put(marker.getId(), place.getId());
-            mReferencesMap.put(place.getId(), place.getReference());
+                Marker marker = mMap.addMarker(new MarkerOptions().position(pos)
+                        .title(place.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
+                Log.d(TAG, place.getName() + " " + pos.toString());
+                mPlacesMap.put(marker.getId(), place.getId());
+                mReferencesMap.put(place.getId(), place.getReference());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
