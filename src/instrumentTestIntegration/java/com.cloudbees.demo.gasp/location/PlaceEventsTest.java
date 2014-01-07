@@ -12,6 +12,7 @@ import com.cloudbees.demo.gasp.model.Places;
 import com.cloudbees.demo.gasp.model.Query;
 import com.google.gson.Gson;
 
+import java.lang.NullPointerException;
 import java.lang.String;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
@@ -280,15 +281,17 @@ public class PlaceEventsTest extends AndroidTestCase {
             protected void onPostExecute(String jsonOutput) {
                 super.onPostExecute(jsonOutput);
                 try {
-                    //Log.d(TAG, "Places API Search returns: " + jsonOutput);
                     PlaceDetails details = new Gson().fromJson(jsonOutput, PlaceDetails.class);
                     assertNotNull(details);
 
                     if (details.getStatus().equalsIgnoreCase("OK")) {
                         boolean found = false;
-                        for (PlaceEvent event: details.getResult().getEvents()) {
-                            if (event.getEvent_id().compareTo(eventId) == 0) {
-                                found = true;
+
+                        if (details.getResult().getEvents() != null) {
+                            for (PlaceEvent event : details.getResult().getEvents()) {
+                                if (event.getEvent_id().compareTo(eventId) == 0) {
+                                    found = true;
+                                }
                             }
                         }
                         assertTrue(found == false);
@@ -298,6 +301,7 @@ public class PlaceEventsTest extends AndroidTestCase {
                     }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     fail();
                 }
                 // Signal completion of async test processes
