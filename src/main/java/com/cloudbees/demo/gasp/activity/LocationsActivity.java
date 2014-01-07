@@ -282,7 +282,6 @@ public class LocationsActivity extends FragmentActivity {
             mMap.setMyLocationEnabled(true);
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 
