@@ -47,7 +47,7 @@ dependencies {
 
     compile 'com.google.android.gms:play-services:4.0.30'
     compile 'com.android.support:support-v4:19.0.0'
-    compile 'com.android.support:appcompat-v7:18.0.0'
+    compile 'com.android.support:appcompat-v7:19.0.0'
     compile 'com.android.support:gridlayout-v7:19.0.0'
     compile 'com.android.support:support-v13:19.0.0'
     compile files('libs/login-with-amazon-sdk.jar')
