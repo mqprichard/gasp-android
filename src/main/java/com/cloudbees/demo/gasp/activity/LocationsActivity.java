@@ -22,13 +22,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.location.GaspPlaces;
-import com.cloudbees.demo.gasp.location.GaspSearch;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
 import com.cloudbees.demo.gasp.fragment.LocationFragment;
 import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.gcm.GaspRegistrationClient;
+import com.cloudbees.demo.gasp.location.GaspPlaces;
+import com.cloudbees.demo.gasp.location.GaspSearch;
 import com.cloudbees.demo.gasp.model.Place;
 import com.cloudbees.demo.gasp.model.PlaceDetails;
 import com.cloudbees.demo.gasp.model.Places;
