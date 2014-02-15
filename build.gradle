@@ -41,11 +41,7 @@ repositories {
 
 dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
-
-    //compile 'com.android.support:support-v4:18.0.0'
-    //compile 'com.google.android.gms:play-services:3.2.+'
-
-    compile 'com.google.android.gms:play-services:4.1.32'
+    compile 'com.google.android.gms:play-services:4.2.42'
     compile 'com.android.support:support-v4:19.0.1'
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.android.support:gridlayout-v7:19.0.0'
