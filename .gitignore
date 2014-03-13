@@ -18,7 +18,25 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+.settings/
 
 # Keyfiles etc
 src/main/java/com/cloudbees/gasp/gcm/GCMProjectKey.java
 src/main/java/com/cloudbees/gasp/location/GooglePlacesKey.java
+src/main/assets/api_key.txt
+
+# Android Studio project files
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Gradle
+build/
+.gradle/
+
+# Android Lint
+lint-results.xml
+
