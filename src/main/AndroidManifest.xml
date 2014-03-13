@@ -98,7 +98,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cloudbees.demo.gasp.activity.PlacesActivity" />
         </activity>
-
+        <activity
+            android:name="com.cloudbees.demo.gasp.activity.PlacesDetailActivity2"
+            android:label="@string/gasp_places_details"
+            android:parentActivityName="com.cloudbees.demo.gasp.activity.PlacesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.demo.gasp.activity.PlacesActivity" />
+        </activity>
 
         <!-- Gasp! database activities -->
         <activity

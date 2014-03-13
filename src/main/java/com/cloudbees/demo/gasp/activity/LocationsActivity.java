@@ -273,8 +273,8 @@ public class LocationsActivity extends FragmentActivity {
             criteria.setSpeedRequired(false);
             criteria.setCostAllowed(true);
             String provider = locationManager.getBestProvider(criteria, true);
-
             mLocation = locationManager.getLastKnownLocation(provider);
+
             Log.i(TAG, "Current Latitude = " + mLocation.getLatitude());
             Log.i(TAG, "Current Longitude = " + mLocation.getLongitude());
 
@@ -314,7 +314,8 @@ public class LocationsActivity extends FragmentActivity {
     private void launchPlacesDetailActivity(PlaceDetails placeDetails) {
         try {
             Intent intent = new Intent();
-            intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
+            //intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
+            intent.setClass(LocationsActivity.this, PlacesDetailActivity2.class);
             intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_SERIALIZED, placeDetails.getResult());
             intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_REFERENCE, mReferencesMap.get(placeDetails.getResult().getId()));
             startActivityForResult(intent, 0);

@@ -34,21 +34,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/detail_phone"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_id"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_latitude"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_longitude"/>
-
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

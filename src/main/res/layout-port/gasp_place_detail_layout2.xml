@@ -59,12 +59,11 @@
             android:layout_width="match_parent"
             android:text="@string/gasp_details_title_reviews" />
 
-        <ListView
+        <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:scrollbars="vertical"
-            android:id="@+id/detail_reviews" />
+            android:name="com.cloudbees.demo.gasp.fragment.ReviewListFragment"
+            tools:layout="@layout/gasp_generic_textview" />
     </LinearLayout>
 
     <LinearLayout
@@ -79,11 +78,10 @@
             android:layout_width="match_parent"
             android:text="@string/gasp_details_title_events" />
 
-        <ListView
+        <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:scrollbars="vertical"
-            android:id="@+id/detail_events" />
+            android:name="com.cloudbees.demo.gasp.fragment.EventListFragment"
+            tools:layout="@layout/gasp_generic_textview" />
     </LinearLayout>
 </LinearLayout>
