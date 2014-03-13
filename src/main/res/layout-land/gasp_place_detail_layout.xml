@@ -62,7 +62,7 @@
         <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.cloudbees.demo.gasp.fragment.ReviewListFragment"
+            android:name="com.cloudbees.demo.gasp.fragment.ReviewDetailsFragment"
             tools:layout="@layout/gasp_generic_textview"
             android:id="@+id/detail_review_list"/>
     </LinearLayout>
@@ -82,7 +82,7 @@
         <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.cloudbees.demo.gasp.fragment.EventListFragment"
+            android:name="com.cloudbees.demo.gasp.fragment.EventDetailsFragment"
             tools:layout="@layout/gasp_generic_textview"
             android:id="@+id/detail_event_list"/>
     </LinearLayout>

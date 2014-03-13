@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
-import com.cloudbees.demo.gasp.fragment.EventListFragment;
-import com.cloudbees.demo.gasp.fragment.ReviewListFragment;
+import com.cloudbees.demo.gasp.fragment.EventDetailsFragment;
+import com.cloudbees.demo.gasp.fragment.ReviewDetailsFragment;
 import com.cloudbees.demo.gasp.model.PlaceDetail;
 import com.cloudbees.demo.gasp.model.Restaurant;
 import com.cloudbees.demo.gasp.model.Review;
@@ -148,19 +148,19 @@ public class PlacesDetailActivity extends FragmentActivity {
     }
 
     private void showReviews(PlaceDetail place) {
-        ReviewListFragment reviewListFragment =
-                (ReviewListFragment) getSupportFragmentManager().findFragmentById(R.id.detail_review_list);
+        ReviewDetailsFragment reviewDetailsFragment =
+                (ReviewDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_review_list);
         Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(place.getId());
         if (restaurant != null) {
             List<Review> reviews = mGaspDatabase.getLastNReviewsByRestaurant(restaurant.getId(), 10);
-            reviewListFragment.showReviewDetails(reviews);
+            reviewDetailsFragment.showReviewDetails(reviews);
         }
     }
 
     private void showEvents(PlaceDetail place) {
-        EventListFragment eventListFragment =
-                (EventListFragment) getSupportFragmentManager().findFragmentById(R.id.detail_event_list);
-        eventListFragment.showEventDetails(place);
+        EventDetailsFragment eventDetailsFragment =
+                (EventDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_event_list);
+        eventDetailsFragment.showEventDetails(place);
     }
 
     private void showLocationDetails(PlaceDetail place) {

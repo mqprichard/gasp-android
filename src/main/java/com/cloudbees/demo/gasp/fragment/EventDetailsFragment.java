@@ -1,13 +1,14 @@
 package com.cloudbees.demo.gasp.fragment;
 
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.model.Review;
+import com.cloudbees.demo.gasp.model.PlaceDetail;
+import com.cloudbees.demo.gasp.model.PlaceEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -25,19 +26,24 @@ import java.util.List;
  * limitations under the License.
  */
 
-public class ReviewListFragment extends ListFragment {
-    private static final String TAG = ReviewListFragment.class.getName();
+public class EventDetailsFragment extends ListFragment {
+    private static final String TAG = EventDetailsFragment.class.getName();
 
-    public ReviewListFragment() {
+    public EventDetailsFragment() {
     }
 
-    public void showReviewDetails(List<Review> reviews) {
+    public void showEventDetails(PlaceDetail placeDetail){
         // Use a simple TextView layout for ArrayAdapter constructor
-        ArrayAdapter<String> mReviewAdapter =
+        ArrayAdapter<String> mEventAdapter =
                 new ArrayAdapter<String>(getActivity(), R.layout.gasp_generic_textview, new ArrayList<String>());
-        setListAdapter(mReviewAdapter);
-        for (Review review : reviews) {
-            mReviewAdapter.add(review.toString());
+        setListAdapter(mEventAdapter);
+
+        if (placeDetail.getEvents() != null) {
+            for (PlaceEvent event : placeDetail.getEvents()) {
+                Log.d(TAG, "Event Id: " + event.getEvent_id());
+                Log.d(TAG, "Event Summary: " + event.getSummary());
+                mEventAdapter.add(event.getSummary() + ": " + event.getUrl());
+            }
         }
     }
 }
