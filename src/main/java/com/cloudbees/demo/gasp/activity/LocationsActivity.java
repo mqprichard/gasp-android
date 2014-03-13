@@ -315,7 +315,7 @@ public class LocationsActivity extends FragmentActivity {
         try {
             Intent intent = new Intent();
             //intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
-            intent.setClass(LocationsActivity.this, PlacesDetailActivity2.class);
+            intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
             intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_SERIALIZED, placeDetails.getResult());
             intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_REFERENCE, mReferencesMap.get(placeDetails.getResult().getId()));
             startActivityForResult(intent, 0);

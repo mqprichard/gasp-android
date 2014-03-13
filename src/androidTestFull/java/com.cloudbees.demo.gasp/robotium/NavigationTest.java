@@ -6,7 +6,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.activity.PlacesActivity;
-import com.cloudbees.demo.gasp.activity.PlacesDetailActivity;
 import com.cloudbees.demo.gasp.activity.RestaurantListActivity;
 import com.cloudbees.demo.gasp.activity.ReviewListActivity;
 import com.cloudbees.demo.gasp.activity.SetPreferencesActivity;
