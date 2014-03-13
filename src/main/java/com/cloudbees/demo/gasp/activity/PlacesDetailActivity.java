@@ -12,11 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
 import com.cloudbees.demo.gasp.fragment.EventDetailsFragment;
+import com.cloudbees.demo.gasp.fragment.LocationDetailsFragment;
 import com.cloudbees.demo.gasp.fragment.ReviewDetailsFragment;
 import com.cloudbees.demo.gasp.model.PlaceDetail;
 import com.cloudbees.demo.gasp.model.Restaurant;
@@ -24,6 +24,7 @@ import com.cloudbees.demo.gasp.model.Review;
 import com.cloudbees.demo.gasp.server.GaspRestaurants;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,37 +61,15 @@ public class PlacesDetailActivity extends FragmentActivity {
         public void onSuccess(String location) {
             Log.d(TAG, "Gasp! restaurant added: " + location);
             mGaspRestaurantId = Integer.valueOf(location.substring(location.lastIndexOf("/") + 1));
-
-            Button reviewButton = (Button) findViewById(R.id.detail_review_button);
-            reviewButton.setEnabled(true);
-            Button restaurantButton = (Button) findViewById(R.id.detail_restaurant_button);
-            restaurantButton.setEnabled(false);
         }
 
         @Override
         public void onFailure() {
-            Log.e(TAG, "Error adding Gasp! review");
+            Log.e(TAG, "Error adding Gasp! restaurant");
         }
     };
 
     public PlacesDetailActivity() {
-    }
-
-    private void initialize() {
-        Button reviewButton = (Button) findViewById(R.id.detail_review_button);
-        Button restaurantButton = (Button) findViewById(R.id.detail_restaurant_button);
-        Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(mPlaceDetail.getId());
-
-        if (restaurant != null) {
-            Log.d(TAG, "Gasp Restaurant Id: " + restaurant.getId());
-            mGaspRestaurantId = restaurant.getId();
-            restaurantButton.setEnabled(false);
-            reviewButton.setEnabled(true);
-        } else {
-            Log.d(TAG, "Restaurant not found in Gasp database");
-            restaurantButton.setEnabled(true);
-            reviewButton.setEnabled(false);
-        }
     }
 
     private void addGaspReview() {
@@ -147,32 +126,45 @@ public class PlacesDetailActivity extends FragmentActivity {
         });
     }
 
+    private Restaurant getGaspRestaurant(PlaceDetail place) {
+        Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(mPlaceDetail.getId());
+        if (restaurant != null) {
+            mGaspRestaurantId = restaurant.getId();
+            return restaurant;
+        }
+        else return null;
+    }
+
+    private void showLocationDetails(PlaceDetail place) {
+        LocationDetailsFragment locationDetailsFragment =
+                (LocationDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_location_fragment);
+
+        Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
+        if ( restaurant != null) {
+            locationDetailsFragment.showLocationDetails(place, true);
+        } else {
+            locationDetailsFragment.showLocationDetails(place, false);
+        }
+    }
+
     private void showReviews(PlaceDetail place) {
         ReviewDetailsFragment reviewDetailsFragment =
-                (ReviewDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_review_list);
-        Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(place.getId());
+                (ReviewDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_review_fragment);
+
+        Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
         if (restaurant != null) {
             List<Review> reviews = mGaspDatabase.getLastNReviewsByRestaurant(restaurant.getId(), 10);
             reviewDetailsFragment.showReviewDetails(reviews);
+        }
+        else {
+            reviewDetailsFragment.showReviewDetails(new ArrayList<Review>());
         }
     }
 
     private void showEvents(PlaceDetail place) {
         EventDetailsFragment eventDetailsFragment =
-                (EventDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_event_list);
+                (EventDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_event_fragment);
         eventDetailsFragment.showEventDetails(place);
-    }
-
-    private void showLocationDetails(PlaceDetail place) {
-        TextView mName = (TextView) findViewById(R.id.detail_name);
-        TextView mWebsite = (TextView) findViewById(R.id.detail_address);
-        TextView mAddress = (TextView) findViewById(R.id.detail_phone);
-        TextView mPhone = (TextView) findViewById(R.id.detail_website);
-
-        mName.setText(place.getName());
-        mAddress.setText(place.getFormatted_address());
-        mPhone.setText(place.getFormatted_phone_number());
-        mWebsite.setText(place.getWebsite());
     }
 
     @Override
@@ -189,7 +181,7 @@ public class PlacesDetailActivity extends FragmentActivity {
 
             setContentView(R.layout.gasp_place_detail_layout);
 
-            // Display views and populate fragments
+            // Populate Fragments
             showLocationDetails(mPlaceDetail);
             showReviews(mPlaceDetail);
             showEvents(mPlaceDetail);
@@ -200,13 +192,6 @@ public class PlacesDetailActivity extends FragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        initialize();
     }
 
     @Override

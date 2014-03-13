@@ -14,37 +14,12 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_name"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_website"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_address"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_phone"/>
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/review_button_add"
-            android:id="@+id/detail_review_button" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/restaurant_button_add"
-            android:id="@+id/detail_restaurant_button" />
+        <fragment
+            android:name="com.cloudbees.demo.gasp.fragment.LocationDetailsFragment"
+            android:id="@+id/detail_location_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/gasp_location_details_layout"/>
     </LinearLayout>
 
     <LinearLayout
@@ -60,11 +35,11 @@
             android:text="@string/gasp_details_title_reviews" />
 
         <fragment
+            android:name="com.cloudbees.demo.gasp.fragment.ReviewDetailsFragment"
+            android:id="@+id/detail_review_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.cloudbees.demo.gasp.fragment.ReviewDetailsFragment"
-            tools:layout="@layout/gasp_generic_textview"
-            android:id="@+id/detail_review_list" />
+            tools:layout="@layout/gasp_generic_textview"/>
     </LinearLayout>
 
     <LinearLayout
@@ -80,10 +55,10 @@
             android:text="@string/gasp_details_title_events" />
 
         <fragment
+            android:name="com.cloudbees.demo.gasp.fragment.EventDetailsFragment"
+            android:id="@+id/detail_event_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.cloudbees.demo.gasp.fragment.EventDetailsFragment"
-            tools:layout="@layout/gasp_generic_textview"
-            android:id="@+id/detail_event_list" />
+            tools:layout="@layout/gasp_generic_textview"/>
     </LinearLayout>
 </LinearLayout>
