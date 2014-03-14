@@ -24,16 +24,4 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/detail_phone"/>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/review_button_add"
-        android:id="@+id/detail_review_button" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/restaurant_button_add"
-        android:id="@+id/detail_restaurant_button" />
 </LinearLayout>

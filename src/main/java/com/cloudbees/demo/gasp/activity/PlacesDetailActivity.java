@@ -61,6 +61,7 @@ public class PlacesDetailActivity extends FragmentActivity {
         public void onSuccess(String location) {
             Log.d(TAG, "Gasp! restaurant added: " + location);
             mGaspRestaurantId = Integer.valueOf(location.substring(location.lastIndexOf("/") + 1));
+            setButtons();
         }
 
         @Override
@@ -70,6 +71,15 @@ public class PlacesDetailActivity extends FragmentActivity {
     };
 
     public PlacesDetailActivity() {
+    }
+
+    private Restaurant getGaspRestaurant(PlaceDetail place) {
+        Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(mPlaceDetail.getId());
+        if (restaurant != null) {
+            mGaspRestaurantId = restaurant.getId();
+            return restaurant;
+        }
+        else return null;
     }
 
     private void addGaspReview() {
@@ -85,24 +95,13 @@ public class PlacesDetailActivity extends FragmentActivity {
         }
     }
 
-    private void addReviewButtonListener() {
-        Button reviewButton = (Button) findViewById(R.id.detail_review_button);
-        reviewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addGaspReview();
-                finish();
-            }
-        });
-    }
-
     private void addGaspRestaurant() {
         try {
             SharedPreferences gaspSharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             URL gaspUrl =
                     new URL(gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_preferences), "")
-                        + getString(R.string.gasp_restaurants_location));
+                            + getString(R.string.gasp_restaurants_location));
 
             Restaurant restaurant = new Restaurant();
             restaurant.setName(mPlaceDetail.getName());
@@ -113,6 +112,31 @@ public class PlacesDetailActivity extends FragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setButtons() {
+        Button restaurantButton = (Button) findViewById(R.id.detail_restaurant_button);
+        Button reviewButton = (Button) findViewById(R.id.detail_review_button);
+
+        Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
+        if ( restaurant != null) {
+            restaurantButton.setEnabled(false);
+            reviewButton.setEnabled(true);
+        } else {
+            restaurantButton.setEnabled(true);
+            reviewButton.setEnabled(false);
+        }
+    }
+
+    private void addReviewButtonListener() {
+        Button reviewButton = (Button) findViewById(R.id.detail_review_button);
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addGaspReview();
+                finish();
+            }
+        });
     }
 
     private void addRestaurantButtonListener() {
@@ -126,24 +150,15 @@ public class PlacesDetailActivity extends FragmentActivity {
         });
     }
 
-    private Restaurant getGaspRestaurant(PlaceDetail place) {
-        Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(mPlaceDetail.getId());
-        if (restaurant != null) {
-            mGaspRestaurantId = restaurant.getId();
-            return restaurant;
-        }
-        else return null;
-    }
-
     private void showLocationDetails(PlaceDetail place) {
         LocationDetailsFragment locationDetailsFragment =
                 (LocationDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_location_fragment);
 
         Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
         if ( restaurant != null) {
-            locationDetailsFragment.showLocationDetails(place, true);
+            locationDetailsFragment.showLocationDetails(place);
         } else {
-            locationDetailsFragment.showLocationDetails(place, false);
+            locationDetailsFragment.showLocationDetails(place);
         }
     }
 
@@ -192,6 +207,12 @@ public class PlacesDetailActivity extends FragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setButtons();
     }
 
     @Override

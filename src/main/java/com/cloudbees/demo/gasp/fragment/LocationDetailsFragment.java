@@ -60,19 +60,10 @@ public class LocationDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void showLocationDetails(PlaceDetail place, boolean isGaspLocation) {
+    public void showLocationDetails(PlaceDetail place) {
         mName.setText(place.getName());
         mAddress.setText(place.getFormatted_address());
         mPhone.setText(place.getFormatted_phone_number());
         mWebsite.setText(place.getWebsite());
-
-        if (isGaspLocation) {
-            mRestaurantButton.setEnabled(false);
-            mReviewButton.setEnabled(true);
-        }
-        else {
-            mRestaurantButton.setEnabled(true);
-            mReviewButton.setEnabled(false);
-        }
     }
 }
