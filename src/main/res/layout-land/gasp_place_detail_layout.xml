@@ -18,14 +18,14 @@
             android:layout_width="0dp"
             android:orientation="vertical"
             android:scrollbars="vertical"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <fragment
                 android:name="com.cloudbees.demo.gasp.fragment.LocationDetailsFragment"
                 android:id="@+id/detail_location_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout="@layout/gasp_location_details_layout2"/>
+                tools:layout="@layout/gasp_location_details_layout"/>
         </LinearLayout>
 
         <LinearLayout
@@ -34,7 +34,7 @@
             android:orientation="vertical"
             android:scrollbars="vertical"
             android:padding="10dp"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <TextView
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:orientation="vertical"
             android:scrollbars="vertical"
             android:padding="10dp"
-            android:layout_weight="1">
+            android:layout_weight="2">
 
             <TextView
                 android:layout_height="wrap_content"
@@ -70,11 +70,11 @@
                 tools:layout="@layout/gasp_generic_textview"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
         <Button
             android:layout_width="fill_parent"

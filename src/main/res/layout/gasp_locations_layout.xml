@@ -9,13 +9,13 @@
     android:scrollbars="vertical"
     android:id="@+id/places_layout">
 
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
- android:id="@+id/map"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:layout_gravity="top"
- class="com.google.android.gms.maps.SupportMapFragment"/>
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="top"/>
 
     <Button
         android:layout_width="match_parent"
@@ -23,5 +23,4 @@
         android:text="@string/places_button_locations_next"
         android:enabled="false"
         android:id="@+id/places_button"/>
-
-    </LinearLayout>
+</LinearLayout>

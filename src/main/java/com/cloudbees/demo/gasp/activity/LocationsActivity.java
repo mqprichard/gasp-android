@@ -227,9 +227,15 @@ public class LocationsActivity extends FragmentActivity {
         ft.commit();
     }
 
+    /**
+     * Placeholder to support third-party libs (Testflight, NewRelic etc)
+     */
     private void addThirdPartyLibs() {
     }
 
+    /**
+     *
+     */
     private void addButtonListener() {
         Button placesButton = (Button) findViewById(R.id.places_button);
         placesButton.setOnClickListener(new View.OnClickListener() {
