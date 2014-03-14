@@ -16,11 +16,13 @@ package com.cloudbees.demo.gasp.model;
  * limitations under the License.
  */
 
+import java.io.Serializable;
+
 /**
  * User: Mark Prichard (mprichard@cloudbees.com)
  * Date: 8/27/13
  */
-public class Places {
+public class Places implements Serializable {
     private Place results[];
     private String status;
     private String next_page_token;

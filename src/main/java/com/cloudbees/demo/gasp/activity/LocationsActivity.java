@@ -75,10 +75,17 @@ public class LocationsActivity extends FragmentActivity {
     // Next page token for Google Maps API queries
     private static String token = "";
 
+    // Search results from Google Place API
+    private Places mPlaces = null;
+
+    // Bundle serialization key
+    private static final String PLACES = "PLACES";
+
     // Gasp proxy objects
     private GaspSearch mGaspSearch = new GaspSearch() {
         @Override
         public void onSuccess(Places places) {
+            mPlaces = places;
             showLocations(places);
             checkToken(places);
         }
@@ -314,7 +321,6 @@ public class LocationsActivity extends FragmentActivity {
     private void launchPlacesDetailActivity(PlaceDetails placeDetails) {
         try {
             Intent intent = new Intent();
-            //intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
             intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
             intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_SERIALIZED, placeDetails.getResult());
             intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_REFERENCE, mReferencesMap.get(placeDetails.getResult().getId()));
@@ -364,31 +370,42 @@ public class LocationsActivity extends FragmentActivity {
         }
     };
 
+    private void prepareMapView() {
+        setContentView(R.layout.gasp_locations_layout);
+        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+
+        enableLocationChecking();
+        setLocation();
+        setCamera();
+        addButtonListener();
+        setMarkerClickListener();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (checkPlayServices()) {
+        getGaspSharedPreferences();
+        mGaspRegistrationClient.registerGCM(this);
+        requestTwitterOAuthToken();
+        addThirdPartyLibs();
 
-            addThirdPartyLibs();
-            enableLocationChecking();
-            getGaspSharedPreferences();
+        // Restore and display saved Places data
+        if (savedInstanceState != null) {
+            mPlaces = (Places) savedInstanceState.getSerializable(LocationsActivity.PLACES);
 
+            prepareMapView();
+            showLocations(mPlaces);
+        }
+
+        // First-time only: Sync Gasp data before Location search
+        else if (checkPlayServices()) {
             // Register listener for notification that restaurant data has been synced
             LocalBroadcastManager.getInstance(this)
                                  .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
             startDataSyncServices();
 
-            mGaspRegistrationClient.registerGCM(this);
-            requestTwitterOAuthToken();
-
-            setContentView(R.layout.gasp_locations_layout);
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-
-            setLocation();
-            setCamera();
-            addButtonListener();
-            setMarkerClickListener();
+            prepareMapView();
 
             // Only show location markers if Gasp restaurant data loaded
             if (!waitForSync) {
@@ -483,5 +500,17 @@ public class LocationsActivity extends FragmentActivity {
         mGaspRegistrationClient.doUnregisterGasp(this);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(LocationsActivity.PLACES, mPlaces);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mPlaces = (Places) savedInstanceState.getSerializable(LocationsActivity.PLACES);
     }
 }
