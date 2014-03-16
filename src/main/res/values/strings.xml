@@ -49,6 +49,7 @@
     <string name="options_exit">Exit</string>
 
     <!-- Network error messages -->
+    <string name="gasp_network_connection_error">No network connection available</string>
     <string name="gasp_network_error">Failed to load Gasp! reviews: Please check your internet settings</string>
     <string name="gasp_twitter_error">Failed to load Twitter stream: Please check your internet settings</string>
     <string name="gasp_twitter_auth_error">Unable to get Twitter authorization token</string>

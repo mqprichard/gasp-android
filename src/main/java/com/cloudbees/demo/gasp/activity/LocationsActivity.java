@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
@@ -137,16 +140,34 @@ public class LocationsActivity extends FragmentActivity {
 
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
-            }
+            // TODO: Handle recoverable Play Services errors
+            //if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+            //    GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+            //            PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            Log.e(TAG, "This device is not supported.");
+            Toast.makeText(this, R.string.common_google_play_services_unsupported_text, Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
+    }
+
+    /**
+     * Check for active network connection
+     * @return true if device has a network connection
+     */
+    private boolean checkNetworking() {
+        boolean connected = false;
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo ni = cm.getActiveNetworkInfo();
+            if (ni != null) {
+                connected = ni.isConnected();
+            } else {
+                Log.e(TAG, "Network connection not available");
+                Toast.makeText(this, R.string.gasp_network_connection_error, Toast.LENGTH_LONG).show();
+            }
+        }
+        return connected;
     }
 
     /**
@@ -177,6 +198,8 @@ public class LocationsActivity extends FragmentActivity {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Start Gasp data synchronization services
@@ -234,7 +257,7 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     /**
-     *
+     * Button Listener for "More Locations" button
      */
     private void addButtonListener() {
         Button placesButton = (Button) findViewById(R.id.places_button);
@@ -246,6 +269,9 @@ public class LocationsActivity extends FragmentActivity {
         });
     }
 
+    /**
+     * Click listener for Google Maps markers
+     */
     private void setMarkerClickListener() {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -258,6 +284,9 @@ public class LocationsActivity extends FragmentActivity {
         });
     }
 
+    /**
+     * Set Camera for Google Maps API
+     */
     private void setCamera() {
         try {
             LatLng myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
@@ -273,6 +302,9 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Set Location Services and get current location
+     */
     private void setLocation() {
         try {
             String svcName = Context.LOCATION_SERVICE;
@@ -297,6 +329,10 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Display location via Google Maps API
+     * @param places Gasp! Locations to display
+     */
     private void showLocations(Places places) {
         Restaurant restaurant;
         float markerColour;
@@ -324,6 +360,10 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Launch child activity to display details for selected Gasp! location
+     * @param placeDetails
+     */
     private void launchPlacesDetailActivity(PlaceDetails placeDetails) {
         try {
             Intent intent = new Intent();
@@ -336,6 +376,11 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Check for Google Places API search result for next_page_token
+     * See @link{https://developers.google.com/places/documentation/search} for details
+     * @param places Google Places API return (converted from JSON)
+     */
     private void checkToken(Places places) {
         try {
             Button placesButton = (Button) findViewById(R.id.places_button);
@@ -354,10 +399,14 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Do Google Places API search (centred on current location, radius from shared preferences)
+     */
     private void getLocations() {
         try {
             SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            int radius = Integer.valueOf(gaspSharedPreferences.getString(getString(R.string.places_search_radius_preferences), ""));
+            int radius = Integer.valueOf(gaspSharedPreferences.getString(
+                                            getString(R.string.places_search_radius_preferences), ""));
             Query query = new Query(mLocation.getLatitude(), mLocation.getLongitude(), radius, token);
             mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
@@ -365,6 +414,9 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * BroadcastReceiver for notification that Gasp! data sync completed
+     */
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -376,6 +428,9 @@ public class LocationsActivity extends FragmentActivity {
         }
     };
 
+    /**
+     * Load Google Maps view/fragment, set location and button/click listeners
+     */
     private void prepareMapView() {
         setContentView(R.layout.gasp_locations_layout);
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -405,21 +460,25 @@ public class LocationsActivity extends FragmentActivity {
         }
 
         // First-time only: Sync Gasp data before Location search
-        else if (checkPlayServices()) {
-            // Register listener for notification that restaurant data has been synced
-            LocalBroadcastManager.getInstance(this)
-                                 .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
-            startDataSyncServices();
-
-            prepareMapView();
-
-            // Only show location markers if Gasp restaurant data loaded
-            if (!waitForSync) {
-                getLocations();
-            }
-        }
         else {
-            Log.e(TAG, "Cannot launch LocationsActivity");
+            if (checkPlayServices() && checkNetworking()) {
+                // Register listener for notification that restaurant data has been synced
+                LocalBroadcastManager.getInstance(this)
+                        .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
+                startDataSyncServices();
+
+                prepareMapView();
+
+                // Only show location markers if Gasp restaurant data loaded
+                if (!waitForSync) {
+                    getLocations();
+                }
+            }
+            else {
+
+                Log.e(TAG, "Cannot launch LocationsActivity");
+                finish();
+            }
         }
     }
 
@@ -512,11 +571,5 @@ public class LocationsActivity extends FragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(LocationsActivity.PLACES, mPlaces);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mPlaces = (Places) savedInstanceState.getSerializable(LocationsActivity.PLACES);
     }
 }
