@@ -116,11 +116,17 @@ public class LocationsActivity extends FragmentActivity {
     // Map Place Ids to Reference strings
     private HashMap<String, String> mReferencesMap = new HashMap<String, String>();
 
-    // Base URL of the Gasp! GCM Push Server
+    // Base URL of the Gasp! GCM Push Server (Shared Preferences)
     private static String mGaspPushServerUrl;
-    public static String getGaspPushServerUrl() {
-        return mGaspPushServerUrl;
-    }
+    public static String getGaspPushServerUrl() { return mGaspPushServerUrl; }
+
+    // Google Places API Search radius (Shared Preferences)
+    private static int mGaspSearchRadius;
+    public static int getGaspSearchRadius() { return mGaspSearchRadius; }
+
+    // URL of the Gasp GCM Push Server (Shared Preferences)
+    private static String mGaspServerUrl;
+    public static String getGaspServerUrl() { return mGaspServerUrl; }
 
     // On initial load, we need to wait for Gasp data sync before drawing location markers
     private static boolean waitForSync = true;
@@ -199,8 +205,6 @@ public class LocationsActivity extends FragmentActivity {
         }
     }
 
-
-
     /**
      * Start Gasp data synchronization services
      * Handle initial REST sync and GCM updates
@@ -226,11 +230,19 @@ public class LocationsActivity extends FragmentActivity {
     private void getGaspSharedPreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.i(TAG, "Using Gasp Server URI: "
-                + gaspSharedPreferences.getString(getString(R.string.gasp_server_uri_base), ""));
 
-        mGaspPushServerUrl = gaspSharedPreferences.getString(getString(R.string.gasp_push_uri_preferences), "");
+        String gaspServerKey = getResources().getString(R.string.gasp_server_uri_base);
+        mGaspServerUrl = gaspSharedPreferences.getString(gaspServerKey, "");
+        Log.i(TAG, "Using Gasp Server URI: " + mGaspServerUrl);
+
+        String gaspPushServerKey = getString(R.string.gasp_push_uri_preferences);
+        mGaspPushServerUrl = gaspSharedPreferences.getString(gaspPushServerKey, "");
         Log.i(TAG, "Using Gasp Push Server URI: " + mGaspPushServerUrl);
+
+        String key = getString(R.string.places_search_radius_preferences, "");
+        String defaultRadius = getResources().getStringArray(R.array.radius_entry_values)[0];
+        mGaspSearchRadius = Integer.valueOf(gaspSharedPreferences.getString(key, defaultRadius));
+        Log.i(TAG, "Using Google Places API search radius: " + mGaspSearchRadius);
     }
 
     /**
@@ -348,9 +360,10 @@ public class LocationsActivity extends FragmentActivity {
                 else
                     markerColour = BitmapDescriptorFactory.HUE_RED;
 
-                Marker marker = mMap.addMarker(new MarkerOptions().position(pos)
-                        .title(place.getName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
+                Marker marker =
+                        mMap.addMarker(new MarkerOptions().position(pos)
+                                                          .title(place.getName())
+                                                          .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
                 Log.d(TAG, place.getName() + " " + pos.toString());
                 mPlacesMap.put(marker.getId(), place.getId());
                 mReferencesMap.put(place.getId(), place.getReference());
@@ -404,10 +417,15 @@ public class LocationsActivity extends FragmentActivity {
      */
     private void getLocations() {
         try {
+            getGaspSharedPreferences();
+            /*
             SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            int radius = Integer.valueOf(gaspSharedPreferences.getString(
-                                            getString(R.string.places_search_radius_preferences), ""));
-            Query query = new Query(mLocation.getLatitude(), mLocation.getLongitude(), radius, token);
+            String key = getString(R.string.places_search_radius_preferences, "");
+            String defaultRadius = getResources().getStringArray(R.array.radius_entry_values)[0];
+            int radius = Integer.valueOf(gaspSharedPreferences.getString(key, defaultRadius));
+            */
+
+            Query query = new Query(mLocation.getLatitude(), mLocation.getLongitude(), mGaspSearchRadius, token);
             mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
             e.printStackTrace();
@@ -453,6 +471,7 @@ public class LocationsActivity extends FragmentActivity {
 
         // Restore and display saved Places data
         if (savedInstanceState != null) {
+            // TODO: Check if shared prefs search radius has changed
             mPlaces = (Places) savedInstanceState.getSerializable(LocationsActivity.PLACES);
 
             prepareMapView();
