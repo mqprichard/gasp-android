@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
@@ -37,8 +36,9 @@ import com.cloudbees.demo.gasp.model.SearchResult;
 import com.cloudbees.demo.gasp.service.RestaurantSyncService;
 import com.cloudbees.demo.gasp.service.ReviewSyncService;
 import com.cloudbees.demo.gasp.service.UserSyncService;
-import com.cloudbees.demo.gasp.utils.GaspNetworking;
-import com.cloudbees.demo.gasp.utils.GaspSharedPreferences;
+import com.cloudbees.demo.gasp.utils.Network;
+import com.cloudbees.demo.gasp.utils.PlayServices;
+import com.cloudbees.demo.gasp.utils.Preferences;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -124,27 +124,6 @@ public class LocationsActivity extends FragmentActivity {
     // Proxy to handle Gasp GCM registration services
     private GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
 
-
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    private boolean checkPlayServices() {
-        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            // TODO: Handle recoverable Play Services errors
-            //if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-            //    GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-            //            PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            Log.e(TAG, "This device is not supported.");
-            Toast.makeText(this, R.string.common_google_play_services_unsupported_text, Toast.LENGTH_LONG).show();
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Check for location services and get current location
@@ -375,10 +354,10 @@ public class LocationsActivity extends FragmentActivity {
      */
     private void getLocations() {
         try {
-            GaspSharedPreferences gaspSharedPreferences = new GaspSharedPreferences(this);
+            Preferences preferences = new Preferences(this);
             Query query = new Query(mLocation.getLatitude(),
                                     mLocation.getLongitude(),
-                                    gaspSharedPreferences.getGaspSearchRadius(),
+                                    preferences.getGaspSearchRadius(),
                                     mPageToken);
             mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
@@ -438,7 +417,8 @@ public class LocationsActivity extends FragmentActivity {
 
         // First time only: Sync Gasp data before Location search
         else {
-            if (checkPlayServices() && GaspNetworking.checkNetworking(this)) {
+            // Gasp requires Play Services and network connectivity
+            if (PlayServices.checkPlayServices(this) && Network.checkNetworking(this)) {
                 // Register listener for notification that restaurant data has been synced
                 LocalBroadcastManager.getInstance(this)
                         .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));

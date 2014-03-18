@@ -23,8 +23,8 @@ import com.cloudbees.demo.gasp.R;
  * limitations under the License.
  */
 
-public class GaspSharedPreferences {
-    private static final String TAG = GaspSharedPreferences.class.getName();
+public class Preferences {
+    private static final String TAG = Preferences.class.getName();
 
     // Base URL of the Gasp! GCM Push Server (Shared Preferences)
     private static String mGaspPushServerUrl;
@@ -38,7 +38,7 @@ public class GaspSharedPreferences {
     private static String mGaspServerUrl;
     public static String getGaspServerUrl() { return mGaspServerUrl; }
 
-    public GaspSharedPreferences(Context context) {
+    public Preferences(Context context) {
         PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
         SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 

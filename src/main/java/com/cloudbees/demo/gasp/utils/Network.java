@@ -24,8 +24,8 @@ import com.cloudbees.demo.gasp.R;
  * limitations under the License.
  */
 
-public class GaspNetworking {
-    private static final String TAG = GaspNetworking.class.getName();
+public class Network {
+    private static final String TAG = Network.class.getName();
 
     /**
      * Check for active network connection

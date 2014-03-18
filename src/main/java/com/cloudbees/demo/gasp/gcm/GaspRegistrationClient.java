@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.cloudbees.demo.gasp.activity.LocationsActivity;
-import com.cloudbees.demo.gasp.utils.GaspSharedPreferences;
+import com.cloudbees.demo.gasp.utils.Preferences;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
@@ -129,8 +129,8 @@ public class GaspRegistrationClient {
                         Log.d(TAG, "Device already registered: " + regId + '\n');
 
                     // Register with Gasp GCM Push Notification Server
-                    GaspSharedPreferences gaspSharedPreferences = new GaspSharedPreferences(context);
-                    String gaspPushServerUrl = gaspSharedPreferences.getGaspPushServerUrl();
+                    Preferences preferences = new Preferences(context);
+                    String gaspPushServerUrl = preferences.getGaspPushServerUrl();
 
                     boolean registered = GCMRegistrationServices.register(context, regId, gaspPushServerUrl);
                     if (registered)
@@ -163,8 +163,8 @@ public class GaspRegistrationClient {
                     @Override
                     protected String doInBackground(Void... params) {
                         try {
-                            GaspSharedPreferences gaspSharedPreferences = new GaspSharedPreferences(context);
-                            String gaspPushServerUrl = gaspSharedPreferences.getGaspPushServerUrl();
+                            Preferences preferences = new Preferences(context);
+                            String gaspPushServerUrl = preferences.getGaspPushServerUrl();
 
                             if (GCMRegistrationServices.register(context, regId, gaspPushServerUrl))
                                 return ("Registered Device Id: " + regId);
@@ -199,8 +199,8 @@ public class GaspRegistrationClient {
                     @Override
                     protected String doInBackground(Void... params) {
                         try {
-                            GaspSharedPreferences gaspSharedPreferences = new GaspSharedPreferences(context);
-                            String gaspPushServerUrl = gaspSharedPreferences.getGaspPushServerUrl();
+                            Preferences preferences = new Preferences(context);
+                            String gaspPushServerUrl = preferences.getGaspPushServerUrl();
 
                             GCMRegistrationServices.unregister(context, regId, gaspPushServerUrl);
                             return ("Unregistered Device Id: " + regId);
