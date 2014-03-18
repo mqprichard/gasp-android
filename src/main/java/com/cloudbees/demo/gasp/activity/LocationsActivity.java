@@ -6,9 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,7 +19,6 @@ import android.widget.Button;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
-import com.cloudbees.demo.gasp.fragment.LocationFragment;
 import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.gcm.GaspRegistrationClient;
@@ -36,11 +33,10 @@ import com.cloudbees.demo.gasp.model.SearchResult;
 import com.cloudbees.demo.gasp.service.RestaurantSyncService;
 import com.cloudbees.demo.gasp.service.ReviewSyncService;
 import com.cloudbees.demo.gasp.service.UserSyncService;
+import com.cloudbees.demo.gasp.utils.LocationServices;
 import com.cloudbees.demo.gasp.utils.Network;
 import com.cloudbees.demo.gasp.utils.PlayServices;
 import com.cloudbees.demo.gasp.utils.Preferences;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -126,35 +122,6 @@ public class LocationsActivity extends FragmentActivity {
 
 
     /**
-     * Check for location services and get current location
-     */
-    private void enableLocationChecking() {
-        try {
-            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-
-                // Check current location
-                Location location = LocationFragment.getLocation(this);
-                if (location != null) {
-                    Log.d(TAG, "Location: " + String.format("%.6f", location.getLatitude())
-                            + ", " + String.format("%.6f", location.getLongitude())
-                            + " (via " + location.getProvider() + ")" + '\n');
-                }
-
-                // Add LocationFragment to enable location updates
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                LocationFragment locationFragment = new LocationFragment();
-                ft.add(locationFragment, "LocationFragment");
-                ft.commit();
-            }
-            else
-                Log.e(TAG, "Google Play Services not available");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Start Gasp data synchronization services
      * Handle initial REST sync and GCM updates
      */
@@ -236,33 +203,6 @@ public class LocationsActivity extends FragmentActivity {
                     .tilt(0)
                     .build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Set Location Services and get current location
-     */
-    private void setLocation() {
-        try {
-            String svcName = Context.LOCATION_SERVICE;
-            LocationManager locationManager = (LocationManager) getSystemService(svcName);
-
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setPowerRequirement(Criteria.POWER_LOW);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(false);
-            criteria.setSpeedRequired(false);
-            criteria.setCostAllowed(true);
-            String provider = locationManager.getBestProvider(criteria, true);
-            mLocation = locationManager.getLastKnownLocation(provider);
-
-            Log.i(TAG, "Current Latitude = " + mLocation.getLatitude());
-            Log.i(TAG, "Current Longitude = " + mLocation.getLongitude());
-
-            mMap.setMyLocationEnabled(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -385,9 +325,7 @@ public class LocationsActivity extends FragmentActivity {
     private void prepareMapView() {
         setContentView(R.layout.gasp_locations_layout);
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-
-        enableLocationChecking();
-        setLocation();
+        mMap.setMyLocationEnabled(true);
         setCamera();
         addButtonListener();
         setMarkerClickListener();
@@ -400,6 +338,8 @@ public class LocationsActivity extends FragmentActivity {
         mGaspRegistrationClient.registerGCM(this);
         requestTwitterOAuthToken();
         addThirdPartyLibs();
+        LocationServices.enableLocationChecking(this);
+        mLocation = LocationServices.getLocation(this);
 
         if (savedInstanceState != null) {
             // Restore incremental search results, page_token and zoom level
