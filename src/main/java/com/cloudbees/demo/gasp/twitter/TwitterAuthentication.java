@@ -1,7 +1,12 @@
 package com.cloudbees.demo.gasp.twitter;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
+
+import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -48,5 +53,23 @@ public class TwitterAuthentication {
             Log.e(TAG, "Check URL encoding", e);
         }
         return authEncodedBase64;
+    }
+
+    /**
+     * Request a Twitter API v1.1 OAuth Token
+     * Uses TwitterAuthenticationFragment
+     */
+    public static void requestTwitterOAuthToken(FragmentActivity activity) {
+
+        FragmentManager fm = activity.getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        TwitterAuthenticationFragment responder =
+                (TwitterAuthenticationFragment) fm.findFragmentByTag("TwitterAuthentication");
+        if (responder == null) {
+            responder = new TwitterAuthenticationFragment();
+
+            ft.add(responder, "TwitterAuthentication");
+        }
+        ft.commit();
     }
 }

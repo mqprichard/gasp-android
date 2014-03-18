@@ -1,7 +1,5 @@
 package com.cloudbees.demo.gasp.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +17,6 @@ import android.widget.Button;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.GaspDatabase;
-import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
 import com.cloudbees.demo.gasp.gcm.GCMIntentService;
 import com.cloudbees.demo.gasp.gcm.GaspRegistrationClient;
 import com.cloudbees.demo.gasp.location.GaspPlaces;
@@ -33,6 +30,7 @@ import com.cloudbees.demo.gasp.model.SearchResult;
 import com.cloudbees.demo.gasp.service.RestaurantSyncService;
 import com.cloudbees.demo.gasp.service.ReviewSyncService;
 import com.cloudbees.demo.gasp.service.UserSyncService;
+import com.cloudbees.demo.gasp.twitter.TwitterAuthentication;
 import com.cloudbees.demo.gasp.utils.LocationServices;
 import com.cloudbees.demo.gasp.utils.Network;
 import com.cloudbees.demo.gasp.utils.PlayServices;
@@ -140,29 +138,6 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     /**
-     * Request a Twitter API v1.1 OAuth Token
-     * Uses TwitterAuthenticationFragment
-     */
-    private void requestTwitterOAuthToken() {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        TwitterAuthenticationFragment responder =
-                (TwitterAuthenticationFragment) fm.findFragmentByTag("TwitterAuthentication");
-        if (responder == null) {
-            responder = new TwitterAuthenticationFragment();
-
-            ft.add(responder, "TwitterAuthentication");
-        }
-        ft.commit();
-    }
-
-    /**
-     * Placeholder to support third-party libs (Testflight, NewRelic etc)
-     */
-    private void addThirdPartyLibs() {
-    }
-
-    /**
      * Button Listener for "More Locations" button
      */
     private void addButtonListener() {
@@ -209,6 +184,22 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     /**
+     * Do Google Places API search (centred on current location, radius from shared preferences)
+     */
+    private void getLocations() {
+        try {
+            Preferences preferences = new Preferences(this);
+            Query query = new Query(mLocation.getLatitude(),
+                    mLocation.getLongitude(),
+                    preferences.getGaspSearchRadius(),
+                    mPageToken);
+            mGaspSearch.nearbySearch(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Display location via Google Maps API
      * @param searchResult Gasp! Locations to display
      */
@@ -240,22 +231,6 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     /**
-     * Launch child activity to display details for selected Gasp! location
-     * @param placeDetails
-     */
-    private void launchPlacesDetailActivity(PlaceDetails placeDetails) {
-        try {
-            Intent intent = new Intent();
-            intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
-            intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_SERIALIZED, placeDetails.getResult());
-            intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_REFERENCE, mReferencesMap.get(placeDetails.getResult().getId()));
-            startActivityForResult(intent, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Check for Google Places API search result for next_page_token
      * See @link{https://developers.google.com/places/documentation/search} for details
      * @param places Google Places API return (converted from JSON)
@@ -276,6 +251,22 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     /**
+     * Launch child activity to display details for selected Gasp! location
+     * @param placeDetails
+     */
+    private void launchPlacesDetailActivity(PlaceDetails placeDetails) {
+        try {
+            Intent intent = new Intent();
+            intent.setClass(LocationsActivity.this, PlacesDetailActivity.class);
+            intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_SERIALIZED, placeDetails.getResult());
+            intent.putExtra(PlacesDetailActivity.PLACES_DETAIL_REFERENCE, mReferencesMap.get(placeDetails.getResult().getId()));
+            startActivityForResult(intent, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Enable/disable "More Locations" button
      * @param enableButton enable or disable button
      */
@@ -286,22 +277,6 @@ public class LocationsActivity extends FragmentActivity {
             placesButton.setEnabled(true);
         } else {
             placesButton.setEnabled(false);
-        }
-    }
-
-    /**
-     * Do Google Places API search (centred on current location, radius from shared preferences)
-     */
-    private void getLocations() {
-        try {
-            Preferences preferences = new Preferences(this);
-            Query query = new Query(mLocation.getLatitude(),
-                                    mLocation.getLongitude(),
-                                    preferences.getGaspSearchRadius(),
-                                    mPageToken);
-            mGaspSearch.nearbySearch(query);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -336,8 +311,7 @@ public class LocationsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         mGaspRegistrationClient.registerGCM(this);
-        requestTwitterOAuthToken();
-        addThirdPartyLibs();
+        TwitterAuthentication.requestTwitterOAuthToken(this);
         LocationServices.enableLocationChecking(this);
         mLocation = LocationServices.getLocation(this);
 
