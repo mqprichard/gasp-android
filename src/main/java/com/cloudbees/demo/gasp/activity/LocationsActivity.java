@@ -6,14 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -37,9 +33,12 @@ import com.cloudbees.demo.gasp.model.PlaceDetails;
 import com.cloudbees.demo.gasp.model.Places;
 import com.cloudbees.demo.gasp.model.Query;
 import com.cloudbees.demo.gasp.model.Restaurant;
+import com.cloudbees.demo.gasp.model.SearchResult;
 import com.cloudbees.demo.gasp.service.RestaurantSyncService;
 import com.cloudbees.demo.gasp.service.ReviewSyncService;
 import com.cloudbees.demo.gasp.service.UserSyncService;
+import com.cloudbees.demo.gasp.utils.GaspNetworking;
+import com.cloudbees.demo.gasp.utils.GaspSharedPreferences;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -74,22 +73,24 @@ public class LocationsActivity extends FragmentActivity {
 
     private GoogleMap mMap;
     private Location mLocation;
+    private float mZoom = 16;
 
-    // Next page token for Google Maps API queries
-    private static String token = "";
+    // Incremental search results from Google Places API
+    private SearchResult mSearchResult = new SearchResult();
+    // Next page token for Google Places API queries
+    private String mPageToken = "";
 
-    // Search results from Google Place API
-    private Places mPlaces = null;
-
-    // Bundle serialization key
-    private static final String PLACES = "PLACES";
+    // Bundle serialization keys
+    private static final String PAGE_TOKEN = "PAGE_TOKEN";
+    private static final String SEARCH_RESULT = "SEARCH_RESULT";
+    private static final String ZOOM_LEVEL = "ZOOM_LEVEL";
 
     // Gasp proxy objects
     private GaspSearch mGaspSearch = new GaspSearch() {
         @Override
         public void onSuccess(Places places) {
-            mPlaces = places;
-            showLocations(places);
+            mSearchResult.add(places);
+            showLocations(mSearchResult);
             checkToken(places);
         }
 
@@ -115,18 +116,6 @@ public class LocationsActivity extends FragmentActivity {
     private HashMap<String, String> mPlacesMap = new HashMap<String, String>();
     // Map Place Ids to Reference strings
     private HashMap<String, String> mReferencesMap = new HashMap<String, String>();
-
-    // Base URL of the Gasp! GCM Push Server (Shared Preferences)
-    private static String mGaspPushServerUrl;
-    public static String getGaspPushServerUrl() { return mGaspPushServerUrl; }
-
-    // Google Places API Search radius (Shared Preferences)
-    private static int mGaspSearchRadius;
-    public static int getGaspSearchRadius() { return mGaspSearchRadius; }
-
-    // URL of the Gasp GCM Push Server (Shared Preferences)
-    private static String mGaspServerUrl;
-    public static String getGaspServerUrl() { return mGaspServerUrl; }
 
     // On initial load, we need to wait for Gasp data sync before drawing location markers
     private static boolean waitForSync = true;
@@ -155,25 +144,6 @@ public class LocationsActivity extends FragmentActivity {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Check for active network connection
-     * @return true if device has a network connection
-     */
-    private boolean checkNetworking() {
-        boolean connected = false;
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo ni = cm.getActiveNetworkInfo();
-            if (ni != null) {
-                connected = ni.isConnected();
-            } else {
-                Log.e(TAG, "Network connection not available");
-                Toast.makeText(this, R.string.gasp_network_connection_error, Toast.LENGTH_LONG).show();
-            }
-        }
-        return connected;
     }
 
     /**
@@ -221,28 +191,6 @@ public class LocationsActivity extends FragmentActivity {
         Intent usersIntent = new Intent(this, UserSyncService.class);
         usersIntent.putExtra(GCMIntentService.PARAM_IN_MSG, "users");
         startService(usersIntent);
-    }
-
-    /**
-     * Load shared preferences from res/xml/preferences.xml (first time only)
-     * Subsequent activations will use the saved shared preferences from the device
-     */
-    private void getGaspSharedPreferences() {
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        String gaspServerKey = getResources().getString(R.string.gasp_server_uri_base);
-        mGaspServerUrl = gaspSharedPreferences.getString(gaspServerKey, "");
-        Log.i(TAG, "Using Gasp Server URI: " + mGaspServerUrl);
-
-        String gaspPushServerKey = getString(R.string.gasp_push_uri_preferences);
-        mGaspPushServerUrl = gaspSharedPreferences.getString(gaspPushServerKey, "");
-        Log.i(TAG, "Using Gasp Push Server URI: " + mGaspPushServerUrl);
-
-        String key = getString(R.string.places_search_radius_preferences, "");
-        String defaultRadius = getResources().getStringArray(R.array.radius_entry_values)[0];
-        mGaspSearchRadius = Integer.valueOf(gaspSharedPreferences.getString(key, defaultRadius));
-        Log.i(TAG, "Using Google Places API search radius: " + mGaspSearchRadius);
     }
 
     /**
@@ -304,7 +252,7 @@ public class LocationsActivity extends FragmentActivity {
             LatLng myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(myLocation)
-                    .zoom(16)
+                    .zoom(mZoom)
                     .bearing(0)
                     .tilt(0)
                     .build();
@@ -343,14 +291,13 @@ public class LocationsActivity extends FragmentActivity {
 
     /**
      * Display location via Google Maps API
-     * @param places Gasp! Locations to display
+     * @param searchResult Gasp! Locations to display
      */
-    private void showLocations(Places places) {
+    private void showLocations(SearchResult searchResult) {
         Restaurant restaurant;
         float markerColour;
         try {
-
-            for (Place place : places.getResults()) {
+            for (Place place : searchResult.getPlaces()) {
                 LatLng pos = new LatLng(place.getGeometry().getLocation().getLat().doubleValue(),
                         place.getGeometry().getLocation().getLng().doubleValue());
 
@@ -362,8 +309,8 @@ public class LocationsActivity extends FragmentActivity {
 
                 Marker marker =
                         mMap.addMarker(new MarkerOptions().position(pos)
-                                                          .title(place.getName())
-                                                          .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
+                                .title(place.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
                 Log.d(TAG, place.getName() + " " + pos.toString());
                 mPlacesMap.put(marker.getId(), place.getId());
                 mReferencesMap.put(place.getId(), place.getReference());
@@ -396,19 +343,30 @@ public class LocationsActivity extends FragmentActivity {
      */
     private void checkToken(Places places) {
         try {
-            Button placesButton = (Button) findViewById(R.id.places_button);
             if (places.getNext_page_token() == null) {
-                token = "";
-                Log.d(TAG, "No page token returned from Places API");
-                placesButton.setEnabled(false);
+                mPageToken = "";
+                setPlacesButton(false);
             } else {
-                token = places.getNext_page_token();
-                Log.d(TAG, "Next page token: " + token);
-                placesButton.setText(R.string.places_button_locations_next);
-                placesButton.setEnabled(true);
+                mPageToken = places.getNext_page_token();
+                Log.d(TAG, "Next page token: " + mPageToken);
+                setPlacesButton(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Enable/disable "More Locations" button
+     * @param enableButton enable or disable button
+     */
+    private void setPlacesButton(boolean enableButton) {
+        Button placesButton = (Button) findViewById(R.id.places_button);
+        placesButton.setText("More Locations");
+        if (enableButton) {
+            placesButton.setEnabled(true);
+        } else {
+            placesButton.setEnabled(false);
         }
     }
 
@@ -417,15 +375,11 @@ public class LocationsActivity extends FragmentActivity {
      */
     private void getLocations() {
         try {
-            getGaspSharedPreferences();
-            /*
-            SharedPreferences gaspSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String key = getString(R.string.places_search_radius_preferences, "");
-            String defaultRadius = getResources().getStringArray(R.array.radius_entry_values)[0];
-            int radius = Integer.valueOf(gaspSharedPreferences.getString(key, defaultRadius));
-            */
-
-            Query query = new Query(mLocation.getLatitude(), mLocation.getLongitude(), mGaspSearchRadius, token);
+            GaspSharedPreferences gaspSharedPreferences = new GaspSharedPreferences(this);
+            Query query = new Query(mLocation.getLatitude(),
+                                    mLocation.getLongitude(),
+                                    gaspSharedPreferences.getGaspSearchRadius(),
+                                    mPageToken);
             mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
             e.printStackTrace();
@@ -464,23 +418,27 @@ public class LocationsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getGaspSharedPreferences();
         mGaspRegistrationClient.registerGCM(this);
         requestTwitterOAuthToken();
         addThirdPartyLibs();
 
-        // Restore and display saved Places data
         if (savedInstanceState != null) {
-            // TODO: Check if shared prefs search radius has changed
-            mPlaces = (Places) savedInstanceState.getSerializable(LocationsActivity.PLACES);
+            // Restore incremental search results, page_token and zoom level
+            mSearchResult = (SearchResult) savedInstanceState.getSerializable(SEARCH_RESULT);
+            mPageToken = savedInstanceState.getString(PAGE_TOKEN);
+            mZoom = savedInstanceState.getFloat(ZOOM_LEVEL);
 
+            // Display locations and enable/disable "More Locations" button
             prepareMapView();
-            showLocations(mPlaces);
+            showLocations(mSearchResult);
+            if (! mPageToken.isEmpty()) {
+                setPlacesButton(true);
+            }
         }
 
-        // First-time only: Sync Gasp data before Location search
+        // First time only: Sync Gasp data before Location search
         else {
-            if (checkPlayServices() && checkNetworking()) {
+            if (checkPlayServices() && GaspNetworking.checkNetworking(this)) {
                 // Register listener for notification that restaurant data has been synced
                 LocalBroadcastManager.getInstance(this)
                         .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
@@ -488,7 +446,7 @@ public class LocationsActivity extends FragmentActivity {
 
                 prepareMapView();
 
-                // Only show location markers if Gasp restaurant data loaded
+                // Only show location markers once Gasp restaurant data loaded
                 if (!waitForSync) {
                     getLocations();
                 }
@@ -589,6 +547,10 @@ public class LocationsActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(LocationsActivity.PLACES, mPlaces);
+
+        // Save incremental search results, page_token and zoom level
+        outState.putSerializable(SEARCH_RESULT, mSearchResult);
+        outState.putString(PAGE_TOKEN, mPageToken);
+        outState.putFloat(ZOOM_LEVEL, mMap.getCameraPosition().zoom);
     }
 }
