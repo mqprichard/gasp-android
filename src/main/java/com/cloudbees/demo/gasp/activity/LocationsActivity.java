@@ -65,12 +65,14 @@ import java.util.HashMap;
 public class LocationsActivity extends FragmentActivity {
     private static final String TAG = LocationsActivity.class.getName();
 
+    // Google Maps and Location
     private GoogleMap mMap;
-    private Location mLocation;
     private float mZoom = 16;
+    private Location mLocation;
 
     // Incremental search results from Google Places API
     private SearchResult mSearchResult = new SearchResult();
+
     // Next page token for Google Places API queries
     private String mPageToken = "";
 
@@ -190,9 +192,9 @@ public class LocationsActivity extends FragmentActivity {
         try {
             Preferences preferences = new Preferences(this);
             Query query = new Query(mLocation.getLatitude(),
-                    mLocation.getLongitude(),
-                    preferences.getGaspSearchRadius(),
-                    mPageToken);
+                                    mLocation.getLongitude(),
+                                    preferences.getGaspSearchRadius(),
+                                    mPageToken);
             mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
             e.printStackTrace();
@@ -218,9 +220,11 @@ public class LocationsActivity extends FragmentActivity {
                     markerColour = BitmapDescriptorFactory.HUE_RED;
 
                 Marker marker =
-                        mMap.addMarker(new MarkerOptions().position(pos)
-                                .title(place.getName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
+                        mMap.addMarker(
+                            new MarkerOptions()
+                                    .position(pos)
+                                    .title(place.getName())
+                                    .icon(BitmapDescriptorFactory.defaultMarker(markerColour)));
                 Log.d(TAG, place.getName() + " " + pos.toString());
                 mPlacesMap.put(marker.getId(), place.getId());
                 mReferencesMap.put(place.getId(), place.getReference());
@@ -231,7 +235,8 @@ public class LocationsActivity extends FragmentActivity {
     }
 
     /**
-     * Check for Google Places API search result for next_page_token
+     * Check Google Places API search result for page_token
+     * Indicates more results available: enable "More Locations" button
      * See @link{https://developers.google.com/places/documentation/search} for details
      * @param places Google Places API return (converted from JSON)
      */
@@ -287,10 +292,10 @@ public class LocationsActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Restaurant sync completed");
-            if (waitForSync) {
+            //if (waitForSync) {
                 getLocations();
-                waitForSync = false;
-            }
+                //waitForSync = false;
+            //}
         }
     };
 
@@ -315,7 +320,26 @@ public class LocationsActivity extends FragmentActivity {
         LocationServices.enableLocationChecking(this);
         mLocation = LocationServices.getLocation(this);
 
-        if (savedInstanceState != null) {
+        // Activity first created
+        if (savedInstanceState == null) {
+            // We need Play Services and Network connectivity
+            if (PlayServices.checkPlayServices(this) && Network.checkNetworking(this)) {
+                // Register listener for notification that restaurant data has been synced
+                LocalBroadcastManager.getInstance(this)
+                        .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
+
+                // Start data sync services and draw map
+                startDataSyncServices();
+                prepareMapView();
+            }
+            else {
+                Log.e(TAG, "Cannot launch LocationsActivity");
+                finish();
+            }
+
+        }
+        // Subsequent onCreate() events
+        else {
             // Restore incremental search results, page_token and zoom level
             mSearchResult = (SearchResult) savedInstanceState.getSerializable(SEARCH_RESULT);
             mPageToken = savedInstanceState.getString(PAGE_TOKEN);
@@ -326,29 +350,6 @@ public class LocationsActivity extends FragmentActivity {
             showLocations(mSearchResult);
             if (! mPageToken.isEmpty()) {
                 setPlacesButton(true);
-            }
-        }
-
-        // First time only: Sync Gasp data before Location search
-        else {
-            // Gasp requires Play Services and network connectivity
-            if (PlayServices.checkPlayServices(this) && Network.checkNetworking(this)) {
-                // Register listener for notification that restaurant data has been synced
-                LocalBroadcastManager.getInstance(this)
-                        .registerReceiver(mMessageReceiver, new IntentFilter(SYNC_COMPLETED));
-                startDataSyncServices();
-
-                prepareMapView();
-
-                // Only show location markers once Gasp restaurant data loaded
-                if (!waitForSync) {
-                    getLocations();
-                }
-            }
-            else {
-
-                Log.e(TAG, "Cannot launch LocationsActivity");
-                finish();
             }
         }
     }

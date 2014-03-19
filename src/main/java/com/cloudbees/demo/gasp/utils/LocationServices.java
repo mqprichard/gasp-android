@@ -36,7 +36,7 @@ public class LocationServices {
      * Enable location checking (via LocationFragment)
      * @param context the application context
      */
-    public static void enableLocationChecking(Context context) {
+    public static void enableLocationChecking(FragmentActivity context) {
         try {
             if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
 
@@ -48,12 +48,8 @@ public class LocationServices {
                             + " (via " + location.getProvider() + ")" + '\n');
                 }
 
-                if (! context.getClass().isInstance(FragmentActivity.class))
-                    throw new UnsupportedOperationException();
-                FragmentActivity activity = (FragmentActivity) context;
-
                 // Add LocationFragment to enable location updates
-                FragmentManager fm = activity.getFragmentManager();
+                FragmentManager fm = context.getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 LocationFragment locationFragment = new LocationFragment();
                 ft.add(locationFragment, "LocationFragment");
