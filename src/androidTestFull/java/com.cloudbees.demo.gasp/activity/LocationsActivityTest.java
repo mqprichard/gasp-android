@@ -67,10 +67,6 @@ public class LocationsActivityTest extends ActivityInstrumentationTestCase2<Loca
         testOptionsMenuStartActivity(TwitterStreamActivity.class.getName(), R.id.gasp_menu_twitter);
     }
 
-    public void testOptionsMenuPlaces() throws Exception {
-        testOptionsMenuStartActivity(PlacesActivity.class.getName(), R.id.gasp_menu_places);
-    }
-
     public void testOptionsMenuPreferences() throws Exception {
         testOptionsMenuStartActivity(SetPreferencesActivity.class.getName(), R.id.gasp_settings);
     }

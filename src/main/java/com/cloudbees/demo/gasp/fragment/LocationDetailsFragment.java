@@ -50,9 +50,9 @@ public class LocationDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mName = (TextView) getView().findViewById(R.id.detail_name);
-        mWebsite = (TextView) getView().findViewById(R.id.detail_address);
-        mAddress = (TextView) getView().findViewById(R.id.detail_phone);
-        mPhone = (TextView) getView().findViewById(R.id.detail_website);
+        mWebsite = (TextView) getView().findViewById(R.id.detail_website);
+        mAddress = (TextView) getView().findViewById(R.id.detail_address);
+        mPhone = (TextView) getView().findViewById(R.id.detail_phone);
 
         mReviewButton = (Button) getView().findViewById(R.id.detail_review_button);
         mRestaurantButton = (Button) getView().findViewById(R.id.detail_restaurant_button);

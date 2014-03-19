@@ -86,19 +86,15 @@
         </activity>
 
         <!-- Gasp! Google Places API activity -->
-        <activity
-            android:name="com.cloudbees.demo.gasp.activity.PlacesActivity"
-            android:label="@string/gasp_places">
-        </activity>
 
         <!-- Gasp! Places Detail activity -->
         <activity
             android:name=".activity.PlacesDetailActivity"
             android:label="@string/gasp_places_details"
-            android:parentActivityName="com.cloudbees.demo.gasp.activity.PlacesActivity">
+            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudbees.demo.gasp.activity.PlacesActivity" />
+                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
 
         <!-- Gasp! database activities -->

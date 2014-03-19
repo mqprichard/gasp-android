@@ -35,11 +35,11 @@
     <string name="gcm_error">From GCM: error (%1$s).</string>
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
-    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Demo Server.</string>
-    <string name="server_registered">From Demo Server: successfully added device!</string>
-    <string name="server_unregistered">From Demo Server: successfully removed device!</string>
-    <string name="server_register_error">Could not register device on Demo Server after %1$d attempts.</string>
-    <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).</string>
+    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Server.</string>
+    <string name="server_registered">From Server: successfully added device!</string>
+    <string name="server_unregistered">From Server: successfully removed device!</string>
+    <string name="server_register_error">Could not register device on Server after %1$d attempts.</string>
+    <string name="server_unregister_error">Could not unregister device on Server (%1$s).</string>
 
     <!-- Options Menu -->
     <string name="action_settings">Settings</string>
@@ -86,9 +86,6 @@
     <string name="review_button_add">Add a Review</string>
     <string name="restaurant_button_add">Add Restaurant to Gasp!</string>
     <string name="restaurant_button_list_reviews">See Gasp! Reviews</string>
-    <string name="places_latitude">"Latitude: "</string>
-    <string name="places_longitude">"Longitude: "</string>
-    <string name="places_google_id">"Google Places Id: "</string>
     <string name="gasp_details_title_reviews">Gasp! Reviews</string>
     <string name="gasp_details_title_events">Gasp! Events</string>
 

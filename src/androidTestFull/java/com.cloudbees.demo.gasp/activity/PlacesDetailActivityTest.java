@@ -81,10 +81,6 @@ public class PlacesDetailActivityTest extends ActivityInstrumentationTestCase2 <
         assertEquals(detailAddress.getText(), mPlaceDetail.getFormatted_address());
         TextView detailPhone = (TextView)mActivity.findViewById(R.id.detail_phone);
         assertEquals(detailPhone.getText(), mPlaceDetail.getFormatted_phone_number());
-        TextView detailLatitude = (TextView)mActivity.findViewById(R.id.detail_latitude);
-        assert(detailLatitude.getText().toString().contains(mPlaceDetail.getGeometry().getLocation().getLat().toString()));
-        TextView detailLongitude = (TextView)mActivity.findViewById(R.id.detail_longitude);
-        assert(detailLatitude.getText().toString().contains(mPlaceDetail.getGeometry().getLocation().getLng().toString()));
     }
 
     private void testOptionsMenuStartActivity(String className, int id){

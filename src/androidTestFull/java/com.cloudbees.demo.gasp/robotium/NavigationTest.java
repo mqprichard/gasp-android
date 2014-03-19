@@ -5,7 +5,6 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.activity.LocationsActivity;
-import com.cloudbees.demo.gasp.activity.PlacesActivity;
 import com.cloudbees.demo.gasp.activity.RestaurantListActivity;
 import com.cloudbees.demo.gasp.activity.ReviewListActivity;
 import com.cloudbees.demo.gasp.activity.SetPreferencesActivity;
@@ -83,32 +82,6 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
         solo.assertCurrentActivity("Back: " + to.getClass().getName(), to);
     }
 
-    public void testPlacesNavigation() {
-        actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
-        backButton(LocationsActivity.class);
-    }
-
-    public void testPlacesDetailNavigation() {
-        actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
-
-        // Allow time for ListActivity to populate
-        solo.sleep(10000);
-        assertTrue(solo.waitForView(R.id.places_list, 1, 1000));
-
-        // Select first item from list
-        solo.clickInList(1);
-        solo.waitForActivity(PlacesDetailActivity.class,5000);
-        solo.assertCurrentActivity("Clicked", PlacesDetailActivity.class);
-
-        actionBarHome(PlacesActivity.class);
-
-        // Allow time for ListActivity to populate
-        solo.sleep(10000);
-        assertTrue(solo.waitForView(R.id.places_list, 1, 1000));
-
-        backButton(LocationsActivity.class);
-    }
-
     public void testTwitterNavigation() {
         actionBarActivity(R.id.gasp_menu_twitter, TwitterStreamActivity.class);
         backButton(LocationsActivity.class);
@@ -117,12 +90,6 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
     public void testSettingsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
         backButton(LocationsActivity.class);
-    }
-
-    public void testPlacesSettingsNavigation() {
-        actionBarActivity(R.id.gasp_menu_places, PlacesActivity.class);
-        optionsMenuActivity(solo.getString(R.string.gasp_settings), SetPreferencesActivity.class);
-        backButton(PlacesActivity.class);
     }
 
     public void testRestaurantsNavigation() {

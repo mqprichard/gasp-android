@@ -409,12 +409,6 @@ public class LocationsActivity extends FragmentActivity {
                 startActivityForResult(intent, 0);
                 return true;
 
-            case R.id.gasp_menu_places:
-                intent = new Intent();
-                intent.setClass(LocationsActivity.this, PlacesActivity.class);
-                startActivityForResult(intent, 0);
-                return true;
-
             case R.id.gasp_login_with_amazon:
                 intent = new Intent();
                 intent.setClass(LocationsActivity.this, AmazonSignInActivity.class);
