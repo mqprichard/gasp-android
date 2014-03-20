@@ -98,6 +98,9 @@
         </activity>
 
         <!-- Gasp! database activities -->
+        <activity android:name=".activity.GaspDataActivity"
+            android:label="@string/gasp_data">
+        </activity>
         <activity
             android:name="com.cloudbees.demo.gasp.activity.ReviewListActivity"
             android:label="@string/gasp_reviews">

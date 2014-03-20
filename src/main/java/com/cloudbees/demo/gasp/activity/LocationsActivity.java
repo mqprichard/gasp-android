@@ -391,6 +391,12 @@ public class LocationsActivity extends FragmentActivity {
                 startActivityForResult(intent, 0);
                 return true;
 
+            case R.id.gasp_data:
+                intent = new Intent();
+                intent.setClass(LocationsActivity.this, GaspDataActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
             case R.id.gasp_reviews_data:
                 intent = new Intent();
                 intent.setClass(LocationsActivity.this, ReviewListActivity.class);

@@ -60,6 +60,7 @@
     <string name="gasp_review_comment_hint">Please enter your review</string>
     <string name="gasp_restaurants_data">Gasp! Restaurants</string>
     <string name="gasp_users_data">Gasp! Users</string>
+    <string name="gasp_data">Gasp! Data</string>
     <string name="places_search_radius_preferences">places_search_radius</string>
     <string name="places_search_radius_title">Google Places API Search Radius</string>
     <string name="places_search_radius_dialog">Select search radius (in meters)</string>

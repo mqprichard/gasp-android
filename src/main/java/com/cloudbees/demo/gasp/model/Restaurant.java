@@ -66,7 +66,6 @@ public class Restaurant extends GaspDataObject {
 
     @Override
     public String toString() {
-        return "Restaurant #" + this.getId() + ": "
-                + this.getName() + " (" + this.getPlacesId() + ")";
+        return "Restaurant #" + this.getId() + ": " + this.getName();
     }
 }
