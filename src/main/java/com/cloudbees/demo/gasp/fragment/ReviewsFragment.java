@@ -2,10 +2,12 @@ package com.cloudbees.demo.gasp.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.cloudbees.demo.gasp.adapter.ReviewDataAdapter;
 import com.cloudbees.demo.gasp.model.Review;
@@ -31,24 +33,33 @@ import java.util.List;
 public class ReviewsFragment extends ListFragment {
     private static final String TAG = ReviewsFragment.class.getName();
 
+    private ReviewDataAdapter mReviewAdapter;
+    private List<Review> mReviews;
+
     public ReviewsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ReviewDataAdapter reviewAdapter = new ReviewDataAdapter(inflater.getContext());
-        reviewAdapter.open();
+        mReviewAdapter = new ReviewDataAdapter(inflater.getContext());
+        mReviewAdapter.open();
 
         // Get all reviews in descending order
-        List<Review> reviews = reviewAdapter.getAllDesc();
-        reviewAdapter.open();
+        mReviews = mReviewAdapter.getAllDesc();
         ArrayAdapter<Review> adapter =
                 new ArrayAdapter<Review>(inflater.getContext(),
                                          android.R.layout.simple_list_item_1,
-                                         reviews);
-        reviewAdapter.close();
+                                         mReviews);
+        mReviewAdapter.close();
 
         setListAdapter(adapter);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Log.d(TAG, "Review Id: " + mReviews.get(position).getId()
+                                 + " " + mReviews.get(position).getComment());
     }
 }

@@ -2,10 +2,12 @@ package com.cloudbees.demo.gasp.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.demo.gasp.model.Restaurant;
@@ -31,23 +33,34 @@ import java.util.List;
 public class RestaurantsFragment extends ListFragment {
     private static final String TAG = RestaurantsFragment.class.getName();
 
+    private RestaurantDataAdapter mRestaurantAdapter;
+    private List<Restaurant> mRestaurants;
+
     public RestaurantsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RestaurantDataAdapter restaurantAdapter = new RestaurantDataAdapter(inflater.getContext());
-        restaurantAdapter.open();
+        mRestaurantAdapter = new RestaurantDataAdapter(inflater.getContext());
+        mRestaurantAdapter.open();
 
         // Get all restaurants in descending order
-        List<Restaurant> restaurants = restaurantAdapter.getAllDesc();
-        restaurantAdapter.close();
+        mRestaurants = mRestaurantAdapter.getAllDesc();
+        mRestaurantAdapter.close();
+
         ArrayAdapter<Restaurant> adapter =
                 new ArrayAdapter<Restaurant>(inflater.getContext(),
                                              android.R.layout.simple_list_item_1,
-                                             restaurants);
+                                             mRestaurants);
         setListAdapter(adapter);
 
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Log.d(TAG, "Restaurant Id: " + mRestaurants.get(position).getId()
+                                     + " " + mRestaurants.get(position).getName());
     }
 }
