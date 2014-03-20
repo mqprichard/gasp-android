@@ -292,10 +292,7 @@ public class LocationsActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Restaurant sync completed");
-            //if (waitForSync) {
-                getLocations();
-                //waitForSync = false;
-            //}
+            getLocations();
         }
     };
 
@@ -365,6 +362,7 @@ public class LocationsActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            /*
             // (Re-)register with Gasp GCM  Server
             case R.id.options_register:
                 mGaspRegistrationClient.doRegisterGasp(this);
@@ -378,7 +376,7 @@ public class LocationsActivity extends FragmentActivity {
             case R.id.options_exit:
                 finish();
                 return true;
-
+            */
             case R.id.gasp_settings:
                 Intent intent = new Intent();
                 intent.setClass(LocationsActivity.this, SetPreferencesActivity.class);
@@ -396,7 +394,7 @@ public class LocationsActivity extends FragmentActivity {
                 intent.setClass(LocationsActivity.this, GaspDataActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
-
+            /*
             case R.id.gasp_reviews_data:
                 intent = new Intent();
                 intent.setClass(LocationsActivity.this, ReviewListActivity.class);
@@ -414,7 +412,7 @@ public class LocationsActivity extends FragmentActivity {
                 intent.setClass(LocationsActivity.this, UserListActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
-
+            */
             case R.id.gasp_login_with_amazon:
                 intent = new Intent();
                 intent.setClass(LocationsActivity.this, AmazonSignInActivity.class);

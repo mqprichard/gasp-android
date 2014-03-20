@@ -85,8 +85,6 @@
             android:label="@string/gasp_add_review">
         </activity>
 
-        <!-- Gasp! Google Places API activity -->
-
         <!-- Gasp! Places Detail activity -->
         <activity
             android:name=".activity.PlacesDetailActivity"
@@ -101,6 +99,7 @@
         <activity android:name=".activity.GaspDataActivity"
             android:label="@string/gasp_data">
         </activity>
+        <!--
         <activity
             android:name="com.cloudbees.demo.gasp.activity.ReviewListActivity"
             android:label="@string/gasp_reviews">
@@ -113,6 +112,7 @@
             android:name="com.cloudbees.demo.gasp.activity.UserListActivity"
             android:label="@string/gasp_users">
         </activity>
+        -->
 
         <!-- Login with Amazon/Google -->
         <activity
