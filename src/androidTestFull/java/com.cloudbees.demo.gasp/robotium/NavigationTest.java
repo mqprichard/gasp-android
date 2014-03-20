@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.cloudbees.demo.gasp.R;
+import com.cloudbees.demo.gasp.activity.GaspDataActivity;
 import com.cloudbees.demo.gasp.activity.LocationsActivity;
 import com.cloudbees.demo.gasp.activity.RestaurantListActivity;
 import com.cloudbees.demo.gasp.activity.ReviewListActivity;
@@ -92,6 +93,16 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
         backButton(LocationsActivity.class);
     }
 
+    public void testGaspDataBackNavigation() {
+        optionsMenuActivity(solo.getString(R.string.gasp_data), GaspDataActivity.class);
+        backButton(LocationsActivity.class);
+    }
+
+    public void testGaspDataHomeNavigation() {
+        optionsMenuActivity(solo.getString(R.string.gasp_data), GaspDataActivity.class);
+        actionBarHome(LocationsActivity.class);
+    }
+    /*
     public void testRestaurantsNavigation() {
         optionsMenuActivity(solo.getString(R.string.gasp_restaurants_data), RestaurantListActivity.class);
         backButton(LocationsActivity.class);
@@ -106,6 +117,7 @@ public class NavigationTest extends ActivityInstrumentationTestCase2<LocationsAc
         optionsMenuActivity(solo.getString(R.string.gasp_users_data), UserListActivity.class);
         backButton(LocationsActivity.class);
     }
+    */
 
     @Override
     public void tearDown() throws Exception {

@@ -6,6 +6,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
 
 import com.cloudbees.demo.gasp.R;
+import com.cloudbees.demo.gasp.activity.GaspDataActivity;
+
+import java.lang.Exception;
 
 /**
  * Copyright (c) 2013 Mark Prichard, CloudBees
@@ -51,6 +54,7 @@ public class LocationsActivityTest extends ActivityInstrumentationTestCase2<Loca
         a.finish();
     }
 
+    /*
     public void testOptionsMenuRestaurants() throws Throwable {
         testOptionsMenuStartActivity(RestaurantListActivity.class.getName(), R.id.gasp_restaurants_data);
     }
@@ -62,6 +66,7 @@ public class LocationsActivityTest extends ActivityInstrumentationTestCase2<Loca
     public void testOptionsMenuUsers() throws Exception {
         testOptionsMenuStartActivity(UserListActivity.class.getName(), R.id.gasp_users_data);
     }
+    */
 
     public void testOptionsMenuTwitter() throws Exception {
         testOptionsMenuStartActivity(TwitterStreamActivity.class.getName(), R.id.gasp_menu_twitter);
@@ -69,5 +74,9 @@ public class LocationsActivityTest extends ActivityInstrumentationTestCase2<Loca
 
     public void testOptionsMenuPreferences() throws Exception {
         testOptionsMenuStartActivity(SetPreferencesActivity.class.getName(), R.id.gasp_settings);
+    }
+
+    public void testOptionsMenuGaspData() throws Exception {
+        testOptionsMenuStartActivity(GaspDataActivity.class.getName(), R.id.gasp_data);
     }
 }

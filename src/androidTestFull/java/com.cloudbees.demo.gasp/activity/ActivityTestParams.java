@@ -16,7 +16,7 @@ package com.cloudbees.demo.gasp.activity;
  * limitations under the License.
  */
 
-public class TestParams {
+public class ActivityTestParams {
     private static int TIMEOUT = 10000;
 
     public static int getTIMEOUT() {

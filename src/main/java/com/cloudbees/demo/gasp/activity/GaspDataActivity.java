@@ -2,9 +2,14 @@ package com.cloudbees.demo.gasp.activity;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.cloudbees.demo.gasp.R;
 import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
@@ -99,5 +104,32 @@ public class GaspDataActivity extends FragmentActivity
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu_short, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+
+            case R.id.gasp_settings:
+                Intent intent = new Intent();
+                intent.setClass(this, SetPreferencesActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -96,8 +96,13 @@
         </activity>
 
         <!-- Gasp! database activities -->
-        <activity android:name=".activity.GaspDataActivity"
-            android:label="@string/gasp_data">
+        <activity
+            android:name=".activity.GaspDataActivity"
+            android:label="@string/gasp_data"
+            android:parentActivityName="com.cloudbees.demo.gasp.activity.LocationsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudbees.demo.gasp.activity.LocationsActivity" />
         </activity>
         <!--
         <activity

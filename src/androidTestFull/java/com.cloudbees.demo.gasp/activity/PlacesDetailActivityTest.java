@@ -87,7 +87,7 @@ public class PlacesDetailActivityTest extends ActivityInstrumentationTestCase2 <
         Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(className, null, false);
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         getInstrumentation().invokeMenuActionSync(mActivity, id, 0);
-        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, TestParams.getTIMEOUT());
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, ActivityTestParams.getTIMEOUT());
         assertEquals(true, getInstrumentation().checkMonitorHit(am, 1));
         a.finish();
     }
@@ -106,7 +106,7 @@ public class PlacesDetailActivityTest extends ActivityInstrumentationTestCase2 <
                 button.performClick();
             }
         });
-        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, TestParams.getTIMEOUT());
+        Activity a = getInstrumentation().waitForMonitorWithTimeout(am, ActivityTestParams.getTIMEOUT());
         assertNotNull(a);
         a .finish();
     }
