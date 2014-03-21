@@ -16,7 +16,9 @@
 
 package com.cloudbees.demo.gasp.model;
 
-public class Restaurant extends GaspDataObject {
+import java.io.Serializable;
+
+public class Restaurant extends GaspDataObject implements Serializable {
     private int id;
     private String name;
     private String website;

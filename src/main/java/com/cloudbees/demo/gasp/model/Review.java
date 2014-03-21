@@ -18,7 +18,9 @@ package com.cloudbees.demo.gasp.model;
 
 import com.google.gson.annotations.Expose;
 
-public class Review extends GaspDataObject {
+import java.io.Serializable;
+
+public class Review extends GaspDataObject implements Serializable {
     private int id;
     private String url;
     // Only expose these methods for HTTP POST calls to Gasp server

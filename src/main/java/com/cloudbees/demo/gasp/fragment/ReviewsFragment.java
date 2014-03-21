@@ -1,6 +1,8 @@
 package com.cloudbees.demo.gasp.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.cloudbees.demo.gasp.adapter.RestaurantDataAdapter;
 import com.cloudbees.demo.gasp.adapter.ReviewDataAdapter;
+import com.cloudbees.demo.gasp.adapter.UserDataAdapter;
 import com.cloudbees.demo.gasp.model.Review;
+import com.cloudbees.demo.gasp.utils.Preferences;
 
 import java.util.List;
 
@@ -34,13 +39,21 @@ public class ReviewsFragment extends ListFragment {
     private static final String TAG = ReviewsFragment.class.getName();
 
     private ReviewDataAdapter mReviewAdapter;
+    private RestaurantDataAdapter mRestaurantDataAdapter;
+    private UserDataAdapter mUserDataAdapter;
+
     private List<Review> mReviews;
+    private Context mContext;
+    private String mBaseUrl;
 
     public ReviewsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mContext = inflater.getContext();
+        mBaseUrl = Preferences.getGaspServerUrl().replaceAll("/$", "");
+
         mReviewAdapter = new ReviewDataAdapter(inflater.getContext());
         mReviewAdapter.open();
 
@@ -60,6 +73,10 @@ public class ReviewsFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Log.d(TAG, "Review Id: " + mReviews.get(position).getId()
-                                 + " " + mReviews.get(position).getComment());
+                + " " + mReviews.get(position).getComment());
+
+        FragmentManager fm = getFragmentManager();
+        ReviewDialogFragment frag = ReviewDialogFragment.newInstance("Gasp! Reviews", mReviews.get(position));
+        frag.show(fm, "Review Dialog Fragment");
     }
 }

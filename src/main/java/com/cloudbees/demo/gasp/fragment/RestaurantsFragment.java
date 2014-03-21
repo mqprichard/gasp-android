@@ -1,6 +1,7 @@
 package com.cloudbees.demo.gasp.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,6 +62,10 @@ public class RestaurantsFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Log.d(TAG, "Restaurant Id: " + mRestaurants.get(position).getId()
-                                     + " " + mRestaurants.get(position).getName());
+                + " " + mRestaurants.get(position).getName());
+        FragmentManager fm = getFragmentManager();
+        RestaurantDialogFragment frag =
+                new RestaurantDialogFragment().newInstance("Gasp! Restaurant", mRestaurants.get(position));
+        frag.show(fm, "Restaurant Dialog Fragment");
     }
 }
