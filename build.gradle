@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.9.1'
 
         //Uncomment to use NewRelic plugin
         //classpath 'com.newrelic.agent.android:agent-gradle-plugin:2.426.0'
