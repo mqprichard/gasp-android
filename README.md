@@ -48,3 +48,31 @@ The easiest way to is run the app directly from Android Studio; alternatively de
 Resetting the Demo Client
 -------------------------
 To re-run the demo from a clean state, you should uninstall the app to remove the GCM registration and delete the SQLite database.  
+
+Setting the location for the Android Emulator
+---------------------------------------------
+This example uses the default (localhost:5554) emulator address and the lat/lng co-ordinates for the CloudBees Los Altos office
+
+    telnet localhost 5554
+    Trying ::1...
+    telnet: connect to address ::1: Connection refused
+    Trying 127.0.0.1...
+    Connected to localhost.
+    Escape character is '^]'.
+    Android Console: type 'help' for a list of commands
+    OK
+    geo fix -122.113847 37.377527
+    OK
+
+Google API Keys
+---------------
+This Android client makes calls to the Google Maps, Google Places and Google Cloud Messaging APIs.
+For details of how to configure Google API keys, see the [Google APIs Console help](https://developers.google.com/console/help/) pages.
+
+Please remember that API keys that are compiled into an Android application can always be de-dexed and read.  For security, keys used for production applications should always be secured by the Android package name and APK signing key.  Where this is not possible (such as the Google Place API key, below), it is recommended that the keys should be retrieved from the server via authenticated https.
+
+1. The Google Maps for Android v2 API key is included as meta-data for LocationsActivity in AndroidManifest.xml.  The API key is tied to the Android package name and the signing key for the APK.
+2. The Google Places API key is stored in `com.cloudbees.demo.gasp.location.GooglePlacesKey`: ideally, this would be Android package-specific but Google currently only support generic server keys for the Places API.  For production use, this key should be retrieved from the Gasp server via authenticated https, or the Places API calls proxied via the server.
+3. Google Cloud Messaging (GCM) uses the Google API Project key.  The key is stored in `com.cloudbees.demo.gasp.gcm.GCMProjectKey` since the Android client uses it to register with the GCM services.  For production use, this key should also be retrieved from the Gasp server via authenticated https, although the Gasp GCM server controls message sending for the application, so the key can be tied to the specific IP address for the server.
+
+The online example [Jenkins build](https://mobile-examples.ci.cloudbees.com/job/Android/job/android-gradle/) uses the [Build Secret plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Secret+Plugin) to inject these keys into the build without having them stored in SCM.
