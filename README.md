@@ -69,7 +69,7 @@ Google API Keys
 This Android client makes calls to the Google Maps, Google Places and Google Cloud Messaging APIs.
 For details of how to configure Google API keys, see the [Google APIs Console help](https://developers.google.com/console/help/) pages.
 
-Please remember that API keys that are compiled into an Android application can always be de-dexed and read.  For security, keys used for production applications should always be secured by the Android package name and APK signing key.  Where this is not possible (such as the Google Place API key, below), it is recommended that the keys should be retrieved from the server via authenticated https.
+Please remember that API keys that are compiled into an Android application can always be de-dexed and read.  Keys used for production applications should always be secured by the Android package name and APK signing key.  Where this is not possible (such as the Google Places API key, below), it is recommended that the keys should be retrieved from the server via authenticated https.
 
 1. The Google Maps for Android v2 API key is included as meta-data for LocationsActivity in AndroidManifest.xml.  The API key is tied to the Android package name and the signing key for the APK.
 2. The Google Places API key is stored in `com.cloudbees.demo.gasp.location.GooglePlacesKey`: ideally, this would be Android package-specific but Google currently only support generic server keys for the Places API.  For production use, this key should be retrieved from the Gasp server via authenticated https, or the Places API calls proxied via the server.
