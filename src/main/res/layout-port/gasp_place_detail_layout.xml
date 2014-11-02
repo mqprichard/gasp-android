@@ -16,7 +16,7 @@
         android:layout_weight="2">
 
         <fragment
-            android:name="com.cloudbees.demo.gasp.fragment.LocationDetailsFragment"
+            android:name="com.appdynamics.demo.gasp.fragment.LocationDetailsFragment"
             android:id="@+id/detail_location_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,7 +37,7 @@
             android:text="@string/gasp_details_title_reviews" />
 
         <fragment
-            android:name="com.cloudbees.demo.gasp.fragment.ReviewDetailsFragment"
+            android:name="com.appdynamics.demo.gasp.fragment.ReviewDetailsFragment"
             android:id="@+id/detail_review_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,7 +58,7 @@
             android:text="@string/gasp_details_title_events" />
 
         <fragment
-            android:name="com.cloudbees.demo.gasp.fragment.EventDetailsFragment"
+            android:name="com.appdynamics.demo.gasp.fragment.EventDetailsFragment"
             android:id="@+id/detail_event_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

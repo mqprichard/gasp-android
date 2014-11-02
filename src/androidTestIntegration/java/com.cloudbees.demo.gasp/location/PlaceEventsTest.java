@@ -1,25 +1,24 @@
-package com.cloudbees.demo.gasp.location;
+package com.appdynamics.demo.gasp.location;
 
 import android.os.AsyncTask;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.model.EventRequest;
-import com.cloudbees.demo.gasp.model.EventResponse;
-import com.cloudbees.demo.gasp.model.PlaceDetails;
-import com.cloudbees.demo.gasp.model.PlaceEvent;
-import com.cloudbees.demo.gasp.model.Places;
-import com.cloudbees.demo.gasp.model.Query;
+import com.appdynamics.demo.gasp.model.EventRequest;
+import com.appdynamics.demo.gasp.model.EventResponse;
+import com.appdynamics.demo.gasp.model.PlaceDetails;
+import com.appdynamics.demo.gasp.model.PlaceEvent;
+import com.appdynamics.demo.gasp.model.Places;
+import com.appdynamics.demo.gasp.model.Query;
 import com.google.gson.Gson;
 
-import java.lang.NullPointerException;
 import java.lang.String;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +49,7 @@ public class PlaceEventsTest extends AndroidTestCase {
     /**
      * Initial Google Places API Search
      * {@link} https://developers.google.com/places/documentation/search#PlaceSearchRequests
-     * @param query com.cloudbees.demo.gasp.model.Query
+     * @param query com.appdynamics.demo.gasp.model.Query
      */
     public void placesSearch(final Query query) {
 
@@ -109,7 +108,7 @@ public class PlaceEventsTest extends AndroidTestCase {
     /**
      * Google Places API Add Event: calls placeDetailsEventAdded()
      * {@link} https://developers.google.com/places/documentation/actions#event_intro
-     * @param request com.cloudbees.demo.gasp.model.EventRequest
+     * @param request com.appdynamics.demo.gasp.model.EventRequest
      */
     public void eventAdd(final EventRequest request) {
         final EventRequest eventRequest = request;
@@ -157,7 +156,7 @@ public class PlaceEventsTest extends AndroidTestCase {
     /**
      * Google Places API Delete Event: calls PlaceDetailsEventDeleted()
      * {@link} https://developers.google.com/places/documentation/actions#event_intro
-     * @param request com.cloudbees.demo.gasp.model.EventRequest
+     * @param request com.appdynamics.demo.gasp.model.EventRequest
      */
     public void eventDelete(final EventRequest request) {
 

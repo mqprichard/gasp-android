@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        class="com.cloudbees.demo.gasp.fragment.UsersFragment"
+        class="com.appdynamics.demo.gasp.fragment.UsersFragment"
         android:id="@+id/gasp_users_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

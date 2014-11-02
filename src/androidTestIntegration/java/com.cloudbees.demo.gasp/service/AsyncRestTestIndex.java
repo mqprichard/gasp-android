@@ -1,10 +1,10 @@
-package com.cloudbees.demo.gasp.service;
+package com.appdynamics.demo.gasp.service;
 
 import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.model.Review;
+import com.appdynamics.demo.gasp.model.Review;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

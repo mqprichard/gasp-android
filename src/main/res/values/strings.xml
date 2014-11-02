@@ -69,13 +69,13 @@
     <string name="gasp_push_uri_title">Gasp! GCM Push Notification Settings</string>
     <string name="gasp_push_uri_dialog">Gasp! GCM Push Server URI</string>
     <string name="gasp_server_uri_preferences">gasp_server_uri</string>
-    <string name="gasp_server_uri_base">http://gasp.mqprichard.cloudbees.net/</string>
+    <string name="gasp_server_uri_base">http://ec2-54-91-133-9.compute-1.amazonaws.com/gasp/</string>
     <string name="gasp_server_uri_title">Gasp! Server Settings</string>
     <string name="gasp_server_uri_dialog">Gasp! Server URI</string>
     <string name="gasp_twitter_preferences">gasp_twitter_keyword</string>
     <string name="gasp_twitter_title">Twitter Stream Settings</string>
     <string name="gasp_twitter_dialog">Keyword for Twitter Search</string>
-    <string name="gasp_twitter_default">CloudBees</string>
+    <string name="gasp_twitter_default">AppDynamics</string>
 
     <!-- Gasp! Location/Review  -->
     <string name="gasp_add_review">Add a Review</string>

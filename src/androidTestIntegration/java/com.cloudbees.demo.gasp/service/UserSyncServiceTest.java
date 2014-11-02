@@ -1,17 +1,17 @@
-package com.cloudbees.demo.gasp.service;
+package com.appdynamics.demo.gasp.service;
 
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
-import com.cloudbees.demo.gasp.adapter.UserDataAdapter;
-import com.cloudbees.demo.gasp.model.User;
+import com.appdynamics.demo.gasp.adapter.UserDataAdapter;
+import com.appdynamics.demo.gasp.model.User;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

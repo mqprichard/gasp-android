@@ -1,4 +1,4 @@
-package com.cloudbees.demo.gasp.twitter;
+package com.appdynamics.demo.gasp.twitter;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,15 +8,15 @@ import android.os.ResultReceiver;
 import android.test.ServiceTestCase;
 import android.util.Base64;
 
-import com.cloudbees.demo.gasp.model.TwitterTokenResponse;
-import com.cloudbees.demo.gasp.service.RESTIntentService;
+import com.appdynamics.demo.gasp.model.TwitterTokenResponse;
+import com.appdynamics.demo.gasp.service.RESTIntentService;
 import com.google.gson.Gson;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

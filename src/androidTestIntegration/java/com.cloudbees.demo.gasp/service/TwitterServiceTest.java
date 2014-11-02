@@ -1,4 +1,4 @@
-package com.cloudbees.demo.gasp.service;
+package com.appdynamics.demo.gasp.service;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -7,19 +7,19 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.test.ServiceTestCase;
 
-import com.cloudbees.demo.gasp.fragment.TwitterAuthenticationFragment;
-import com.cloudbees.demo.gasp.fragment.TwitterResponderFragment;
-import com.cloudbees.demo.gasp.model.TwitterStatuses;
-import com.cloudbees.demo.gasp.model.TwitterTokenResponse;
-import com.cloudbees.demo.gasp.twitter.TwitterAPI;
-import com.cloudbees.demo.gasp.twitter.TwitterAuthentication;
+import com.appdynamics.demo.gasp.fragment.TwitterAuthenticationFragment;
+import com.appdynamics.demo.gasp.fragment.TwitterResponderFragment;
+import com.appdynamics.demo.gasp.model.TwitterStatuses;
+import com.appdynamics.demo.gasp.model.TwitterTokenResponse;
+import com.appdynamics.demo.gasp.twitter.TwitterAPI;
+import com.appdynamics.demo.gasp.twitter.TwitterAuthentication;
 import com.google.gson.Gson;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ public class TwitterServiceTest extends ServiceTestCase<RESTIntentService> {
             intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
 
             params = new Bundle();
-            params.putString("q", "cloudbees");
+            params.putString("q", "appdynamics");
             params.putString("count", "10");
 
             headers = new Bundle();

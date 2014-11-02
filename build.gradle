@@ -1,74 +1,59 @@
 buildscript {
     repositories {
-        //Not required if using Artifactory virtual repo
-        //mavenCentral()
-        maven {
-            //Get Android jars from private CloudBees forge repo
-            //url "https://repository-partnerdemo.forge.cloudbees.com/release/"
+        mavenCentral()
 
-            //Get Android and other dependencies from Artifactory virtual repo
-            url "http://partnerdemo.artifactoryonline.com/partnerdemo/snapshots"
+        maven {
+            url uri('adeum-maven-repo')
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.1'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.14.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath 'com.appdynamics:appdynamics-gradle-plugin:2.0'
 
-        //Uncomment to use NewRelic plugin
-        //classpath 'com.newrelic.agent.android:agent-gradle-plugin:2.426.0'
     }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.8'
+    gradleVersion = '2.1'
 }
 
 apply plugin: 'android-sdk-manager'
-apply plugin: 'android'
-
-//Uncomment to use NewRelic plugin
-//apply plugin: 'newrelic'
+apply plugin: 'com.android.application'
+apply plugin: 'adeum'
 
 repositories {
-    //Not required if using Artifactory virtual repo
     //mavenCentral()
     maven {
-        //Get Android jars from private CloudBees forge repo
-        //url "https://repository-partnerdemo.forge.cloudbees.com/release/"
-
         //Get Android and other dependencies from Artifactory virtual repo
         url "http://partnerdemo.artifactoryonline.com/partnerdemo/snapshots"
+    }
+    maven {
+        url uri('adeum-maven-repo')
     }
 }
 
 dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.google.android.gms:play-services:4.2.42'
-    compile 'com.android.support:support-v4:19.0.1'
-    compile 'com.android.support:appcompat-v7:19.0.1'
-    compile 'com.android.support:gridlayout-v7:19.0.1'
-    compile 'com.android.support:support-v13:19.0.1'
+    compile 'com.google.android.gms:play-services:6.1.71'
+    compile 'com.android.support:support-v4:21.+'
+    compile 'com.android.support:appcompat-v7:21.+'
+    compile 'com.android.support:gridlayout-v7:21.+'
+    compile 'com.android.support:support-v13:21.+'
     compile files('libs/login-with-amazon-sdk.jar')
 
-    //Uncomment for New Relic integration
-    //compile 'com.newrelic.agent.android:android-agent:2.426.0'
-
-    //Uncomment for TestFlight integration
-    //compile files('libs/TestFlightLib.jar')
-
-    //Uncomment for Vessel integration
-    //compile files('libs/vesselsdk.jar')
+    compile 'com.appdynamics:appdynamics-runtime:1.0'
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    compileSdkVersion 21
+    buildToolsVersion "21.1"
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false;
             proguardFile getDefaultProguardFile('proguard-android.txt')
         }
     }
@@ -89,5 +74,9 @@ android {
         // Requires Gasp! server
         full {
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }

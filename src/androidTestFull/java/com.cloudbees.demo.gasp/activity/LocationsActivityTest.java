@@ -1,17 +1,16 @@
-package com.cloudbees.demo.gasp.activity;
+package com.appdynamics.demo.gasp.activity;
 
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
 
-import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.GaspDataActivity;
+import com.appdynamics.demo.gasp.R;
 
 import java.lang.Exception;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

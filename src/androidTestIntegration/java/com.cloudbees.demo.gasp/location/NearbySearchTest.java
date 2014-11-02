@@ -1,12 +1,12 @@
-package com.cloudbees.demo.gasp.location;
+package com.appdynamics.demo.gasp.location;
 
 import android.os.AsyncTask;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.cloudbees.demo.gasp.model.Place;
-import com.cloudbees.demo.gasp.model.Places;
-import com.cloudbees.demo.gasp.model.Query;
+import com.appdynamics.demo.gasp.model.Place;
+import com.appdynamics.demo.gasp.model.Places;
+import com.appdynamics.demo.gasp.model.Query;
 import com.google.gson.Gson;
 
 import java.net.URL;
@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

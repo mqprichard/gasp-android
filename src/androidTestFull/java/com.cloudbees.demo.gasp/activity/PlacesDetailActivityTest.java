@@ -1,4 +1,4 @@
-package com.cloudbees.demo.gasp.activity;
+package com.appdynamics.demo.gasp.activity;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -9,16 +9,16 @@ import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.location.GooglePlacesClient;
-import com.cloudbees.demo.gasp.model.PlaceDetail;
-import com.cloudbees.demo.gasp.model.PlaceDetails;
+import com.appdynamics.demo.gasp.R;
+import com.appdynamics.demo.gasp.location.GooglePlacesClient;
+import com.appdynamics.demo.gasp.model.PlaceDetail;
+import com.appdynamics.demo.gasp.model.PlaceDetails;
 import com.google.gson.Gson;
 
 import java.net.URL;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

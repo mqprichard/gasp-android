@@ -1,20 +1,17 @@
-package com.cloudbees.gasp.robotium;
+package com.appdynamics.gasp.robotium;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.cloudbees.demo.gasp.R;
-import com.cloudbees.demo.gasp.activity.GaspDataActivity;
-import com.cloudbees.demo.gasp.activity.LocationsActivity;
-import com.cloudbees.demo.gasp.activity.RestaurantListActivity;
-import com.cloudbees.demo.gasp.activity.ReviewListActivity;
-import com.cloudbees.demo.gasp.activity.SetPreferencesActivity;
-import com.cloudbees.demo.gasp.activity.TwitterStreamActivity;
-import com.cloudbees.demo.gasp.activity.UserListActivity;
+import com.appdynamics.demo.gasp.R;
+import com.appdynamics.demo.gasp.activity.GaspDataActivity;
+import com.appdynamics.demo.gasp.activity.LocationsActivity;
+import com.appdynamics.demo.gasp.activity.SetPreferencesActivity;
+import com.appdynamics.demo.gasp.activity.TwitterStreamActivity;
 import com.jayway.android.robotium.solo.Solo;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

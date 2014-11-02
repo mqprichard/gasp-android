@@ -1,15 +1,15 @@
-package com.cloudbees.demo.gasp.server;
+package com.appdynamics.demo.gasp.server;
 
 import android.webkit.URLUtil;
 
-import com.cloudbees.demo.gasp.model.Restaurant;
+import com.appdynamics.demo.gasp.model.Restaurant;
 import com.google.gson.Gson;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Copyright (c) 2013 Mark Prichard, CloudBees
+ * Copyright (c) 2013 Mark Prichard
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
