@@ -3,6 +3,7 @@ package com.appdynamics.demo.gasp.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
  */
 
 public class SearchResult implements Serializable {
-    private List<Place> mPlaces;
+    private final List<Place> mPlaces;
 
     public List<Place> getPlaces() {
         return mPlaces;
@@ -41,8 +42,6 @@ public class SearchResult implements Serializable {
     }
 
     public void add(Places places) {
-        for (Place place: places.getResults()) {
-            mPlaces.add(place);
-        }
+        Collections.addAll(mPlaces, places.getResults());
     }
 }

@@ -28,11 +28,7 @@ import com.appdynamics.demo.gasp.R;
 public class PlayServicesDialogFragment extends DialogFragment {
 
     public interface PlayServicesDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
     }
-
-    PlayServicesDialogListener mListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -61,7 +57,7 @@ public class PlayServicesDialogFragment extends DialogFragment {
         super.onAttach(activity);
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (PlayServicesDialogListener) activity;
+            PlayServicesDialogListener mListener = (PlayServicesDialogListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()

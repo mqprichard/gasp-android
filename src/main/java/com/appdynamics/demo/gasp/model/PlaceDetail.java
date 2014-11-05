@@ -26,7 +26,7 @@ public class PlaceDetail implements Serializable {
     private String international_phone_number;
     private Geometry geometry;
     private String id;
-    PlaceEvent events[];
+    private PlaceEvent[] events;
 
     public String getName() {
         return name;

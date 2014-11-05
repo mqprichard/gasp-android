@@ -48,7 +48,7 @@ public class PreferencesFragment extends PreferenceFragment {
         gaspTwitterPreference.setOnPreferenceChangeListener(changeListener);
     }
 
-    final Preference.OnPreferenceChangeListener changeListener = new Preference.OnPreferenceChangeListener() {
+    private final Preference.OnPreferenceChangeListener changeListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             Log.d(TAG, "Preference changed: " + preference.getKey());

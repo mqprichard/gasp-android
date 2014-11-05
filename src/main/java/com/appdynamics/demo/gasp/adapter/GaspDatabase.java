@@ -24,8 +24,8 @@ import java.util.List;
  */
 
 public class GaspDatabase {
-    private RestaurantDataAdapter mRestaurantAdapter;
-    private ReviewDataAdapter mReviewAdapter;
+    private final RestaurantDataAdapter mRestaurantAdapter;
+    private final ReviewDataAdapter mReviewAdapter;
 
     public GaspDatabase (Context context) {
         mRestaurantAdapter = new RestaurantDataAdapter(context);
@@ -58,7 +58,7 @@ public class GaspDatabase {
         return reviews;
     }
 
-    public List<Review> getLastNReviewsByRestaurant(int id, int n) {
+    public List<Review> getLastNReviewsByRestaurant(int id, @SuppressWarnings("SameParameterValue") int n) {
         List<Review> reviews = null;
         try {
             mReviewAdapter.open();

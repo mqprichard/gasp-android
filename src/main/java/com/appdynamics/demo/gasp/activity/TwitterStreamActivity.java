@@ -34,7 +34,6 @@ import com.appdynamics.demo.gasp.fragment.TwitterResponderFragment;
  * @author Mark Prichard
  */
 public class TwitterStreamActivity extends Activity {
-    private final String TAG = TwitterStreamActivity.class.getName();
 
     // Twitter API v1.1 OAuth Token
     private static String twitterOAuthToken = "";

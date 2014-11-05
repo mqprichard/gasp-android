@@ -14,7 +14,8 @@
   - under the License.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="UnusedResources">
 
     <!-- Typically, an application registers automatically, so options below
@@ -25,5 +26,5 @@
     <item
         android:id="@+id/gasp_settings"
         android:title="@string/gasp_settings"
-        android:showAsAction="never"></item>
+        app:showAsAction="never"></item>
 </menu>

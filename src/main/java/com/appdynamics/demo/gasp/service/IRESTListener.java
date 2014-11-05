@@ -16,6 +16,6 @@
 
 package com.appdynamics.demo.gasp.service;
 
-public interface IRESTListener {
+interface IRESTListener {
     void onCompleted(String results);
 }

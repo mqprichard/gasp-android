@@ -34,7 +34,6 @@ import java.util.List;
 public class RestaurantsFragment extends ListFragment {
     private static final String TAG = RestaurantsFragment.class.getName();
 
-    private RestaurantDataAdapter mRestaurantAdapter;
     private List<Restaurant> mRestaurants;
 
     public RestaurantsFragment() {
@@ -42,7 +41,7 @@ public class RestaurantsFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRestaurantAdapter = new RestaurantDataAdapter(inflater.getContext());
+        RestaurantDataAdapter mRestaurantAdapter = new RestaurantDataAdapter(inflater.getContext());
         mRestaurantAdapter.open();
 
         // Get all restaurants in descending order
@@ -64,6 +63,7 @@ public class RestaurantsFragment extends ListFragment {
         Log.d(TAG, "Restaurant Id: " + mRestaurants.get(position).getId()
                 + " " + mRestaurants.get(position).getName());
         FragmentManager fm = getFragmentManager();
+        //noinspection AccessStaticViaInstance
         RestaurantDialogFragment frag =
                 new RestaurantDialogFragment().newInstance("Gasp! Restaurant", mRestaurants.get(position));
         frag.show(fm, "Restaurant Dialog Fragment");

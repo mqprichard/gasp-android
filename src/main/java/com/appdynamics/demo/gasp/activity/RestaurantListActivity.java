@@ -45,7 +45,7 @@ public class RestaurantListActivity extends ListActivity {
         List<Restaurant> restaurants = restaurantAdapter.getAllDesc();
 
         RestaurantArrayAdapter restaurantArrayAdapter =
-                new RestaurantArrayAdapter(this, R.layout.gasp_restaurant_list, restaurants);
+                new RestaurantArrayAdapter(this, restaurants);
         setListAdapter(restaurantArrayAdapter);
     }
 

@@ -29,7 +29,6 @@ import java.util.List;
  */
 
 public class UsersFragment extends ListFragment {
-    private static final String TAG = UsersFragment.class.getName();
 
     public UsersFragment() {
     }

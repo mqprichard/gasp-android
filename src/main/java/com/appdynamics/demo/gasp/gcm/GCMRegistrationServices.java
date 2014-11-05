@@ -17,7 +17,6 @@
 
 package com.appdynamics.demo.gasp.gcm;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -34,8 +33,8 @@ import java.util.Random;
 /**
  * Helper class used to communicate with the Gasp! GCM Push Notification server.
  */
-public final class GCMRegistrationServices {
-    static final String TAG = GCMRegistrationServices.class.getName();
+final class GCMRegistrationServices {
+    private static final String TAG = GCMRegistrationServices.class.getName();
 
     // Control backoff/retry behaviour for HTTP Post requests
     private static final int MAX_ATTEMPTS = 5;
@@ -47,7 +46,7 @@ public final class GCMRegistrationServices {
      *
      * @return whether the registration succeeded or not.
      */
-    public static boolean register(final Context context, final String regId, final String baseUrl) {
+    public static boolean register(final String regId, final String baseUrl) {
         Log.i(TAG, "Registering device (regId = " + regId + ")");
         String serverUrl = baseUrl + "/register";
         Map<String, String> params = new HashMap<String, String>();
@@ -59,7 +58,7 @@ public final class GCMRegistrationServices {
                 post(serverUrl, params);
                 Log.d(TAG, "Registered: " + regId);
                 return true;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Failed to register on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     break;
@@ -83,7 +82,7 @@ public final class GCMRegistrationServices {
     /**
      * Unregister this account/device pair within the server.
      */
-    public static void unregister(final Context context, final String regId, final String baseUrl) {
+    public static void unregister(final String regId, final String baseUrl) {
         Log.i(TAG, "Unregistering device (regId = " + regId + ")");
         String serverUrl = baseUrl + "/unregister";
         Map<String, String> params = new HashMap<String, String>();
@@ -98,7 +97,7 @@ public final class GCMRegistrationServices {
                 Log.d(TAG, "Unregistered: " + regId);
                 return;
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Failed to unregister on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     break;
@@ -123,9 +122,8 @@ public final class GCMRegistrationServices {
      *
      * @param endpoint POST address.
      * @param params   request parameters.
-     * @throws IOException propagated from POST.
      */
-    private static void post(String endpoint, Map<String, String> params) throws IOException {
+    private static void post(String endpoint, Map<String, String> params) {
         URL url;
         try {
             url = new URL(endpoint);

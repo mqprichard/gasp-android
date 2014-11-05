@@ -16,6 +16,7 @@ package com.appdynamics.demo.gasp.gcm;
  * limitations under the License.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class GCMProjectKey {
     // Google API project id registered to use GCM.
     public static final String SENDER_ID = "960428562804";

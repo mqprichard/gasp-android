@@ -64,7 +64,7 @@ public abstract class GaspEvents {
                     if (eventResponse.getStatus().equalsIgnoreCase("OK"))
                         onEventAdded(eventResponse);
                     else
-                        onErrorAddEvent(eventResponse.getStatus());
+                        onErrorAddEvent();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -75,7 +75,7 @@ public abstract class GaspEvents {
 
     // Callbacks to calling Activity
     abstract public void onEventAdded(EventResponse eventResponse);
-    abstract public void onErrorAddEvent(String status);
+    abstract public void onErrorAddEvent();
 
     /**
      * Delete an event using Google Places API
@@ -110,7 +110,7 @@ public abstract class GaspEvents {
                     if (eventResponse.getStatus().equalsIgnoreCase("OK"))
                         onEventDeleted(eventResponse);
                     else
-                        onErrorDeleteEvent(eventResponse.getStatus());
+                        onErrorDeleteEvent();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,5 +121,5 @@ public abstract class GaspEvents {
 
     // Callbacks to calling Activity
     abstract public void onEventDeleted(EventResponse eventResponse);
-    abstract public void onErrorDeleteEvent(String status);
+    abstract public void onErrorDeleteEvent();
 }

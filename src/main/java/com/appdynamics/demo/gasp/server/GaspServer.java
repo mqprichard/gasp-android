@@ -24,7 +24,7 @@ import java.net.URL;
  * limitations under the License.
  */
 
-public class GaspServer {
+class GaspServer {
     private static final String TAG = GaspServer.class.getName();
 
     /**

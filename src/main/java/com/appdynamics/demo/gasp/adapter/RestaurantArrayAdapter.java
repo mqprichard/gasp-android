@@ -41,15 +41,13 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Restaurant> {
 
     /**
      * Default constructor
-     *
-     * @param context     The Activity context
-     * @param resource    The layout resource
+     *  @param context     The Activity context
      * @param restaurants The List collection
      */
-    public RestaurantArrayAdapter(Context context, int resource, List<Restaurant> restaurants) {
-        super(context, resource, restaurants);
+    public RestaurantArrayAdapter(Context context, List<Restaurant> restaurants) {
+        super(context, R.layout.gasp_restaurant_list, restaurants);
         this.mRestaurants = restaurants;
-        this.mResource = resource;
+        this.mResource = R.layout.gasp_restaurant_list;
     }
 
     /**

@@ -28,15 +28,15 @@ import java.net.URLEncoder;
  * limitations under the License.
  */
 
-public class GooglePlacesClient {
+class GooglePlacesClient {
     private static final String TAG = GooglePlacesClient.class.getName();
 
-    public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    public static final String TYPE_DETAILS = "/details";
-    public static final String TYPE_NEARBY = "/nearbysearch";
-    public static final String TYPE_EVENT_ADD = "/event/add";
-    public static final String TYPE_EVENT_DELETE = "/event/delete";
-    public static final String OUT_JSON = "/json";
+    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    private static final String TYPE_DETAILS = "/details";
+    private static final String TYPE_NEARBY = "/nearbysearch";
+    private static final String TYPE_EVENT_ADD = "/event/add";
+    private static final String TYPE_EVENT_DELETE = "/event/delete";
+    private static final String OUT_JSON = "/json";
 
 
     private static final String keywords = "Restaurant|food|cafe";

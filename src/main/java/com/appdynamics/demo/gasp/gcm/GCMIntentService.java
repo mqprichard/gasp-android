@@ -41,7 +41,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class GCMIntentService extends IntentService {
     private static final String TAG = "GCMIntentService";
 
-    public static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
 
     public static final String PARAM_IN_MSG = "gaspInMsg";
     public static final String PARAM_ID = "id";

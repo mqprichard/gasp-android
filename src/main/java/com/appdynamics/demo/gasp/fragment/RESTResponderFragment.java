@@ -58,9 +58,9 @@ public abstract class RESTResponderFragment extends Fragment {
         setRetainInstance(true);
     }
     
-    public ResultReceiver getResultReceiver() {
+    ResultReceiver getResultReceiver() {
         return mReceiver;
     }
 
-    abstract public void onRESTResult(int code, String result);
+    protected abstract void onRESTResult(int code, String result);
 }

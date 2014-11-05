@@ -227,8 +227,4 @@ public class DataAdapterQueryTest extends AndroidTestCase {
 
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
 }

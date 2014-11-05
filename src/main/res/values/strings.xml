@@ -128,4 +128,7 @@
     <string name="login_button_content_description">"Button for authorization through Login with Amazon"</string>
     <string name="return_to_app">Return To App</string>
 
+    <!-- Dialog buttons -->
+    <string name="button_OK">OK</string>
+
 </resources>

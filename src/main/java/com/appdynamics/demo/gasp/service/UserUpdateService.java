@@ -46,10 +46,6 @@ public class UserUpdateService extends IntentService implements IRESTListener {
         this.mGaspUsersUri = Uri.parse(gaspUsersUri);
     }
 
-    public Uri getGaspUsersUri() {
-        return mGaspUsersUri;
-    }
-
     public UserUpdateService() {
         super("UserUpdateService");
     }

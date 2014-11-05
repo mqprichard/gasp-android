@@ -7,8 +7,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.+'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath 'com.android.tools.build:gradle:0.14.1'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         classpath 'com.appdynamics:appdynamics-gradle-plugin:2.0'
 
     }
@@ -23,23 +23,20 @@ apply plugin: 'com.android.application'
 apply plugin: 'adeum'
 
 repositories {
-    //mavenCentral()
-    maven {
-        //Get Android and other dependencies from Artifactory virtual repo
-        url "http://partnerdemo.artifactoryonline.com/partnerdemo/snapshots"
-    }
+    mavenCentral()
+
     maven {
         url uri('adeum-maven-repo')
     }
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.code.gson:gson:2.3'
     compile 'com.google.android.gms:play-services:6.1.71'
-    compile 'com.android.support:support-v4:21.+'
-    compile 'com.android.support:appcompat-v7:21.+'
-    compile 'com.android.support:gridlayout-v7:21.+'
-    compile 'com.android.support:support-v13:21.+'
+    compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.0'
+    compile 'com.android.support:gridlayout-v7:21.0.0'
+    compile 'com.android.support:support-v13:21.0.0'
     compile files('libs/login-with-amazon-sdk.jar')
 
     compile 'com.appdynamics:appdynamics-runtime:1.0'
@@ -62,16 +59,19 @@ android {
     productFlavors {
         // Standalone AndroidTestCase tests
         // Do not require Gasp! server integration
+        //noinspection GroovyMissingReturnStatement
         base {
         }
 
         // Integration tests (AndroidTestCase, InstrumentationTestCase, ServiceTestCase)
         // Requires Gasp! server
+        //noinspection GroovyMissingReturnStatement
         integration {
 
         }
         // ActivityInstrumentationTestCase2 and Robotium tests
         // Requires Gasp! server
+        //noinspection GroovyMissingReturnStatement
         full {
         }
     }

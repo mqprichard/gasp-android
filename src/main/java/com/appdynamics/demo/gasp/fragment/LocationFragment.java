@@ -32,11 +32,6 @@ public class LocationFragment extends Fragment implements LocationListener {
     private static LocationManager locationManager;
     private static String provider;
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public static Location getLocation(Context context) {
         Location location = null;
 

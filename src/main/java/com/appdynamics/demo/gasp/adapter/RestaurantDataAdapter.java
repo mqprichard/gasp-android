@@ -28,7 +28,6 @@ import com.appdynamics.eumagent.runtime.Instrumentation;
  * Implements insert, cursor and list methods: main interface to Restaurant data
  */
 public class RestaurantDataAdapter extends GaspDataAdapter<Restaurant> {
-    private static final String TAG = RestaurantDataAdapter.class.getName();
 
     private final String[] allColumns = {GaspSQLiteHelper.RESTAURANTS_COLUMN_ID,
             GaspSQLiteHelper.RESTAURANTS_COLUMN_NAME,

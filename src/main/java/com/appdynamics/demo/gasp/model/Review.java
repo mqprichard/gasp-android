@@ -82,7 +82,7 @@ public class Review extends GaspDataObject implements Serializable {
         return restaurant;
     }
 
-    public void setRestaurant(String restaurant) {
+    void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
     }
 
@@ -90,7 +90,7 @@ public class Review extends GaspDataObject implements Serializable {
         return user;
     }
 
-    public void setUser(String user) {
+    void setUser(String user) {
         this.user = user;
     }
 

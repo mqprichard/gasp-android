@@ -36,10 +36,10 @@ import java.util.List;
  * @param <T> The GaspDataObject type for the Adapter
  */
 public abstract class GaspDataAdapter<T extends GaspDataObject> {
-    protected final String TAG = GaspDataAdapter.class.getName();
+    private final String TAG = GaspDataAdapter.class.getName();
 
-    protected SQLiteDatabase database;
-    protected final GaspSQLiteHelper dbHelper;
+    SQLiteDatabase database;
+    private final GaspSQLiteHelper dbHelper;
 
     // Sub-classes must implement to support database calls
     abstract protected String getTableName();
@@ -58,7 +58,7 @@ public abstract class GaspDataAdapter<T extends GaspDataObject> {
      *
      * @param context The calling activity context
      */
-    protected GaspDataAdapter(Context context) {
+    GaspDataAdapter(Context context) {
         dbHelper = new GaspSQLiteHelper(context);
     }
 
@@ -174,7 +174,7 @@ public abstract class GaspDataAdapter<T extends GaspDataObject> {
      * @param cursor The Cursor object from a database query
      * @return ArrayList containing the GaspDataObjects
      */
-    protected List<T> listFromCursor(Cursor cursor) {
+    List<T> listFromCursor(Cursor cursor) {
         List<T> list = new ArrayList<T>();
 
         cursor.moveToFirst();

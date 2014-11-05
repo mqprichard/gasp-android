@@ -85,7 +85,7 @@ public class LocationsActivity extends FragmentActivity {
     private static final String ZOOM_LEVEL = "ZOOM_LEVEL";
 
     // Gasp proxy objects
-    private GaspSearch mGaspSearch = new GaspSearch() {
+    private final GaspSearch mGaspSearch = new GaspSearch() {
         @Override
         public void onSuccess(Places places) {
             mSearchResult.add(places);
@@ -98,7 +98,7 @@ public class LocationsActivity extends FragmentActivity {
             Log.e(TAG, "Google Places API search failed: status = " + status);
         }
     };
-    private GaspPlaces mGaspPlaces = new GaspPlaces() {
+    private final GaspPlaces mGaspPlaces = new GaspPlaces() {
         @Override
         public void onSuccess(PlaceDetails placeDetails) {
             launchPlacesDetailActivity(placeDetails);
@@ -109,19 +109,19 @@ public class LocationsActivity extends FragmentActivity {
             Log.e(TAG, "Google Places API search failed: status = " + status);
         }
     };
-    private GaspDatabase mGaspDatabase = new GaspDatabase(this);
+    private final GaspDatabase mGaspDatabase = new GaspDatabase(this);
 
     // Map GoogleMap Markers to Place Ids
-    private HashMap<String, String> mPlacesMap = new HashMap<String, String>();
+    private final HashMap<String, String> mPlacesMap = new HashMap<String, String>();
     // Map Place Ids to Reference strings
-    private HashMap<String, String> mReferencesMap = new HashMap<String, String>();
+    private final HashMap<String, String> mReferencesMap = new HashMap<String, String>();
 
     // On initial load, we need to wait for Gasp data sync before drawing location markers
     private static boolean waitForSync = true;
     public static final String SYNC_COMPLETED = "gasp-sync";
 
     // Proxy to handle Gasp GCM registration services
-    private GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
+    private final GaspRegistrationClient mGaspRegistrationClient = new GaspRegistrationClient();
 
 
     /**
@@ -196,7 +196,7 @@ public class LocationsActivity extends FragmentActivity {
             Preferences preferences = new Preferences(this);
             Query query = new Query(mLocation.getLatitude(),
                                     mLocation.getLongitude(),
-                                    preferences.getGaspSearchRadius(),
+                                    Preferences.getGaspSearchRadius(),
                                     mPageToken);
             mGaspSearch.nearbySearch(query);
         } catch (Exception e) {
@@ -260,7 +260,7 @@ public class LocationsActivity extends FragmentActivity {
 
     /**
      * Launch child activity to display details for selected Gasp! location
-     * @param placeDetails
+     * @param placeDetails Details for Gasp! location
      */
     private void launchPlacesDetailActivity(PlaceDetails placeDetails) {
         try {
@@ -291,7 +291,7 @@ public class LocationsActivity extends FragmentActivity {
     /**
      * BroadcastReceiver for notification that Gasp! data sync completed
      */
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Restaurant sync completed");

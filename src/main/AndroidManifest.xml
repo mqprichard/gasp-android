@@ -15,6 +15,7 @@
   ~ limitations under the License.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.appdynamics.demo.gasp"
     android:versionCode="1"
     android:versionName="1.0">
@@ -89,7 +90,8 @@
         <activity
             android:name=".activity.PlacesDetailActivity"
             android:label="@string/gasp_places_details"
-            android:parentActivityName=".activity.LocationsActivity">
+            android:parentActivityName=".activity.LocationsActivity"
+            tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.appdynamics.demo.gasp.activity.LocationsActivity" />
@@ -104,6 +106,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.appdynamics.demo.gasp.activity.LocationsActivity" />
         </activity>
+
+        <activity android:name=".activity.RestaurantListActivity" />
+        <activity android:name=".activity.UserListActivity" />
+        <activity android:name=".activity.ReviewListActivity" />
 
         <!-- Login with Amazon/Google -->
         <activity

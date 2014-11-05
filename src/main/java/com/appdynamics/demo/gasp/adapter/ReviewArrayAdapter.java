@@ -41,15 +41,13 @@ public class ReviewArrayAdapter extends ArrayAdapter<Review> {
 
     /**
      * Default constructor
-     *
-     * @param context  The Activity context
-     * @param resource The layout resource
+     *  @param context  The Activity context
      * @param reviews  The List collection
      */
-    public ReviewArrayAdapter(Context context, int resource, List<Review> reviews) {
-        super(context, resource, reviews);
+    public ReviewArrayAdapter(Context context, List<Review> reviews) {
+        super(context, R.layout.gasp_review_list, reviews);
         this.mReviews = reviews;
-        this.mResource = resource;
+        this.mResource = R.layout.gasp_review_list;
     }
 
     /**

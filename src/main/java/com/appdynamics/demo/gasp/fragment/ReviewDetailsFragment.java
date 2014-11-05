@@ -26,7 +26,6 @@ import java.util.List;
  */
 
 public class ReviewDetailsFragment extends ListFragment {
-    private static final String TAG = ReviewDetailsFragment.class.getName();
 
     public ReviewDetailsFragment() {
     }

@@ -353,10 +353,7 @@ public class AmazonSignInActivity extends Activity {
                 });
             }
             else{
-                StringBuilder profileBuilder = new StringBuilder();
-                profileBuilder.append(String.format("Welcome, %s!\n", profileBundle.getString(AuthzConstants.PROFILE_KEY.NAME.val)));
-                profileBuilder.append(String.format("Your email is %s\n", profileBundle.getString(AuthzConstants.PROFILE_KEY.EMAIL.val)));
-                final String profile = profileBuilder.toString();
+                final String profile = String.format("Welcome, %s!\n", profileBundle.getString(AuthzConstants.PROFILE_KEY.NAME.val)) + String.format("Your email is %s\n", profileBundle.getString(AuthzConstants.PROFILE_KEY.EMAIL.val));
                 Log.d(TAG, "Profile Response: " + profile);
                 runOnUiThread(new Runnable() {
                     @Override

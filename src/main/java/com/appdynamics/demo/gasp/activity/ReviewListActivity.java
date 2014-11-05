@@ -44,7 +44,7 @@ public class ReviewListActivity extends ListActivity {
         // Get all reviews in descending order
         List<Review> reviews = reviewAdapter.getAllDesc();
 
-        ReviewArrayAdapter reviewArrayAdapter = new ReviewArrayAdapter(this, R.layout.gasp_review_list, reviews);
+        ReviewArrayAdapter reviewArrayAdapter = new ReviewArrayAdapter(this, reviews);
         setListAdapter(reviewArrayAdapter);
     }
 

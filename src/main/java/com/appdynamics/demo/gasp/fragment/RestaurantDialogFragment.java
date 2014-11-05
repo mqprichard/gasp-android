@@ -1,6 +1,5 @@
 package com.appdynamics.demo.gasp.fragment;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -33,7 +32,6 @@ import java.net.URL;
  */
 
 public class RestaurantDialogFragment extends DialogFragment {
-    private static final String TAG = DialogFragment.class.getName();
 
     public RestaurantDialogFragment() {
     }
@@ -94,8 +92,4 @@ public class RestaurantDialogFragment extends DialogFragment {
         return view;
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
-    }
 }

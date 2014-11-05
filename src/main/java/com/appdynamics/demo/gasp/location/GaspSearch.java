@@ -26,7 +26,7 @@ import java.net.URL;
  */
 
 public abstract class GaspSearch {
-    private static String TAG = GaspSearch.class.getName();
+    private static final String TAG = GaspSearch.class.getName();
 
     private Query mQuery;
     private String mJsonOutput;

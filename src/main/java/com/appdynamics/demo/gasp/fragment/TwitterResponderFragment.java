@@ -67,7 +67,7 @@ public class TwitterResponderFragment extends RESTResponderFragment {
                     PreferenceManager.getDefaultSharedPreferences(getActivity());
             String keyword = gaspSharedPreferences.getString(getString(R.string.gasp_twitter_preferences), "");
 
-            if (mTweets == null && activity != null) {
+            if (mTweets == null) {
                 Intent intent = new Intent(activity, RESTIntentService.class);
                 intent.setData(Uri.parse(TwitterAPI.getTwitterApiSearch()));
 

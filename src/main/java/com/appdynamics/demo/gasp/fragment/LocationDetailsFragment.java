@@ -35,16 +35,12 @@ public class LocationDetailsFragment extends Fragment {
     private TextView mAddress;
     private TextView mPhone;
 
-    private Button mReviewButton;
-    private Button mRestaurantButton;
-
     public LocationDetailsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.gasp_location_details_layout, container);
-        return view;
+        return inflater.inflate(R.layout.gasp_location_details_layout, container);
     }
 
     @Override
@@ -54,8 +50,8 @@ public class LocationDetailsFragment extends Fragment {
         mAddress = (TextView) getView().findViewById(R.id.detail_address);
         mPhone = (TextView) getView().findViewById(R.id.detail_phone);
 
-        mReviewButton = (Button) getView().findViewById(R.id.detail_review_button);
-        mRestaurantButton = (Button) getView().findViewById(R.id.detail_restaurant_button);
+        Button mReviewButton = (Button) getView().findViewById(R.id.detail_review_button);
+        Button mRestaurantButton = (Button) getView().findViewById(R.id.detail_restaurant_button);
 
         super.onViewCreated(view, savedInstanceState);
     }

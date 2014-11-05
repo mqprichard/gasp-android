@@ -16,8 +16,8 @@ package com.appdynamics.demo.gasp.model;
  * limitations under the License.
  */
 
-public class TwitterStatuses {
-    TwitterStatus statuses[];
+class TwitterStatuses {
+    private TwitterStatus[] statuses;
 
     public TwitterStatus[] getStatuses() {
         return statuses;

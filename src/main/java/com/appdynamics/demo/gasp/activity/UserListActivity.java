@@ -45,7 +45,7 @@ public class UserListActivity extends ListActivity {
         List<User> users = userAdapter.getAllDesc();
 
         UserArrayAdapter userArrayAdapter =
-                new UserArrayAdapter(this, R.layout.gasp_user_list, users);
+                new UserArrayAdapter(this, users);
         setListAdapter(userArrayAdapter);
     }
 

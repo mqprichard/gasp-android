@@ -77,7 +77,7 @@ public class GaspRegistrationClient {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -87,7 +87,7 @@ public class GaspRegistrationClient {
      * @return registration ID, or empty string if there is no existing
      * registration ID.
      */
-    public String getRegistrationId(Context context) {
+    String getRegistrationId(Context context) {
         final SharedPreferences prefs = getPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
@@ -130,9 +130,9 @@ public class GaspRegistrationClient {
 
                     // Register with Gasp GCM Push Notification Server
                     Preferences preferences = new Preferences(context);
-                    String gaspPushServerUrl = preferences.getGaspPushServerUrl();
+                    String gaspPushServerUrl = Preferences.getGaspPushServerUrl();
 
-                    boolean registered = GCMRegistrationServices.register(context, regId, gaspPushServerUrl);
+                    boolean registered = GCMRegistrationServices.register(regId, gaspPushServerUrl);
                     if (registered)
                         Log.d(TAG, "Registered with server (" + gaspPushServerUrl + "): " + regId);
                     else
@@ -164,9 +164,9 @@ public class GaspRegistrationClient {
                     protected String doInBackground(Void... params) {
                         try {
                             Preferences preferences = new Preferences(context);
-                            String gaspPushServerUrl = preferences.getGaspPushServerUrl();
+                            String gaspPushServerUrl = Preferences.getGaspPushServerUrl();
 
-                            if (GCMRegistrationServices.register(context, regId, gaspPushServerUrl))
+                            if (GCMRegistrationServices.register(regId, gaspPushServerUrl))
                                 return ("Registered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -200,9 +200,9 @@ public class GaspRegistrationClient {
                     protected String doInBackground(Void... params) {
                         try {
                             Preferences preferences = new Preferences(context);
-                            String gaspPushServerUrl = preferences.getGaspPushServerUrl();
+                            String gaspPushServerUrl = Preferences.getGaspPushServerUrl();
 
-                            GCMRegistrationServices.unregister(context, regId, gaspPushServerUrl);
+                            GCMRegistrationServices.unregister(regId, gaspPushServerUrl);
                             return ("Unregistered Device Id: " + regId);
                         } catch (Exception ex) {
                             ex.printStackTrace();

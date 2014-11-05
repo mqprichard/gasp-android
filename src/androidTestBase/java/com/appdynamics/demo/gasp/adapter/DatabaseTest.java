@@ -48,7 +48,7 @@ public class DatabaseTest extends AndroidTestCase {
             for (Review review : reviewList) {
                 reviewData.delete(review);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             reviewData.close();
         }
@@ -60,7 +60,7 @@ public class DatabaseTest extends AndroidTestCase {
             for (Restaurant restaurant : restaurantList) {
                 restaurantAdapter.delete(restaurant);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             restaurantAdapter.close();
         }
@@ -72,7 +72,7 @@ public class DatabaseTest extends AndroidTestCase {
             for (User user : userList) {
                 userAdapter.delete(user);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             userAdapter.close();
         }

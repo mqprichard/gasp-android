@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.appdynamics.demo.gasp.adapter.RestaurantDataAdapter;
 import com.appdynamics.demo.gasp.adapter.ReviewDataAdapter;
-import com.appdynamics.demo.gasp.adapter.UserDataAdapter;
 import com.appdynamics.demo.gasp.model.Review;
 import com.appdynamics.demo.gasp.utils.Preferences;
 
@@ -38,23 +36,17 @@ import java.util.List;
 public class ReviewsFragment extends ListFragment {
     private static final String TAG = ReviewsFragment.class.getName();
 
-    private ReviewDataAdapter mReviewAdapter;
-    private RestaurantDataAdapter mRestaurantDataAdapter;
-    private UserDataAdapter mUserDataAdapter;
-
     private List<Review> mReviews;
-    private Context mContext;
-    private String mBaseUrl;
 
     public ReviewsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mContext = inflater.getContext();
-        mBaseUrl = Preferences.getGaspServerUrl().replaceAll("/$", "");
+        Context mContext = inflater.getContext();
+        String mBaseUrl = Preferences.getGaspServerUrl().replaceAll("/$", "");
 
-        mReviewAdapter = new ReviewDataAdapter(inflater.getContext());
+        ReviewDataAdapter mReviewAdapter = new ReviewDataAdapter(inflater.getContext());
         mReviewAdapter.open();
 
         // Get all reviews in descending order

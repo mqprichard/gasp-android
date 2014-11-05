@@ -50,7 +50,7 @@ public class ReviewActivity extends Activity {
     private URL mGaspUrl;               // The Gasp reviews URI
 
     // Gasp proxy objects
-    private GaspReviews mGaspReviews = new GaspReviews() {
+    private final GaspReviews mGaspReviews = new GaspReviews() {
         @Override
         public void onSuccess(String location) {
             try {
@@ -66,14 +66,14 @@ public class ReviewActivity extends Activity {
             Log.e(TAG, "Error adding Gasp! review");
         }
     };
-    private GaspEvents mGaspEvents = new GaspEvents() {
+    private final GaspEvents mGaspEvents = new GaspEvents() {
         @Override
         public void onEventAdded(EventResponse eventResponse) {
             Log.d(TAG, "Event added: " + eventResponse.getEvent_id());
         }
 
         @Override
-        public void onErrorAddEvent(String status) {
+        public void onErrorAddEvent() {
             Log.d(TAG, "Error adding event via Google Places API");
         }
 
@@ -83,7 +83,7 @@ public class ReviewActivity extends Activity {
         }
 
         @Override
-        public void onErrorDeleteEvent(String status) {
+        public void onErrorDeleteEvent() {
             Log.d(TAG, "Error deleting event via Google Places API");
         }
     };

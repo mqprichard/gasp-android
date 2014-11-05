@@ -55,8 +55,8 @@ public class PlacesDetailActivity extends FragmentActivity {
     private PlaceDetail mPlaceDetail;   // Google Places API details
 
     // Gasp proxy objects
-    private GaspDatabase mGaspDatabase = new GaspDatabase(this);
-    private GaspRestaurants mGaspRestaurants = new GaspRestaurants() {
+    private final GaspDatabase mGaspDatabase = new GaspDatabase(this);
+    private final GaspRestaurants mGaspRestaurants = new GaspRestaurants() {
         @Override
         public void onSuccess(String location) {
             Log.d(TAG, "Gasp! restaurant added: " + location);
@@ -73,7 +73,7 @@ public class PlacesDetailActivity extends FragmentActivity {
     public PlacesDetailActivity() {
     }
 
-    private Restaurant getGaspRestaurant(PlaceDetail place) {
+    private Restaurant getGaspRestaurant() {
         Restaurant restaurant = mGaspDatabase.getRestaurantByPlacesId(mPlaceDetail.getId());
         if (restaurant != null) {
             mGaspRestaurantId = restaurant.getId();
@@ -118,7 +118,7 @@ public class PlacesDetailActivity extends FragmentActivity {
         Button restaurantButton = (Button) findViewById(R.id.detail_restaurant_button);
         Button reviewButton = (Button) findViewById(R.id.detail_review_button);
 
-        Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
+        Restaurant restaurant = getGaspRestaurant();
         if ( restaurant != null) {
             restaurantButton.setEnabled(false);
             reviewButton.setEnabled(true);
@@ -154,7 +154,7 @@ public class PlacesDetailActivity extends FragmentActivity {
         LocationDetailsFragment locationDetailsFragment =
                 (LocationDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_location_fragment);
 
-        Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
+        Restaurant restaurant = getGaspRestaurant();
         if ( restaurant != null) {
             locationDetailsFragment.showLocationDetails(place);
         } else {
@@ -162,11 +162,11 @@ public class PlacesDetailActivity extends FragmentActivity {
         }
     }
 
-    private void showReviews(PlaceDetail place) {
+    private void showReviews() {
         ReviewDetailsFragment reviewDetailsFragment =
                 (ReviewDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detail_review_fragment);
 
-        Restaurant restaurant = getGaspRestaurant(mPlaceDetail);
+        Restaurant restaurant = getGaspRestaurant();
         if (restaurant != null) {
             List<Review> reviews = mGaspDatabase.getLastNReviewsByRestaurant(restaurant.getId(), 10);
             reviewDetailsFragment.showReviewDetails(reviews);
@@ -198,7 +198,7 @@ public class PlacesDetailActivity extends FragmentActivity {
 
             // Populate Fragments
             showLocationDetails(mPlaceDetail);
-            showReviews(mPlaceDetail);
+            showReviews();
             showEvents(mPlaceDetail);
 
             // Hook uo button listeners

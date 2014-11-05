@@ -41,15 +41,13 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
 
     /**
      * Default constructor
-     *
-     * @param context  The Activity context
-     * @param resource The layout resource
+     *  @param context  The Activity context
      * @param users    The List collection
      */
-    public UserArrayAdapter(Context context, int resource, List<User> users) {
-        super(context, resource, users);
+    public UserArrayAdapter(Context context, List<User> users) {
+        super(context, R.layout.gasp_user_list, users);
         this.mUsers = users;
-        this.mResource = resource;
+        this.mResource = R.layout.gasp_user_list;
     }
 
     /**

@@ -36,11 +36,10 @@ public class GaspDataActivity extends FragmentActivity
     private static final String TAG = GaspDataActivity.class.getName();
 
     private ViewPager viewPager;
-    private TabPagerAdapter mAdapter;
     private ActionBar actionBar;
 
     // Tab titles
-    private String[] tabs = { "Restaurants", "Reviews", "Users" };
+    private final String[] tabs = { "Restaurants", "Reviews", "Users" };
 
     private RestaurantDataAdapter restaurantAdapter;
 
@@ -51,7 +50,7 @@ public class GaspDataActivity extends FragmentActivity
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+        TabPagerAdapter mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

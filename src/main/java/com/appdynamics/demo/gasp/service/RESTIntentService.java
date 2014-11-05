@@ -55,10 +55,10 @@ import java.util.List;
 public class RESTIntentService extends IntentService {
     private static final String TAG = RESTIntentService.class.getName();
     
-    public static final int GET    = 0x1;
+    private static final int GET    = 0x1;
     public static final int POST   = 0x2;
-    public static final int PUT    = 0x3;
-    public static final int DELETE = 0x4;
+    private static final int PUT    = 0x3;
+    private static final int DELETE = 0x4;
 
     public static final String EXTRA_HTTP_VERB       = "com.appdynamics.gasp.EXTRA_HTTP_VERB";
     public static final String EXTRA_PARAMS          = "com.appdynamics.gasp.EXTRA_PARAMS";

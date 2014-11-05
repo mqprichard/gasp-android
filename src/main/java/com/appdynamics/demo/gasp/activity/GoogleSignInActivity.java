@@ -44,7 +44,7 @@ import java.io.IOException;
 public class GoogleSignInActivity extends FragmentActivity implements OnClickListener,
         PlusClient.ConnectionCallbacks, PlusClient.OnConnectionFailedListener,
         PlusClient.OnAccessRevokedListener, PlayServicesDialogFragment.PlayServicesDialogListener {
-    private static String TAG = GoogleSignInActivity.class.getName();
+    private static final String TAG = GoogleSignInActivity.class.getName();
 
     private static final String scopes = "https://www.googleapis.com/auth/userinfo.email "
                                          + "https://www.googleapis.com/auth/plus.login "
@@ -125,16 +125,6 @@ public class GoogleSignInActivity extends FragmentActivity implements OnClickLis
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        // TODO
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        // TODO
     }
 
     @Override

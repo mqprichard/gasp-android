@@ -9,7 +9,7 @@
     android:scrollbars="vertical"
     android:id="@+id/places_layout">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/map"
         android:layout_width="match_parent"
